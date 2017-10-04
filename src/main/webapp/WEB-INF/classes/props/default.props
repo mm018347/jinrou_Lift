@@ -1,4 +1,4 @@
-db.url=jdbc:mysql://localhost/jinrou
+db.url=jdbc:mysql://Server_W1/jinrou
 db.driver=com.mysql.jdbc.Driver
-db.user=jinrou
-db.password=jinrou0000
+db.user=MM018347
+db.password=F0X11DCMEC

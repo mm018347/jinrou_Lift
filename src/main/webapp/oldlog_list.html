@@ -1,40 +1,98 @@
 <lift:surround with="default" at="content">
-    <link rel="stylesheet" href="css/index.css"/>
-	<link rel="stylesheet" href="css/base.css"/>
-	<div id="header">
-<h1>
-<img src="images/old_log_title.jpg" /><br/>
-<span class="comment">鸚鵡實驗站（猫又代管）</span>
-</h1>
-</div>
-  <div id="menu">
-<h2>選單</h2>
-<ul class="menu">
-<!--
-    <li><a href="test.html">測試須知</a></li>
-    <li><a href="create_test1.html">25人測試用村</a></li>
-    <li><a href="create_test2.html">8人測試用村</a></li>
-	-->
-    <li><a href="http://catjinro.no-ip.org/">導覽頁</a></li>
-	<li><a href="main.html">首頁</a></li>
-    <li><a href="http://jigokutushin.net/jinro/list.php">聯合列表</a></li>
-    <li><a href="http://nedftp.com/wiki/index.php/">人狼Wiki</a></li>
-	<li><a href="script_info.html">系統特點</a></li>
-	<li><a href="rule.html">遊戲規則</a></li>
-	<li><a href="version.html">版本紀錄</a></li>
-	<li><a href="oldlog_list.html">紀錄閱覽</a></li>
-	<li><a href="user_icon.html">頭像一覽</a></li>
-	<li><a href="upload.html">頭像登錄</a></li>
-	<li><a href="faq.html">問答集</a></li>
-	<li><a href="main_olg.html">舊版首頁</a></li>
-</ul>
-</div>
-  <div id="main">
+  <style type="text/css">
+body {
+  background-image: url("images/top_bg.jpg");
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-attachment: fixed
+}
+div {
+  text-align: center;
+}
+table {
+  filter: alpha(opacity=80, enabled=80);
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  margin-left:  auto;
+  margin-right: auto;
+  border: 1px solid #000000;
+  border-collapse: collapse;
+}
+caption {
+  margin-bottom: 5px;
+  text-align: right;
+}
+th {
+  margin: 0px;
+  padding : 3px 3px 3px 6px;
+  border: 1px solid #000000;
+  background-color: #526CD6;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+tbody tr, tbody td {
+  text-align: right;
+}
+.main {
+  background-color: #CCCCCC;
+  border: 1px solid #FFFFFF;
+  text-align: center;
+}
+td {
+  padding: 3px 3px 3px 6px;
+  background-color: #F2EACE;
+  color: #333333;
+  vertical-align: middle;
+}
+.title {
+  border-right:  1px dotted  #CCCCCC;
+}
+.upper {
+  border-right:  1px dotted #CCCCCC;
+}
+.side {
+  border-right:  1px dotted #CCCCCC;
+  border-left:   1px dotted  #CCCCCC;
+}
+.middle {
+  border-bottom: 1px dotted #CCCCCC;
+}
+.lower td {
+  border-right:  1px solid  #000000;
+  border-left:   1px solid  #000000;
+  border-bottom: 1px solid  #000000;
+  vertical-align: middle;
+}
+.lower img {
+  vertical-align: middle;
+}
+.time {
+  border-right:  1px dotted  #CCCCCC;
+  border-left:   1px dotted  #CCCCCC;
+}
+.number {
+  border-top:    1px solid  #000000;
+  border-right:  1px dotted  #CCCCCC;
+  
+}
+.option {
+  border-bottom: 1px solid  #000000;
+  border-top:    1px dotted  #CCCCCC;
+}
+.comment {
+  font-size: 75%;
+}
+.icon {
+  text-align: left;
+}
+.vanish a:link, .vanish a:visited {
+  color: #909090;
+}
+    </style>
   <lift:OldlogController.list>
   <a href="main.html">←返回</a> <entry:last_page/> <entry:next_page/><br/> 
   <div align="center">
     <entry:room_table/>
   </div>
   </lift:OldlogController.list>
-  </div>
 </lift:surround> 
