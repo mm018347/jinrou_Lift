@@ -43,6 +43,8 @@ class OldlogController {
       case RoomVictoryEnum.LOVER_WIN    => "戀"
       case RoomVictoryEnum.ABANDONED    => "棄"
       case RoomVictoryEnum.DRAW         => "和"
+	  case RoomVictoryEnum.CAT          => "GM"
+	  case RoomVictoryEnum.VAMPIRE_WIN          => "鬼"
       case xs                           => "？"
     }
 
@@ -55,10 +57,6 @@ class OldlogController {
                     else <a href={"oldlog_list.html?page_no=" + (page_no-1).toString}>上一頁</a>
     val next_page = if (room_list.length != 20) <span></span>
                     else <a href={"oldlog_list.html?page_no=" + (page_no+1).toString}>下一頁</a>
-	val last_page_olg = if (page_no == 0) <span></span>
-                    else <a href={"oldlog_list_olg.html?page_no=" + (page_no-1).toString}>上一頁</a>
-    val next_page_olg = if (room_list.length != 20) <span></span>
-                    else <a href={"oldlog_list_olg.html?page_no=" + (page_no+1).toString}>下一頁</a>
 
     val room_table = <table border="0" cellpadding="0" cellspacing="0">
       <tr>
@@ -67,26 +65,27 @@ class OldlogController {
         <th class="column">村莊說明</th>
         <th class="column">人數</th>
         <th class="column">勝</th>
-        <th class="column">選項</th>
+		<th class="column">最後更新</th>
       </tr>
       { for (room <- room_list) yield 
       <tr> 
-        <td align="right" valign="middle" class="row">{room.id.is.toString}</td> 
-        <td align="right" valign="middle" class="row">
+        <td class="number" rowspan="2">{room.id.is.toString}</td> 
+        <td class="title">
          <a href={"oldlog_view.html?room_no="+room.id.is.toString}>{room.room_name.is} 村</a>
         </td> 
-        <td align="right" valign="middle" class="row"><small>～ {room.room_comment.is.toString} ～</small></td> 
-        <td align="center" valign="middle" class="row">[ {room.max_user.is.toString}人用 ]</td> 
-        <td align="center" valign="middle" class="row">[{victory_text(room.victory.is.toString)}]</td>
-        <td valign="middle" class="row"><small>{room.option_text}</small></td>
+        <td class="comment side"><small>～ {room.room_comment.is.toString} ～</small></td> 
+        <td class="upper">[ {room.max_user.is.toString}人用 ]</td> 
+        <td class="side">[{victory_text(room.victory.is.toString)}]</td>
+	    <td class="time comment"><small>{room.updated.is.toString}</small></td> 
+      </tr>
+      <tr>
+        <td class="option" colspan="5"><small>{room.option_text}</small></td>
       </tr>
       }
     </table> 
     bind("entry", xhtml,
       "last_page"  ->  last_page,
       "next_page"  ->  next_page,
-	  "last_page_olg"  ->  last_page_olg,
-      "next_page_olg"  ->  next_page_olg,
       "room_table" ->  room_table
     )
   }
@@ -141,8 +140,8 @@ class OldlogController {
       }
     }
     
-    val game_title : NodeSeq = Seq(<span style="text-decoration:underline;"><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
-         　～{room.room_comment.is}～[{room_no}號村] <a href="main.html" target="_top">[離開]</a>
+    val game_title : NodeSeq = Seq(<span><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
+         [{room_no}號村] <a href="main.html" target="_top">[離開]</a><br/>～{room.room_comment.is}～
          </span>, <br/>)
 
     val user_entrys = UserEntry.findAll(By(UserEntry.room_id, room_id))
@@ -160,8 +159,11 @@ class OldlogController {
             case RoomVictoryEnum.PONTIFF_WIN  => <td valign="middle" align="center" width="100%" style="background-color:#EEAA55;color:snow;font-weight:bold;"><img src="icon/nob.gif"/> [教主勝利] 村莊納入教派管轄</td>
             case RoomVictoryEnum.MOB_WIN      => <td valign="middle" align="center" width="100%" style="background-color:#AAAAAA;color:snow;font-weight:bold;"><img src="icon/spy.gif"/> [暴民勝利] 獨一無二的暴君誕生了</td>
             case RoomVictoryEnum.MOB_WIN2     => <td valign="middle" align="center" width="100%" style="background-color:#AAAAAA;color:snow;font-weight:bold;"><img src="icon/spy.gif"/> [暴民勝利] 村莊陷入混亂狀態</td>
-            case RoomVictoryEnum.LOVER_WIN    => <td valign="middle" align="center" width="100%" style="background-color:#FF69B4;color:snow;font-weight:bold;"><img src="icon/fre.gif"/> [戀人勝利] 等這村莊結束之後，我們就要回老家結婚了</td>            case RoomVictoryEnum.ABANDONED    => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">這個村莊已經廢棄</td>
+            case RoomVictoryEnum.LOVER_WIN    => <td valign="middle" align="center" width="100%" style="background-color:#FF69B4;color:snow;font-weight:bold;"><img src="icon/fre.gif"/> [戀人勝利] 等這村莊結束之後，我們就要回老家結婚了</td>
+            case RoomVictoryEnum.ABANDONED    => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">這個村莊已經廢棄</td>
             case RoomVictoryEnum.DRAW         => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">投票五次相同平手</td>
+			case RoomVictoryEnum.CAT          => <td valign="middle" align="center" width="100%" style="background-color:#CCEECC;color:black;font-weight:bold;"><img src="icon/sw.gif"/> [管理員勝利] 村莊遭到強制中止</td>
+			case RoomVictoryEnum.VAMPIRE_WIN  => <td valign="middle" align="center" width="100%" style="background-color:#D000D0;color:snow;font-weight:bold;"><img src="icon/sw.gif"/> [吸血鬼勝利] 村民都成為吸血鬼的眷屬了</td>
             case xs                           => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">遊戲狀況不明</td>
           }
         }
@@ -268,10 +270,10 @@ class OldlogController {
       }
     }
     val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
-                       ((room.status.is == RoomStatusEnum.PLAYING.toString) &&
-                        (room.has_flag(RoomFlagEnum.TEST_MODE))) ||
+                        (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
                        ((user_entry != null) && (!user_entry.live.is) &&
-                        (room.has_flag(RoomFlagEnum.DEATH_LOOK)))
+                        (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
+                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
     if (!heaven_mode) {
       S.redirectTo("main.html")
     }

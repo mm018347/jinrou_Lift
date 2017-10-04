@@ -7,6 +7,7 @@ object VoteFlagEnum extends Enumeration {
   
   val AUTO        = Value("A")
   val BLESSED     = Value("B")
+  val NOBLESSED = Value("H")
   val SHOUTED     = Value("S")
   val CURSED      = Value("C")
   val BFEATHERED = Value("E")

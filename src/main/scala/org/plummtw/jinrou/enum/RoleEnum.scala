@@ -31,6 +31,7 @@ object RoleEnum extends Enumeration {
   val WOLFCUB     = Value("X")
   val MADMAN      = Value("M")
   val SORCEROR    = Value("U")
+  val SPY         = Value("y")
   
   // FOX SIDE
   val FOX         = Value("F")
@@ -40,6 +41,7 @@ object RoleEnum extends Enumeration {
   // DEMON SIDE
   val DEMON       = Value("D")
   val FALLEN_ANGEL = Value("f")
+  val HERETIC = Value("h")
   
   // PENGUIN SIDE
   val PENGUIN     = Value("K")
@@ -49,6 +51,10 @@ object RoleEnum extends Enumeration {
   // NON-SPECIFIC-SIDE
   val INHERITER   = Value("I")
   val SHIFTER     = Value("S")
+  
+  
+  val FAIRY = Value("a")
+  val VAMPIRE    = Value("m")
   
   
   def ROLE_MAP   = scala.collection.immutable.TreeMap(
@@ -71,6 +77,7 @@ object RoleEnum extends Enumeration {
      WOLFCUB     -> RoleWolfcub,
      MADMAN      -> RoleMadman,
      SORCEROR    -> RoleSorceror,
+	 SPY         -> RoleSpy,
      
      AUGHUNTER   -> RoleAugHunter,
      SCHOLAR     -> RoleScholar,
@@ -81,7 +88,8 @@ object RoleEnum extends Enumeration {
      GODFAT      -> RoleGodfat,  
 
      DEMON       -> RoleDemon,
-     FALLEN_ANGEL-> RoleFallenAngel,
+     FALLEN_ANGEL -> RoleFallenAngel,
+	 HERETIC -> RoleHeretic,
 
      PENGUIN     -> RolePenguin,
 
@@ -95,7 +103,7 @@ object RoleEnum extends Enumeration {
 
   def HIDDEN_ROLE_LIST = List(
       HERMIT, ALCHEMIST, AUGHUNTER, ARCHMAGE,
-      FALLEN_ANGEL, PENGUIN, CARDMASTER
+      FALLEN_ANGEL, PENGUIN, CARDMASTER, FAIRY, HERETIC, VAMPIRE
   )
   
   def get_role(role : RoleEnum.Value) : RoleData = {
@@ -120,21 +128,71 @@ object RoleSpecialEnum extends Enumeration {
   val CONJURE     = Value("c")
   val WHITE       = Value("w")
   val TEN         = Value("t")
+  
+  val PRIDE  = Value("o")
+  val ENVY  = Value("j")
+  val WRATH      = Value("n")
+  val LUST          = Value("s")
+  val SLOTH         = Value("z")
+  val GREED      = Value("g")
+  val GLUTTONY  = Value("u")
 
   def ROLESPECIAL_MAP   = scala.collection.immutable.TreeMap(
      NONE        -> "",
 
+     POISON      -> "毒狼",
+     RESIST      -> "抗毒狼",
+     CONJURE     -> "咒狼",
+     WHITE       -> "白狼",
+     TEN         -> "天狼",
+	 
+	 PRIDE  -> "路西法",
+	 ENVY    -> "利維坦",
+	 WRATH         -> "撒旦",
+	 LUST            -> "莉莉絲",
+	 SLOTH          -> "貝利爾",
+	 GREED       -> "瑪門",
+	 GLUTTONY   -> "別西卜"
+  )
+
+  def ROLESPECIAL_WOLF   = scala.collection.immutable.TreeMap(
      POISON      -> "毒",
      RESIST      -> "抗",
      CONJURE     -> "咒",
      WHITE       -> "白",
      TEN         -> "天"
   )
+  
+  def ROLESPECIAL_FALLENANGEL   = scala.collection.immutable.TreeMap(
+	 PRIDE  -> "路西法",
+	 ENVY    -> "利維坦",
+	 WRATH         -> "撒旦",
+	 LUST            -> "莉莉絲",
+	 SLOTH          -> "貝利爾",
+	 GREED       -> "瑪門",
+	 GLUTTONY   -> "別西卜"
+  )
+  
+  def ROLESPECIAL_FALLENANGEL_NOGREED   = scala.collection.immutable.TreeMap(
+	 PRIDE  -> "路西法",
+	 ENVY    -> "利維坦",
+	 WRATH         -> "撒旦",
+	 LUST            -> "莉莉絲",
+	 SLOTH          -> "貝利爾",
+	 GLUTTONY   -> "別西卜"
+  )
 
   def get_string(rolespecial_string : String) : String = {
     val result = ROLESPECIAL_MAP.get(valueOf(rolespecial_string).getOrElse(NONE))
     if (result.isEmpty)
-      println(rolespecial_string + "is null")
+      println(rolespecial_string.toString + "is null")
+    return result.getOrElse("")
+  }
+  
+  def get_string_wolf(rolespecial_string : String) : String = {
+    val result = ROLESPECIAL_WOLF.get(valueOf(rolespecial_string).getOrElse(NONE))
+    if (result.isEmpty)
+      println(rolespecial_string.toString + "is null")
     return result.getOrElse("")
   }
 }

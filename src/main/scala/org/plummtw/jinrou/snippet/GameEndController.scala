@@ -113,14 +113,14 @@ class GameEndController {
              Seq(<a href={"logout.html?&room_no=" + room_no} target="_top">[登出]</a>) ++ game_title_with_user2  
              
     
-    val game_title : NodeSeq = Seq(<span style="text-decoration:underline;"><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
-         　～{room.room_comment.is}～[{room_no}號村] 
+    val game_title : NodeSeq = Seq(<span><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
+         [{room_no}號村] 
          { 
            if (user_entry != null)
              game_title_with_user 
            else 
              Seq(<a href="main.html" target="_top">[離開]</a>)
-         }</span>, <br/>)
+         }<br/>～{room.room_comment.is}～</span>, <br/>)
 
     val game_option : NodeSeq = Seq(<small>[自動更新](
          <a href={link_page + "?room_no=" + room_no + "&auto_reload="} target="_top">手動</a>
@@ -136,8 +136,10 @@ class GameEndController {
     val live_fox_lovers     = live_fox.filter(x=>x.has_flag(UserEntryFlagEnum.LOVER))
     val user_victory  = if (user_entry == null)
                           ""
+					  
                         else if (user_entry.has_flag(UserEntryFlagEnum.LOVER))
                           RoomVictoryEnum.LOVER_WIN.toString
+					  /*
                         else if ((live_pontiff.length == live_pontiff_lovers.length) &&
                                  (live_pontiff.length > 0) &&
                                  (user_entry.subrole.is == SubroleEnum.SUBPONTIFF.toString))
@@ -145,10 +147,13 @@ class GameEndController {
                         else if ((live_fox.length == live_fox_lovers.length) &&
                                  (live_fox.length > 0) &&
                                  ((user_entry.current_role == RoleEnum.BETRAYER) ||
-                                  (user_entry.current_role == RoleEnum.GODFAT)))
+                                  (user_entry.current_role == RoleEnum.GODFAT) ||
+                                  (user_entry.subrole.is == SubroleEnum.FOXBELIEVER.toString)))
                           RoomVictoryEnum.LOVER_WIN.toString
+						  */
                         else if (((live_pontiff.length != 0) &&
-                                 (user_entry.has_flag(UserEntryFlagEnum.RELIGION))) ||
+                                 (user_entry.has_flag(UserEntryFlagEnum.RELIGION)) &&
+								 (user_entry.hasnt_flag(UserEntryFlagEnum.HERETIC_FAITH_SHAKE))) ||
                                  (user_entry.subrole.is == SubroleEnum.SUBPONTIFF.toString))
                           RoomVictoryEnum.PONTIFF_WIN.toString
                         else if ((user_entry.current_role == RoleEnum.FOX) ||
@@ -170,6 +175,9 @@ class GameEndController {
                                  (user_entry.current_role == RoleEnum.RUNNER) &&
                                  (!user_entry.live.is))
                           RoomVictoryEnum.NONE.toString
+                        else if ((user_entry.current_role == RoleEnum.SPY) &&
+                                 (user_entry.hasnt_flag(UserEntryFlagEnum.SPY_OVER)))
+                          RoomVictoryEnum.NONE.toString
                         else
                           RoleEnum.get_role(user_entry.current_role).role_side.toString
 
@@ -189,7 +197,9 @@ class GameEndController {
             case RoomVictoryEnum.LOVER_WIN    => <td valign="middle" align="center" width="100%" style="background-color:#FF69B4;color:snow;font-weight:bold;"><img src="icon/fre.gif"/> [戀人勝利] 等這村莊結束之後，我們就要回老家結婚了</td>
             case RoomVictoryEnum.ABANDONED    => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">這個村莊已經廢棄</td>
             case RoomVictoryEnum.DRAW         => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">投票五次相同平手</td>
-            case xs                           => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">遊戲狀況不明</td>
+			case RoomVictoryEnum.CAT          => <td valign="middle" align="center" width="100%" style="background-color:#CCEECC;color:black;font-weight:bold;"><img src="icon/sw.gif"/> [管理員勝利] 村莊遭到強制中止</td>
+            case RoomVictoryEnum.VAMPIRE_WIN  => <td valign="middle" align="center" width="100%" style="background-color:#D000D0;color:snow;font-weight:bold;"><img src="icon/sw.gif"/> [吸血鬼勝利] 村民都成為吸血鬼的眷屬了</td>
+			case xs                           => <td valign="middle" align="center" width="100%" style="background-color:snow;color:black;font-weight:bold;">遊戲狀況不明</td>
           }
         }
        </tr>
@@ -216,7 +226,16 @@ class GameEndController {
                    ((user_entry != null) && (user_entry.current_role == RoleEnum.FALLEN_ANGEL) &&
                     (user_entry.live.is)) ||
                    ((user_entry != null) && (user_entry.current_role == RoleEnum.PENGUIN) &&
-                    (room.victory.is == RoomVictoryEnum.PENGUIN_WIN.toString)))
+                    (room.victory.is == RoomVictoryEnum.PENGUIN_WIN.toString)) ||
+				   ((user_entry != null) && (user_entry.has_flag(UserEntryFlagEnum.LOVER)) && (user_entry.live.is)) ||
+				   ((user_entry != null) && (live_pontiff.length == live_pontiff_lovers.length) &&
+                    (live_pontiff.length > 0) &&
+                    (user_entry.subrole.is == SubroleEnum.SUBPONTIFF.toString)) ||
+				   ((user_entry != null) && (user_entry.has_flag(UserEntryFlagEnum.RELIGION)) && (user_entry.hasnt_flag(UserEntryFlagEnum.HERETIC_FAITH_SHAKE)) &&
+				    (room.victory.is == RoomVictoryEnum.PONTIFF_WIN.toString)) ||
+				   ((user_entry != null) && (user_entry.current_role == RoleEnum.SPY) && (user_entry.has_flag(UserEntryFlagEnum.SPY_OVER)) &&
+				    (room.victory.is == RoomVictoryEnum.WEREWOLF_WIN.toString))
+					)
             <td valign="middle" align="center" width="100%" style="background-color:#FFFF99;color:black;font-weight:bold;">您獲勝了</td>
           else
             <td valign="middle" align="center" width="100%" style="background-color:black;color:#FFFF99;font-weight:bold;">您已經輸了</td>

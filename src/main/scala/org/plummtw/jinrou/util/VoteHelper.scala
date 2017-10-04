@@ -228,10 +228,16 @@ object VoteHelper {
           actioner_list(0)
         else
           null
+      val actionee_list = user_entrys.filter(_.id.is    == vote.actionee_id.is)
+      val actionee      = 
+        if (actionee_list.length != 0)
+          actionee_list(0)
+        else
+          null
       val vote_actionee = votes.filter(_.actioner_id.is == vote.actionee_id.is)(0)
     
       if ((actioner != null) && (vote.actioner_id.is == vote.actionee_id.is))  { // 自投時固定 1 票
-        //vote_actionee.vote_number(vote_actionee.vote_number.is + 2) // 自投時改成 0 票
+        //vote_actionee.vote_number(0) // 自投時改成 0 票(有BUG)
         vote_actionee.vote_flags(VoteFlagEnum.AUTO.toString + vote.vote_flags.is)
       }
       else if ((room_day.weather.is != WeatherEnum.CLOUDY.toString) && (actioner != null) && (actioner.subrole.is == SubroleEnum.AUTHORITY.toString))
@@ -240,8 +246,64 @@ object VoteHelper {
         vote_actionee.vote_number(vote_actionee.vote_number.is + 3)
       else 
         vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
-        
+    
+	val pontiffs = user_entrys.filter(x=> (x.current_role == RoleEnum.PONTIFF) && (x.live.is)).map(_.id.is)
+    val greeds = user_entrys.filter(x=> (x.current_role == RoleEnum.FALLEN_ANGEL) && (x.get_fallenangel_special == RoleSpecialEnum.GREED.toString) && (x.live.is)).map(_.id.is)
+	if ((pontiffs.length != 0) && (greeds.length != 0)) {
+    // 貪婪的瑪門投票給教派多一票
+      if ((actioner != null) && (actioner.get_fallenangel_special == RoleSpecialEnum.GREED.toString)) {
+	    if ((actionee.current_role == RoleEnum.PONTIFF) ||
+            (actionee.subrole.is == SubroleEnum.SUBPONTIFF.toString) ||
+            (actionee.has_flag(UserEntryFlagEnum.RELIGION))) {
+              vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+        }
+	  }
+	// 貪婪的瑪門被教派投票多一票
+	  if ((actioner != null) && ((actioner.current_role == RoleEnum.PONTIFF) ||
+            (actioner.subrole.is == SubroleEnum.SUBPONTIFF.toString) ||
+            (actioner.has_flag(UserEntryFlagEnum.RELIGION)))) {
+	    if (actionee.get_fallenangel_special == RoleSpecialEnum.GREED.toString) {
+              vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+        }
+	  }
+    }
+	val envys = user_entrys.filter(x=> (x.current_role == RoleEnum.FALLEN_ANGEL) && (x.get_fallenangel_special == RoleSpecialEnum.ENVY.toString) && (x.live.is)).map(_.id.is)
+	if (envys.length != 0) {
+	// 妒忌的利維坦投票
+        if ((actioner != null) && (actioner.get_fallenangel_special == RoleSpecialEnum.ENVY.toString)) {
+	      if (actionee.has_flag(UserEntryFlagEnum.LOVER)) {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+	    }
+	    if ((actioner != null) && (actioner.get_fallenangel_special == RoleSpecialEnum.ENVY.toString) && (actioner.subrole.is == "")) {
+	      if (actionee.subrole.is != "") {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+	    }
+	    if ((actioner != null) && (actioner.get_fallenangel_special == RoleSpecialEnum.ENVY.toString) && (actioner.subrole.is != "")) {
+	      if (actionee.subrole.is == "") {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+	   }
+	    if ((actioner != null) && (actioner.has_flag(UserEntryFlagEnum.LOVER))) {
+	      if (actionee.get_fallenangel_special == RoleSpecialEnum.ENVY.toString) {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+	    }
+	    if ((actioner != null) && (actioner.subrole.is == "")) {
+	      if ((actionee.subrole.is != "") && (actionee.get_fallenangel_special == RoleSpecialEnum.ENVY.toString)) {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+	    }
+	    if ((actioner != null) && (actioner.subrole.is != "")) {
+	      if ((actionee.subrole.is == "") && (actionee.get_fallenangel_special == RoleSpecialEnum.ENVY.toString)) {
+                vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
+          }
+        }
+	  }
+	  
       if ((actioner != null) && (werewolf_side.contains(actioner))) {
+	    // 鼓舞
         vote_actionee.vote_number(vote_actionee.vote_number.is + 2)
         vote.vote_flags(vote.vote_flags.is + VoteFlagEnum.SHOUTED.toString)
       }
@@ -335,15 +397,25 @@ object VoteHelper {
     if ((room_day.weather.is != WeatherEnum.SNOWY.toString) && (blesseds.length != 0)) {
       blesseds.foreach{ blessed =>
         val blesser = user_entrys.filter(_.id.is == blessed.actioner_id.is)(0)
+        val blesser_vote = user_entrys.filter(_.id.is == blessed.actionee_id.is)(0)
         val vote_blessed_list = votes.filter(_.actioner_id.is == blessed.actionee_id.is)
 
         if (vote_blessed_list.length != 0) {
           val vote_blessed = vote_blessed_list(0)
-        
-          if ((blesser.live.is) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.BLESSED.toString) == -1)) 
+		  
+		  if (room.has_flag(RoomFlagEnum.CLERIC_OPTION4)) {
+            if ((blesser.live.is) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.BLESSED.toString) == -1) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.NOBLESSED.toString) == -1) && (blesser_vote.current_role == RoleEnum.HERETIC))
+              vote_blessed.vote_flags(vote_blessed.vote_flags.is + VoteFlagEnum.NOBLESSED.toString)
+		    else if ((blesser.live.is) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.BLESSED.toString) == -1) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.NOBLESSED.toString) == -1) && (blesser_vote.current_role != RoleEnum.HERETIC))
             vote_blessed.vote_flags(vote_blessed.vote_flags.is + VoteFlagEnum.BLESSED.toString)
-          if (blesser.live.is)
-            vote_blessed.vote_number(Math.max(0, vote_blessed.vote_number.is - 2))
+		  } else if ((blesser.live.is) && (vote_blessed.vote_flags.is.indexOf(VoteFlagEnum.BLESSED.toString) == -1))
+		    vote_blessed.vote_flags(vote_blessed.vote_flags.is + VoteFlagEnum.BLESSED.toString)
+
+		  if (room.has_flag(RoomFlagEnum.CLERIC_OPTION4)) {
+            if ((blesser.live.is) && (blesser_vote.current_role != RoleEnum.HERETIC))
+              vote_blessed.vote_number(Math.max(0, vote_blessed.vote_number.is - 2))
+		  } else if (blesser.live.is)
+              vote_blessed.vote_number(Math.max(0, vote_blessed.vote_number.is - 2))
         }
       }
     }
@@ -354,8 +426,10 @@ object VoteHelper {
       vortexes.foreach{ vortex =>
         val vortexer = user_entrys.filter(_.id.is == vortex.actioner_id.is)(0)
         val vote_vortexed_list = votes.filter(_.actioner_id.is == vortex.actionee_id.is)
-
-        if ((vortexer.live.is) && (vote_vortexed_list.length != 0)) {
+		
+        if((vortexer.id.is == vortex.actionee_id.is)){
+			
+		}else if ((vortexer.live.is) && (vote_vortexed_list.length != 0)) {
           val vote_vortexed = vote_vortexed_list(0)
 
           val vortexer_vote = votes.filter(_.actioner_id.is == vortex.actioner_id.is)(0)
@@ -453,7 +527,11 @@ object VoteHelper {
             }
 
             if (cash_votes.contains(user.id.is)) {
-              user.cash(user.cash.is + cash_gain)
+			  if ((user.current_role == RoleEnum.FALLEN_ANGEL) &&
+			   (user.get_fallenangel_special == RoleSpecialEnum.GREED.toString))
+                user.cash(user.cash.is + (cash_gain * 2))
+			  else
+			    user.cash(user.cash.is + cash_gain)
             }
 
             user.save()
@@ -485,6 +563,7 @@ object VoteHelper {
     def vote_flags_str(vote:Vote)   : String = {
       val auto_str    = if (vote.vote_flags.is.indexOf(VoteFlagEnum.AUTO.toString) != -1 )    "(自投)" else ""
       val blessed_str = if (vote.vote_flags.is.indexOf(VoteFlagEnum.BLESSED.toString) != -1 ) "(祝福)" else ""
+	  val noblessed_str = if (vote.vote_flags.is.indexOf(VoteFlagEnum.NOBLESSED.toString) != -1 ) "" else "" //陰霾
       val cursed_str  = if (vote.vote_flags.is.indexOf(VoteFlagEnum.CURSED.toString) != -1 )  "(詛咒)" else ""
       val bfeather_str = if (vote.vote_flags.is.indexOf(VoteFlagEnum.BFEATHERED.toString) != -1 )  "(黑羽)" else ""
       val fallen_str = vote.vote_flags.is match {
@@ -499,7 +578,7 @@ object VoteHelper {
       val vortex_str = if (vote.vote_flags.is.indexOf(VoteFlagEnum.VORTEX.toString) != -1 ) "(斗轉)" else ""
       val colored_str = if (vote.vote_flags.is.indexOf(VoteFlagEnum.COLORSPRAY.toString) != -1 ) "(七彩)" else ""
 
-      return auto_str + blessed_str + cursed_str + bfeather_str + fallen_str + shouted_str + sear_str + vortex_str + colored_str
+      return auto_str + blessed_str + noblessed_str + cursed_str + bfeather_str + fallen_str + shouted_str + sear_str + vortex_str + colored_str
     }
     def vote_no(room_day:RoomDay, user:UserEntry, vote_reveal:Boolean, vote_flags:String): String =
       if (!vote_reveal) ""

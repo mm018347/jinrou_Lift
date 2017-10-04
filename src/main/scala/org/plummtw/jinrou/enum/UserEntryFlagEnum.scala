@@ -14,6 +14,8 @@ object UserEntryFlagEnum extends Enumeration {
   val REVERSE_USED = Value("Y")
 
   val SHOUTED      = Value("S")
+  
+  val RUNNER      = Value("r")
 
   val RELIGION    = Value("R")
   val NORELIGION  = Value("N")
@@ -56,6 +58,11 @@ object UserEntryFlagEnum extends Enumeration {
 
   val GODFAT_TARGETED     = Value("+")
   val GODFAT_PREDICTED     = Value("-")
+  val GODFAT_NECROMANCER     = Value("靈")
+  val GODFAT_HUNTER     = Value("獵")
+  val GODFAT_HERBALIST     = Value("藥")
+  val GODFAT_POISONER     = Value("毒")
+  val GODFAT_SCHOLAR     = Value("學")
 
   val GODFAT_SPECIAL1      = Value("!")
   val GODFAT_SPECIAL2      = Value("@")
@@ -79,8 +86,41 @@ object UserEntryFlagEnum extends Enumeration {
   val FALLEN               = Value("*")
   val SUMMON               = Value("/")
   val SEAR                 = Value("^")
+  
+  val SHIFTER_USER = Value("模")
+  val SHIFTER_VOTE = Value("被")
 
   val LOVER                = Value("&")
 
   val DMESSAGE_SEALED     = Value("%")
+  
+  val DEMON_GIVEUP = Value("棄")
+  
+  val HERETIC_HP = Value("血")
+  
+  val DEMON_DEAD = Value("轉")
+  
+  val HERETIC_PARTY = Value("恥")
+  val HERETIC_PARTY_1 = Value("一")
+  val HERETIC_PARTY_2 = Value("二")
+  val HERETIC_DESTRUCTION_1 = Value("三")
+  val HERETIC_DESTRUCTION_2 = Value("四")
+  val HERETIC_DESTRUCTION_3 = Value("五")
+  val HERETIC_FAITH_SUCCESS = Value("毀")
+  val HERETIC_FAITH_SHAKE = Value("搖")
+  
+  val FALLENANGEL_HAVEUSED = Value("罪")
+  val FALLENANGEL_HAVEWRATH = Value("憤")
+  val FALLENANGEL_LUSTCHARM = Value("惑")
+  val FALLENANGEL_WRATH_TARGETED1 = Value("撤")
+  val FALLENANGEL_WRATH_TARGETED2 = Value("旦")
+  val FALLENANGEL_WRATH_ANGER = Value("怒")
+  
+  val THEATER = Value("劇")
+  
+  val MICROPHONE = Value("傳")
+  
+  val SPY_OVER = Value("完")
+  val SPY_JAM = Value("擾")
+  
 }

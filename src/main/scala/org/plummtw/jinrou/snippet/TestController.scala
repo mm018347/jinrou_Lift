@@ -88,8 +88,8 @@ class TestController {
     }
       
     // 加入替身君
-    val dummy_boy = UserEntry.create.uname("dummy_boy").handle_name("替身君").sex("M").user_icon_id(1)
-                    .password("dummy_boy").last_words("替身君的遺言測試").role(RoleEnum.NONE.toString)
+    val dummy_boy = UserEntry.create.uname("dummy_boy").handle_name("替身君").trip("GQ5ZTY5Z").sex("M").user_icon_id(1)
+                    .password("PPNQol99tSyPTZq+l3fy").last_words("替身君的遺言測試").role(RoleEnum.NONE.toString)
                     .user_flags(UserEntryFlagEnum.VOTED.toString).subrole("")
                     .ip_address(S.request.map{x=>JinrouUtil.getIpAddress(x)}.openOr(""))
                       
@@ -143,8 +143,8 @@ class TestController {
     }
       
     // 加入替身君
-    val dummy_boy = UserEntry.create.uname("dummy_boy").handle_name("替身君").sex("M").user_icon_id(1)
-                    .password("dummy_boy").last_words("替身君的遺言測試").role(RoleEnum.NONE.toString)
+    val dummy_boy = UserEntry.create.uname("dummy_boy").handle_name("替身君").trip("GQ5ZTY5Z").sex("M").user_icon_id(1)
+                    .password("PPNQol99tSyPTZq+l3fy").last_words("替身君的遺言測試").role(RoleEnum.NONE.toString)
                     .user_flags(UserEntryFlagEnum.VOTED.toString).subrole("")
                     .ip_address(S.request.map{x=>JinrouUtil.getIpAddress(x)}.openOr(""))
                       

@@ -30,6 +30,7 @@ class StatController {
     var draws         = 0
     var others        = 0
     var total_wins    = 0
+	var vampire_wins = 0
 
     def stat_count (rooms : List[Room], count : Int)  {
       villager_wins = 0
@@ -43,6 +44,7 @@ class StatController {
       draws         = 0
       others        = 0
       total_wins    = 0
+	  vampire_wins = 0
 
       rooms.foreach { room =>
         if (!room.has_flag(RoomFlagEnum.TEST_MODE)) {
@@ -57,6 +59,7 @@ class StatController {
           else if (room.victory.is == RoomVictoryEnum.PONTIFF_WIN.toString) pontiff_wins += 1
           else if (room.victory.is == RoomVictoryEnum.LOVER_WIN.toString) lover_wins += 1
           else if (room.victory.is == RoomVictoryEnum.DRAW.toString) draws += 1
+		  else if (room.victory.is == RoomVictoryEnum.VAMPIRE_WIN.toString) vampire_wins += 1
           else  others += 1
 
           total_wins += 1
@@ -81,6 +84,7 @@ class StatController {
         <tr><td>教勝</td><td>{pontiff_wins}</td><td>{pontiff_wins*100.0/total_wins}%</td></tr>
         <tr><td>企勝</td><td>{penguin_wins}</td><td>{penguin_wins*100.0/total_wins}%</td></tr>
         <tr><td>戀勝</td><td>{lover_wins}</td><td>{lover_wins*100.0/total_wins}%</td></tr>
+		<tr><td>鬼勝</td><td>{vampire_wins}</td><td>{vampire_wins*100.0/total_wins}%</td></tr>
         <tr><td>平手</td><td>{draws}</td><td>{draws*100.0/total_wins}%</td></tr>
         <tr><td>其他</td><td>{others}</td><td>{others*100.0/total_wins}%</td></tr>
       </table>

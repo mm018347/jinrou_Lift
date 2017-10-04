@@ -121,13 +121,178 @@ class UserEntryController {
   
     def create_user () {
       //val user_icon_no = S.param("user_icon").getOrElse("0")
-      val user_icon_id : Long =
+      var user_icon_id : Long =
         try { user_icon.toLong } 
         catch { case e: Exception => 2 }
+		
+		//匿名模式 名稱由系統自行採用
+		//使用的人物組：吉倫特省（http://garulf.web.fc2.com/）
+		if (room.has_flag(RoomFlagEnum.ANONYMOUS_MODE)) {
+			var random = new Random()
+			var anonymous_re = 0
+			
+			do {
+				var anonymous_int = random.nextInt(66) + 1
+				handle_name = anonymous_int match {
+					case 0 => "梅瑞莉絲"
+					case 1 => "梅莉賽"
+					case 2 => "達倫"
+					case 3 => "碧安卡"
+					case 4 => "尼祿"
+					case 5 => "奧爾黛希雅"
+					case 6 => "愛芬里歐"
+					case 7 => "多比"
+					case 8 => "瑪莉"
+					case 9 => "伊露茲"
+					case 10 => "從者"
+					case 11 => "特雷西"
+					case 12 => "波麗安娜"
+					case 13 => "約爾妲"
+					case 14 => "吉姆羅"
+					case 15 => "瑪麗鈴"
+					case 16 => "艾雷"
+					case 17 => "納西斯"
+					case 18 => "瑪莉亞"
+					case 19 => "伊辛里歐"
+					case 20 => "妮娜"
+					case 21 => "琴潔"
+					case 22 => "健"
+					case 23 => "白妙"
+					case 24 => "千草"
+					case 25 => "卡繆"
+					case 26 => "但塔"
+					case 27 => "阿爾弗雷德"
+					case 28 => "林繆爾"
+					case 29 => "辛尼"
+					case 30 => "米亞"
+					case 31 => "赫克托"
+					case 32 => "賽特"
+					case 33 => "安妮"
+					case 34 => "歐利"
+					case 35 => "哈倫恩"
+					case 36 => "萊拉"
+					case 37 => "羅倫佐"
+					case 38 => "悠蒂特"
+					case 39 => "吉伯特"
+					case 40 => "諾耶爾"
+					case 41 => "娜塔莉亞"
+					case 42 => "思汀"
+					case 43 => "荊"
+					case 44 => "亞多維嘉"
+					case 45 => "切思瓦夫"
+					case 46 => "克勞斯"
+					case 47 => "伊莉莎白"
+					case 48 => "卡珊德拉"
+					case 49 => "荷賽因"
+					case 50 => "申美"
+					case 51 => "拉希德"
+					case 52 => "格雷厄姆"
+					case 53 => "雲龍"
+					case 54 => "亞瑟"
+					case 55 => "羅薩蓓菈"
+					case 56 => "哈羅德"	
+					case 57 => "希絲卡"
+					case 58 => "蜜緹亞"
+					case 59 => "諾瓦"
+					case 60 => "葛溫"
+					case 61 => "艾莉莎"
+					case 62 => "利夫爾"
+					case 63 => "榭麗耶"
+					case 64 => "班妮塔"
+					case 65 => "大吾"
+					case 66 => "薰子"
+					case _ => "瑪莉貝爾"
+				}
+				user_icon_id = anonymous_int match {
+					case 0 => 505
+					case 1 => 506
+					case 2 => 507
+					case 3 => 508
+					case 4 => 509
+					case 5 => 510
+					case 6 => 511
+					case 7 => 512
+					case 8 => 513
+					case 9 => 514
+					case 10 => 515
+					case 11 => 516
+					case 12 => 517
+					case 13 => 518
+					case 14 => 519
+					case 15 => 520
+					case 16 => 521
+					case 17 => 522
+					case 18 => 523
+					case 19 => 524
+					case 20 => 525
+					case 21 => 526
+					case 22 => 527
+					case 23 => 528
+					case 24 => 529
+					case 25 => 530
+					case 26 => 531
+					case 27 => 532
+					case 28 => 533
+					case 29 => 534
+					case 30 => 535
+					case 31 => 536
+					case 32 => 537
+					case 33 => 538
+					case 34 => 539
+					case 35 => 540
+					case 36 => 541
+					case 37 => 542
+					case 38 => 543
+					case 39 => 544
+					case 40 => 545
+					case 41 => 546
+					case 42 => 547
+					case 43 => 548
+					case 44 => 549
+					case 45 => 550
+					case 46 => 551
+					case 47 => 552
+					case 48 => 553
+					case 49 => 554
+					case 50 => 555
+					case 51 => 556
+					case 52 => 557
+					case 53 => 558
+					case 54 => 559
+					case 55 => 560
+					case 56 => 561	
+					case 57 => 562
+					case 58 => 563
+					case 59 => 564
+					case 60 => 565
+					case 61 => 566
+					case 62 => 567
+					case 63 => 568
+					case 64 => 569
+					case 65 => 570
+					case 66 => 571
+					case _ => 584
+				}
+				
+				var uname_count_am = UserEntry.count(By(UserEntry.room_id, room_id), By(UserEntry.handle_name, handle_name))
+				if(uname_count_am > 0) {
+					anonymous_re = 1
+				}else{
+					anonymous_re = 0
+				}
+				
+			} while (anonymous_re > 0)
+		}
         
       // 欄位檢核
       if (uname.trim() == "dummy_boy") {
         S.error(<b>使用者帳號錯誤</b>);
+        return redirectTo("regist.html?group="+group+"&room_no=" + room_no)
+      }
+	  
+	  // 欄位檢核
+      if (password.length() < 5) {
+        S.error(<b>密碼太短＜４</b>);
         return redirectTo("regist.html?group="+group+"&room_no=" + room_no)
       }
 
@@ -233,12 +398,12 @@ class UserEntryController {
     
     val param_uname    = S.param("uname").getOrElse("").trim()
     val param_password = S.param("password").getOrElse("").trim()
-    
+    /*
     if (param_uname  == "dummy_boy") {
       S.error(<b>不可使用替身君登入</b>)
       S.redirectTo("main.html")
     }
-    
+    */
     // 輸入 ID 和 PASSWORD 登入
     var user_entry : UserEntry = null
     if ((param_uname != "") && (param_password != "")) {

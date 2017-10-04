@@ -66,7 +66,8 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
     override def validations = validPriority _ :: super.validations 
  
     def validPriority(in: String): List[FieldError] = 
-      if (in.length() < 6)        List(FieldError(this, <b>密碼過短＜６</b>))
+      if (in.length() <= 0)       List(FieldError(this, <b>密碼過短＜４</b>))
+      else if (in.length() <= 4)  List(FieldError(this, <b>密碼過短＜４</b>))
       else if (in.length() > 20)  List(FieldError(this, <b>密碼過長＞２０</b>))
       else Nil
   }
@@ -184,6 +185,14 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
   def current_role() : RoleEnum.Value = {
     RoleEnum.valueOf(role.is.substring(0,1)).getOrElse(RoleEnum.NONE)
   }
+  
+  def get_fallenangel_special() : String = {
+    var result = ""
+    if ((current_role == RoleEnum.FALLEN_ANGEL) && (role.is.length > 1)) {
+      result = role.is.substring(1,2)
+    }
+    return result
+  }
 
   def get_user_icon() : UserIcon = {
     val user_icon_list = 
@@ -208,9 +217,24 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
       if (role_enum != RoleNone)
         result = result ++ Seq(RoleEnum.get_role(role.is.substring(1,2)).simple_ctext)
       else {
+        val rolespecial = role.is.substring(1,2)
         val rolespecial_enum = RoleSpecialEnum.get_string(role.is.substring(1,2))
-        if (rolespecial_enum != RoleSpecialEnum.NONE.toString)     
-          result = result ++ Seq(<font color="#FF0000">[{rolespecial_enum}]</font>)
+        if ((rolespecial != "") &&
+		((rolespecial == RoleSpecialEnum.POISON.toString) ||
+		(rolespecial == RoleSpecialEnum.RESIST.toString) ||
+		(rolespecial == RoleSpecialEnum.CONJURE.toString) ||
+		(rolespecial == RoleSpecialEnum.WHITE.toString) ||
+		(rolespecial == RoleSpecialEnum.TEN.toString)))
+          result = Seq(<font color="#FF0000">《{rolespecial_enum}》</font>)
+		else if ((rolespecial != "") &&
+		((rolespecial == RoleSpecialEnum.PRIDE.toString) ||
+		(rolespecial == RoleSpecialEnum.ENVY.toString) ||
+		(rolespecial == RoleSpecialEnum.WRATH.toString) ||
+		(rolespecial == RoleSpecialEnum.LUST.toString) ||
+		(rolespecial == RoleSpecialEnum.SLOTH.toString) ||
+		(rolespecial == RoleSpecialEnum.GREED.toString) ||
+		(rolespecial == RoleSpecialEnum.GLUTTONY.toString)))
+          result = Seq(<font color="#666666">《{rolespecial_enum}》</font>)
       }
     }
     if (role.is.length > 2) {
@@ -218,9 +242,24 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
       if (role_enum != RoleNone)
         result = result ++ Seq(RoleEnum.get_role(role.is.substring(2,3)).simple_ctext)
       else {
-        val rolespecial_enum = RoleSpecialEnum.get_string(role.is.substring(2,3))
-        if (rolespecial_enum != RoleSpecialEnum.NONE.toString)
+        val rolespecial = role.is.substring(1,2)
+        val rolespecial_enum = RoleSpecialEnum.get_string(role.is.substring(1,2))
+        if ((rolespecial != "") &&
+		((rolespecial == RoleSpecialEnum.POISON.toString) ||
+		(rolespecial == RoleSpecialEnum.RESIST.toString) ||
+		(rolespecial == RoleSpecialEnum.CONJURE.toString) ||
+		(rolespecial == RoleSpecialEnum.WHITE.toString) ||
+		(rolespecial == RoleSpecialEnum.TEN.toString)))
           result = result ++ Seq(<font color="#FF0000">[{rolespecial_enum}]</font>)
+		else if ((rolespecial != "") &&
+		((rolespecial == RoleSpecialEnum.PRIDE.toString) ||
+		(rolespecial == RoleSpecialEnum.ENVY.toString) ||
+		(rolespecial == RoleSpecialEnum.WRATH.toString) ||
+		(rolespecial == RoleSpecialEnum.LUST.toString) ||
+		(rolespecial == RoleSpecialEnum.SLOTH.toString) ||
+		(rolespecial == RoleSpecialEnum.GREED.toString) ||
+		(rolespecial == RoleSpecialEnum.GLUTTONY.toString)))
+          result = Seq(<font color="#666666">[{rolespecial_enum}]</font>)
       }
     }
     result
@@ -273,6 +312,9 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
   }
 
   // 測試是否為失憶者
+  //  ((this.current_role == RoleEnum.HERMIT) && (room.has_flag(RoomFlagEnum.GM_HERMIT1)) &&
+  //         (room_day.day_no.is <= 11)) ||
+  //隱士GM1內建忘6↑
   def test_memoryloss(room:Room, room_day:RoomDay, user_entrys: List[UserEntry]) : Boolean = {
     if (((this.subrole.is.indexOf(SubroleEnum.MEMORYLOSS4.toString) != -1 ) &&
          (room_day.day_no.is <= 7)) ||
@@ -281,8 +323,6 @@ class UserEntry extends LongKeyedMapper[UserEntry] with IdPK {
         ((this.subrole.is.indexOf(SubroleEnum.MEMORYLOSS8.toString) != -1 ) &&
          (room_day.day_no.is <= 15)) ||
         ((this.subrole.is.indexOf(SubroleEnum.ALPHAWOLF.toString) != -1 ) &&
-         (room_day.day_no.is <= 11)) ||
-        ((this.current_role == RoleEnum.HERMIT) && (room.has_flag(RoomFlagEnum.GM_HERMIT1)) &&
          (room_day.day_no.is <= 11)) ||
         (this.has_flag(UserEntryFlagEnum.STUNNED_1) ) ||
         (this.has_flag(UserEntryFlagEnum.STUNNED_2) ) ||

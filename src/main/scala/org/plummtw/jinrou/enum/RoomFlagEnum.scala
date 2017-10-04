@@ -4,23 +4,26 @@ object RoomFlagEnum extends Enumeration {
   type RoomFlagEnum = Value
   
   // Game Option
-  val TEST_MODE    = Value("TM")
-  val WISH_ROLE    = Value("WR")
-  val NO_DUMMY     = Value("ND")
-  val DUMMY_REVEAL = Value("DR")
-  val VOTE_REVEAL  = Value("VR")
-  val DEATH_LOOK   = Value("DL")
-  val GEMINI_TALK  = Value("GT")
-  val AUTO_VOTE    = Value("AV")
-  val WEATHER       = Value("WE")
-  val WEATHER1       = Value("WF")
-  val ITEM_MODE      = Value("IT")
-  val ITEM_CUBIC     = Value("IC")
-  val CUBIC_CHANNEL  = Value("CC")
-  val CUBIC_INIT     = Value("CI")
-  val CUBIC_IMMEDIATE = Value("CM")
-  val MOB_MODE      = Value("MM")
-  val MOB_MODE1     = Value("MN")
+  val TEST_MODE         = Value("TM")
+  val ANONYMOUS_MODE    = Value("AM")
+  val WISH_ROLE         = Value("WR")
+  val NO_DUMMY          = Value("ND")
+  val DUMMY_REVEAL      = Value("DR")
+  val VOTE_REVEAL       = Value("VR")
+  val DEATH_LOOK        = Value("DL")
+  val GEMINI_TALK       = Value("GT")
+  val AUTO_VOTE         = Value("AV")
+  val WEATHER           = Value("WE")
+  val WEATHER1          = Value("WF")
+  val ITEM_MODE         = Value("IT")
+  val ITEM_CUBIC        = Value("IC")
+  val CUBIC_CHANNEL     = Value("CC")
+  val CUBIC_INIT        = Value("CI")
+  val CUBIC_IMMEDIATE   = Value("CM")
+  val LOVER_INIT        = Value("LI")
+  val LOVER_LETTER_EXCHANGE     = Value("LE")
+  val MOB_MODE          = Value("MM")
+  val MOB_MODE1         = Value("MN")
   
   // Optional Role
 
@@ -74,13 +77,14 @@ object RoomFlagEnum extends Enumeration {
   val HUNTER_OPTION2     = Value("H2")
   val CLERIC_OPTION1    = Value("C1")
   val CLERIC_OPTION2    = Value("C2")
+  val CLERIC_OPTION3    = Value("C3")
+  val CLERIC_OPTION4    = Value("C4")
   val HERBALIST_MIX      = Value("L1")
   val HERBALIST_DROP     = Value("L2")
   val SCHOLAR_OPTION1    = Value("O1")
   val SCHOLAR_OPTION2    = Value("O2")
   val SCHOLAR_OPTION3    = Value("O3")
   val SCHOLAR_OPTION4    = Value("O4")
-  val ARCHMAGE_OPTION1   = Value("Z1")
   val WEREWOLF_OPTION1  = Value("W1")
   val WOLFCUB_OPTION1  = Value("X1")
   val MADMAN_KNOWLEDGE = Value("M1")
@@ -113,21 +117,30 @@ object RoomFlagEnum extends Enumeration {
   val PENGUIN_OPTION1    = Value("K1")
   val PENGUIN_OPTION2    = Value("K2")
   val PENGUIN_OPTION3    = Value("K3")
+  val PENGUIN_OPTION4    = Value("K4")
   val PONTIFF_OPTION1  = Value("J1")
   val PONTIFF_OPTION2    = Value("J2")
   val PONTIFF_OPTION3    = Value("J3")
+  val PONTIFF_OPTION4    = Value("J4")
   val INHERITER_REVEAL = Value("I1")
   val INHERITER_NEUTRAL = Value("I2")
   val SHIFTER_REVEAL   = Value("S1")
   val SHIFTER_LINKS    = Value("S2")
+  val SHIFTER_RANDOM = Value("S3")
+  val HERETIC_OPTION1 = Value("#1")
+  val FALLENANGEL_OPTION1  = Value("f1")
+  val ARCHMAGE_OPTION1   = Value("Z1")
   val CARDMASTER_OPTION1 = Value("Q1")
-
   val GM_PENGUIN1        = Value("(1")
   val GM_HERMIT1          = Value("(2")
   val GM_PONTIFF1         = Value("(3")
+  val GM_HERETIC1         = Value("(4")
+  val GM_HERETIC2         = Value("(5")
+  val GM_SPY1         = Value("(6")
   
   val FLAGNAME_MAP   = Map(
     TEST_MODE    -> "(測)",
+	ANONYMOUS_MODE -> "(匿)",
     WISH_ROLE    -> "(希)",
     NO_DUMMY     -> "(無替)",
     DUMMY_REVEAL -> "(替)",
@@ -144,6 +157,8 @@ object RoomFlagEnum extends Enumeration {
     CUBIC_CHANNEL-> "(戀1)",
     CUBIC_INIT   -> "(戀2)",
     CUBIC_IMMEDIATE -> "(戀3)",
+	LOVER_INIT -> "(戀4)",
+	LOVER_LETTER_EXCHANGE -> "(戀5)",
   
     // Optional Role
 
@@ -151,9 +166,7 @@ object RoomFlagEnum extends Enumeration {
     ROLE_HERBALIST -> "[藥]",
     ROLE_POISONER  -> "[毒]",
     ROLE_RUNNER    -> "[逃]",
-    ROLE_AUGHUNTER -> "[占獵]",
     ROLE_SCHOLAR   -> "[學]",
-    ROLE_ARCHMAGE  -> "[大]",
 
     ROLE_SORCEROR  -> "[巫]",
     ROLE_WOLFCUB   -> "[幼]",
@@ -162,14 +175,16 @@ object RoomFlagEnum extends Enumeration {
     ROLE_GODFAT    -> "[哥]",
   
     ROLE_DEMON     -> "[惡]",
-    ROLE_FALLEN_ANGEL -> "[墮]",
     ROLE_PONTIFF   -> "[教]",
-    ROLE_PENGUIN   -> "[企]",
 
     ROLE_INHERITER -> "[繼]",
     ROLE_SHIFTER   -> "[模]",
-    ROLE_HERMIT    -> "[隱]",
+	ROLE_ARCHMAGE  -> "[大]",
+	ROLE_AUGHUNTER -> "[占獵]",
     ROLE_CARDMASTER -> "[卡]",
+	ROLE_HERMIT    -> "[隱]",
+	ROLE_PENGUIN   -> "[企]",
+	ROLE_FALLEN_ANGEL -> "[墮]",
 
     SUBROLE_MEMORYLOSS4  -> "[忘4]",
     SUBROLE_MEMORYLOSS4_2-> "[忘4+]",
@@ -196,13 +211,14 @@ object RoomFlagEnum extends Enumeration {
     HUNTER_OPTION2   -> "<獵2>",
     CLERIC_OPTION1   -> "<牧1>",
     CLERIC_OPTION2   -> "<牧2>",
+	CLERIC_OPTION3   -> "<牧3>",
+	CLERIC_OPTION4   -> "<牧4>",
     HERBALIST_MIX    -> "<藥1>",
     HERBALIST_DROP   -> "<藥2>",
     SCHOLAR_OPTION1  -> "<學1>",
     SCHOLAR_OPTION2  -> "<學2>",
     SCHOLAR_OPTION3  -> "<學3>",
     SCHOLAR_OPTION4  -> "<學4>",
-    ARCHMAGE_OPTION1 -> "【GM:大】",
     WEREWOLF_OPTION1  -> "<狼>",
     WOLFCUB_OPTION1  -> "<幼>",
     MADMAN_KNOWLEDGE -> "<狂1>",
@@ -235,21 +251,29 @@ object RoomFlagEnum extends Enumeration {
     PENGUIN_OPTION1  -> "<企1>",
     PENGUIN_OPTION2  -> "<企2>",
     PENGUIN_OPTION3  -> "<企3>",
+	PENGUIN_OPTION4  -> "<企4>",
     PONTIFF_OPTION1  -> "<教1>",
     PONTIFF_OPTION2  -> "<教2>",
     PONTIFF_OPTION3  -> "<教3>",
+	PONTIFF_OPTION4  -> "<教4>",
     INHERITER_REVEAL -> "<繼1>",
     INHERITER_NEUTRAL -> "<繼2>",
     SHIFTER_REVEAL   -> "<模1>",
     SHIFTER_LINKS    -> "<模2>",
+	SHIFTER_RANDOM -> "<模3>",
+	HERETIC_OPTION1    -> "<魔1>",
+	FALLENANGEL_OPTION1    -> "<墮1>",
 
-    ARCHMAGE_OPTION1   -> "【GM:大】",
-    CARDMASTER_OPTION1 -> "【GM:卡】",
+    ARCHMAGE_OPTION1   -> "【大初】",
+    CARDMASTER_OPTION1 -> "【卡初】",
 
     
-    GM_PENGUIN1        -> "【GM:企】",
-    GM_HERMIT1         -> "【GM:隱】",
-    GM_PONTIFF1        -> "【GM:教】"
+    GM_PENGUIN1        -> "【企初】",
+    GM_HERMIT1         -> "【隱初】",
+    GM_PONTIFF1        -> "【教替】",
+	GM_HERETIC1        -> "【端村】",
+	GM_HERETIC2        -> "【端繼】",
+	GM_SPY1            -> "【諜狂】"
   )
   
   def flag_name(flag : RoomFlagEnum.Value) = {

@@ -86,10 +86,10 @@ class HeavenController {
     //  ()=>MessageHelper.messages_heaven(room, room_day, user_entry, user_entrys))
 
     val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
-                     ((room.status.is == RoomStatusEnum.PLAYING.toString) &&
-                      (room.has_flag(RoomFlagEnum.TEST_MODE))) ||
+                     (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
                      ((user_entry != null) && (!user_entry.live.is) &&
-                      (room.has_flag(RoomFlagEnum.DEATH_LOOK)))
+                      (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
+                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
 
     val old_logs = 
       if (!heaven_mode)

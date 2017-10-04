@@ -15,6 +15,24 @@ import org.plummtw.jinrou.enum._
 import org.plummtw.jinrou.util._
 import org.plummtw.jinrou.data._
 
+// 行動處理用 Lock
+object ActionLock {
+  val lock_hash = scala.collection.mutable.Map[Long, Object]()
+  
+  // 每個 User 莊 給一個 Lock
+  def get_lock(id: Long) : Object = {
+    if (!lock_hash.contains(id)) {
+      lock_hash(id) = new Object()
+    } 
+    
+    return lock_hash(id)
+  }
+  
+  def remove_lock(id: Long) = {
+    lock_hash -= id
+  }
+}
+
 class UpController {
   
   //<form name="reloadsend" method="POST" action="game_play.php?room_no=4600&auto_reload=15&play_sound=off&dead_mode=&heaven_mode=&list_down=#game_top" target="bottom"></form>
@@ -62,6 +80,7 @@ class UpController {
       S.redirectTo("up_error.html")
     }
     
+    val user_entrys     = UserEntry.findAll(By(UserEntry.room_id, room_id))
     var user_entry : UserEntry = null
     val user_entry_no : String = S.getSessionAttribute("user_id").getOrElse("")
     if ((S.getSessionAttribute("room_id").getOrElse("") == room_no) && 
@@ -74,12 +93,12 @@ class UpController {
       S.error(<b>找不到對應的玩家 {user_entry_no}</b>)
       S.redirectTo("up_error.html")
     }
-    val user_entrys     = UserEntry.findAll(By(UserEntry.room_id, room_id))
     
     // 是否發言
     var say_data   = S.param("say").getOrElse("").trim()
     val say_gemini = S.param("say_gemini").getOrElse("")
     val say_lover  = S.param("say_lover").getOrElse("")
+	val say_microphone  = S.param("say_microphone").getOrElse("")
     val say_betrayer = S.param("say_betrayer").getOrElse("")
 
     val font_type  = S.param("font_type").getOrElse("")
@@ -119,17 +138,101 @@ class UpController {
 //*    val vote_sorceror_whisper = SystemMessage.findAll(By(SystemMessage.roomday_id, room_day.id.is),
 //*                                                      By(SystemMessage.actioner_id, user_entry.id.is),
 //*                                                      By(SystemMessage.mtype, MTypeEnum.VOTE_SORCEROR_WHISPER.toString))
-
-
+/*
+    val fxxks = List(
+	"幹",
+	"屌",
+	"幹你",
+	"幹你娘",
+	"他媽",
+	"他娘",
+	"媽的",
+	"去死",
+	"你娘",
+	"你媽",
+	"媽超胖",
+	"吃我的",
+	"去屎",
+	"吃屎",
+	"屎",
+	"活該",
+	"死好",
+	"哭哭喔",
+	"閉嘴",
+	"ㄎㄎ",
+	"ㄏㄏ",
+	"顆顆",
+	"白痴",
+	"白癡",
+	"智障",
+	"喜憨兒",
+	"去你的",
+	"他馬的",
+	"馬的",
+	"他馬",
+	"塞你娘",
+	"屁眼",
+	"菊花",
+	"蛋蛋",
+	"打我",
+	"E04",
+	"e04",
+	"腦殘",
+	"奶奶的",
+	"他娘親的",
+	"老母",
+	"北七",
+	"仆街",
+	"撚",
+	"閪",
+	"老木",
+	"吃糞",
+	"操你",
+	"你奶",
+	"臭你",
+	"你老娘的",
+	"狗娘養的",
+	"機掰",
+	"雞掰",
+	"死孽種",
+	"死中二",
+	"哭爸哭媽",
+	"咀炮",
+	"低能",
+	"北爛",
+	"北濫",
+	"大便",
+	"孬",
+	"沒種"
+	) 
+    for(str <- fxxks if(say_data contains str)){
+         say_data = ""
+      }
+	  */
     if (((say_data != "") && List("20","16","12","8","S","V").contains(font_type)) ||
         (font_type == "L")) {
       if (font_type == "L") {
         // 遺言
         if (user_entry.live.is) {
-          user_entry.last_words(say_data)
-          user_entry.validate match {
-            case Nil => user_entry.save()
-            case xs  => Log.warn(xs); S.error(xs)
+		  if (say_data == " ") {
+		    say_data = ""
+          } else if((user_entry.has_flag(UserEntryFlagEnum.LOVER)) &&
+             (room.has_flag(RoomFlagEnum.LOVER_LETTER_EXCHANGE))) {
+            val lovers = user_entrys.filter(x=> (x.has_flag(UserEntryFlagEnum.LOVER)) && (x.id.is != user_entry.id.is))
+            val talk = Talk.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is)
+                   .font_type("8").message(say_data).mtype(MTypeEnum.TALK_LOVER_DIARY.toString)
+            talk.save
+            lovers(0).last_words(say_data)
+            lovers(0).validate match {
+              case Nil => lovers(0).save()
+              case xs  => Log.warn(xs); S.error(xs)
+            }
+          } else {
+            user_entry.last_words(say_data)
+            user_entry.validate match {
+              case Nil => user_entry.save()
+              case xs  => Log.warn(xs); S.error(xs)
+            }
           }
         }
       } else if (((room_day.deadline.is == null) &&
@@ -181,9 +284,13 @@ class UpController {
           }
           else if ((say_lover == "on") &&
                    (user_entry.has_flag(UserEntryFlagEnum.LOVER)) &&
-                   (room.has_flag(RoomFlagEnum.CUBIC_CHANNEL)))
+                   (room.has_flag(RoomFlagEnum.CUBIC_CHANNEL)) &&
+				   (!room.has_flag(RoomFlagEnum.LOVER_LETTER_EXCHANGE)))
               MTypeEnum.TALK_LOVER.toString
-          else if ((user_entry.test_memoryloss(room, room_day, user_entrys)) ||
+          else if ((say_microphone == "on") &&
+                   (user_entry.has_flag(UserEntryFlagEnum.MICROPHONE)))
+              MTypeEnum.TALK_MICROPHONE.toString
+		  else if ((user_entry.test_memoryloss(room, room_day, user_entrys)) ||
                    (user_entry.test_fake(room_day)))
             MTypeEnum.TALK_NIGHT.toString
           else if (user_entry.role.is.substring(0,1) == RoleEnum.WEREWOLF.toString)
@@ -505,10 +612,13 @@ class UpController {
                               (user_entry != null) && (!user_entry.live.is)
 
     val js_reload_game_str  = js_reload_game(dead_mode)
-    val item_bar            = (if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (room_day.day_no.is % 2 == 1))
+	// val item_bar            = (if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (room_day.day_no.is % 2 == 1))
+	//道具可使用的時機的控制改為道具那邊
+    val item_bar            = user_entry.get_item_tag(room, room_day, user_entrys, ItemVote.findAll(By(ItemVote.roomday_id, room_day.id.is)))
+	/*val item_bar            = (if ((room_day.day_no.is % 2 == 1))
                                  user_entry.get_item_tag(room, room_day, user_entrys, ItemVote.findAll(By(ItemVote.roomday_id, room_day.id.is)))
                                else
-                                 <span></span>)
+                                 <span></span>)*/
     val action_bar          = user_entry.get_action_tag(room, room_day, user_entrys, vote_list)
     val say_option          = (if (vote_sorceror_whisper.length != 0) Seq(<option value="S">隱密發言</option>)
                               else NodeSeq.Empty) ++
@@ -530,10 +640,16 @@ class UpController {
                                   (room_day.day_no.is %2 == 1) &&
                                   (user_entry.has_flag(UserEntryFlagEnum.LOVER)) &&
                                   (room.has_flag(RoomFlagEnum.CUBIC_CHANNEL)) &&
+								  (!room.has_flag(RoomFlagEnum.LOVER_LETTER_EXCHANGE)) &&
                                   (user_entry.live.is))
                                 Seq(<input type="checkbox" id="say_lover" name="say_lover"/>, <span>戀人頻道</span>, <br/>)
+							  else if ((room.status.is != RoomStatusEnum.ENDED.toString) &&
+                                  (room_day.day_no.is %2 == 1) &&
+                                  (user_entry.has_flag(UserEntryFlagEnum.MICROPHONE)) &&
+                                  (user_entry.live.is))
+                                Seq(<input type="checkbox" id="say_microphone" name="say_microphone"/>, <span>傳聲頻道</span>, <br/>)
                               else NodeSeq.Empty
-    val item_option         = if ((room.status.is != RoomStatusEnum.ENDED.toString) &&
+							val item_option         = if ((room.status.is != RoomStatusEnum.ENDED.toString) &&
                                   (room_day.day_no.is %2 == 1) &&
                                   (user_entry.live.is)) {
                                 val user_item = ItemEnum.get_item(user_entry.item_flags.is)
@@ -622,6 +738,8 @@ class UpController {
       S.error(<b>找不到對應的玩家 {user_entry_no}</b>)
       S.redirectTo("up_error.html")
     }
+	
+	ActionLock.get_lock(user_entry.id.is).synchronized {
     
     val user_entrys     = UserEntry.findAll(By(UserEntry.room_id, room_id))
     val user_role       = if (room_day.day_no.is == 0) "0"
@@ -689,7 +807,7 @@ class UpController {
       "command_hidden_field"   -> <input type="hidden" name="command"   value={command_data} />,
       "vote_time_hidden_field" -> <input type="hidden" name="vote_time" value={room_day.vote_time.is.toString} />,
       "action_table"           -> action_table,
-      "auction"                -> (if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (room_day.day_no.is % 2 == 0) && (room_day.day_no.is != 0))
+      "auction"                -> (if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (room_day.day_no.is % 2 == 0) && (room_day.day_no.is != 0) && (!command_data.startsWith("item_")))
                                      <span>競標金額：<input type="text" name="auction" size="3" maxlength="3" value="0"/></span>
                                    else
                                      <span></span>),
@@ -697,5 +815,6 @@ class UpController {
 
       //"action_bar"           -> action_bar
     )
+	}
   }
 }

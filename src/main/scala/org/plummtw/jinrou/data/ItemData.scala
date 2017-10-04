@@ -29,17 +29,22 @@ class ItemData (action: MTypeEnum.Value, str: String, name: String, targetable_b
 
   // 產生 Item Tag
   def generate_action_tag(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry], vote_list:List[ItemVote]) : NodeSeq = {
-    if (room.status.is == RoomStatusEnum.ENDED.toString)
+    val user_item = ItemEnum.get_item(user.item_flags.is)
+	if (room.status.is == RoomStatusEnum.ENDED.toString)
       return Seq(<span></span>)
     else if (!user.live.is)
       return Seq(<span></span>)
+    else if ((room_day.day_no.is % 2 == 0) && (user_item != ItemMicrophone))
+	  return Seq(<span></span>)
+    else if ((room_day.day_no.is % 2 == 1) && (user_item == ItemMicrophone))
+	  return Seq(<span></span>)
 
     val is_voted = (vote_list.filter(_.actioner_id.is == user.id.is).length != 0)
 
     if (is_voted)
       return Seq(<span></span>)
 
-    val user_item = ItemEnum.get_item(user.item_flags.is)
+    
     if (user_item == ItemNoItem)
       return Seq(<span></span>)
 
@@ -57,10 +62,12 @@ object ItemUnluckyPurse extends ItemData(MTypeEnum.ITEM_UNLUCKY_PURSE, "不運�
   override def item_pic = Seq(<img src="icon/UP.gif" />)
   override def targetable_users(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry]) : List[UserEntry] = {
     val result = user_entrys.filter(x=>(x.uname.is != "dummy_boy") && (x.id.is != user.id.is) && (x.live.is))
-    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) ||
+    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) && (user.hasnt_flag(UserEntryFlagEnum.LOVER)) ||
         (user.subrole.is == SubroleEnum.SUBPONTIFF.toString))
       result.filter(x=>x.hasnt_flag(UserEntryFlagEnum.PONTIFF_AURA))
-    else
+    else if (user.has_flag(UserEntryFlagEnum.FALLENANGEL_LUSTCHARM))
+      result.filter(x=>x.get_fallenangel_special != RoleSpecialEnum.LUST.toString)
+	else
       result
   }
 }
@@ -76,10 +83,12 @@ object ItemBlackFeather extends ItemData(MTypeEnum.ITEM_BLACK_FEATHER, "咒縛�
   override def item_pic = Seq(<img src="icon/BF.gif" />)
   override def targetable_users(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry]) : List[UserEntry] = {
     val result = user_entrys.filter(x=>(x.uname.is != "dummy_boy") && (x.id.is != user.id.is) && (x.live.is))
-    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) ||
+    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) && (user.hasnt_flag(UserEntryFlagEnum.LOVER)) ||
         (user.subrole.is == SubroleEnum.SUBPONTIFF.toString))
       result.filter(x=>x.hasnt_flag(UserEntryFlagEnum.PONTIFF_AURA))
-    else
+    else if (user.has_flag(UserEntryFlagEnum.FALLENANGEL_LUSTCHARM))
+      result.filter(x=>x.get_fallenangel_special != RoleSpecialEnum.LUST.toString)
+	else
       result
   }
 }
@@ -88,10 +97,12 @@ object ItemThiefSecret extends ItemData(MTypeEnum.ITEM_THIEF_SECRET, "盜賊極�
   override def item_pic = Seq(<img src="icon/TS.gif" />)
   override def targetable_users(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry]) : List[UserEntry] = {
     val result = user_entrys.filter(x=>(x.uname.is != "dummy_boy") && (x.id.is != user.id.is))
-    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) ||
+    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) && (user.hasnt_flag(UserEntryFlagEnum.LOVER)) ||
         (user.subrole.is == SubroleEnum.SUBPONTIFF.toString))
       result.filter(x=>x.hasnt_flag(UserEntryFlagEnum.PONTIFF_AURA))
-    else
+    else if (user.has_flag(UserEntryFlagEnum.FALLENANGEL_LUSTCHARM))
+      result.filter(x=>x.get_fallenangel_special != RoleSpecialEnum.LUST.toString)
+	else
       result
   }
 }
@@ -104,10 +115,12 @@ object ItemDMessageSeal extends ItemData(MTypeEnum.ITEM_DMESSAGE_SEAL, "封印�
   override def item_pic = Seq(<img src="icon/DS.gif" />)
   override def targetable_users(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry]) : List[UserEntry] = {
     val result = user_entrys.filter(x=>(x.uname.is != "dummy_boy") && (x.id.is != user.id.is) && (x.live.is))
-    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) ||
+    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) && (user.hasnt_flag(UserEntryFlagEnum.LOVER)) ||
         (user.subrole.is == SubroleEnum.SUBPONTIFF.toString))
       result.filter(x=>x.hasnt_flag(UserEntryFlagEnum.PONTIFF_AURA))
-    else
+    else if (user.has_flag(UserEntryFlagEnum.FALLENANGEL_LUSTCHARM))
+      result.filter(x=>x.get_fallenangel_special != RoleSpecialEnum.LUST.toString)
+	else
       result
   }
 }
@@ -116,7 +129,7 @@ object ItemMirrorShield extends ItemData(MTypeEnum.ITEM_MIRROR_SHIELD, "鏡盾�
   override def item_pic = Seq(<img src="icon/MS.gif" />)
 }
 
-object ItemShamanCrown extends ItemData(MTypeEnum.ITEM_SHAMAN_CROWN, "薩滿冕冠", "item_shaman_crown", true, 3) {
+object ItemShamanCrown extends ItemData(MTypeEnum.ITEM_SHAMAN_CROWN, "薩滿冠冕", "item_shaman_crown", true, 3) {
   override def item_pic = Seq(<img src="icon/SC.gif" />)
   override def item_intro(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
     val  system_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
@@ -162,10 +175,12 @@ object ItemDeathNote extends ItemData(MTypeEnum.ITEM_DEATH_NOTE, "死亡筆記",
   override def item_pic = Seq(<img src="icon/DN.gif" />)
   override def targetable_users(room:Room, room_day:RoomDay, user:UserEntry, user_entrys:List[UserEntry]) : List[UserEntry] = {
     val result = user_entrys.filter(x=>(x.uname.is != "dummy_boy") && (x.id.is != user.id.is) && (x.live.is))
-    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) ||
+    if ((user.has_flag(UserEntryFlagEnum.RELIGION)) && (user.hasnt_flag(UserEntryFlagEnum.LOVER)) ||
         (user.subrole.is == SubroleEnum.SUBPONTIFF.toString))
       result.filter(x=>x.hasnt_flag(UserEntryFlagEnum.PONTIFF_AURA))
-    else
+    else if (user.has_flag(UserEntryFlagEnum.FALLENANGEL_LUSTCHARM))
+      result.filter(x=>x.get_fallenangel_special != RoleSpecialEnum.LUST.toString)
+	else
       result
   }
 }
@@ -209,4 +224,8 @@ object ItemPopulationCensus extends ItemData(MTypeEnum.ITEM_POPULATION_CENSUS, "
 
     result_census
   }
+}
+
+object ItemMicrophone extends ItemData(MTypeEnum.ITEM_MICROPHONE, "傳聲筒", "item_microphone", true, 3) {
+  override def item_pic = Seq(<img src="icon/MI.gif" />)
 }

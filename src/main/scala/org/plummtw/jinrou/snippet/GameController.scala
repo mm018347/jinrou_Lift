@@ -267,14 +267,14 @@ class GameController {
              Seq(<a href={"logout.html?&room_no=" + room_no} target="_top">[登出]</a>) ++ game_title_with_user2  
              
     
-    val game_title : NodeSeq = Seq(<span style="text-decoration:underline;"><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
-         　～{room.room_comment.is}～[{room_no}號村] 
+    val game_title : NodeSeq = Seq(<span><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
+         [{room_no}號村] 
          { 
            if (user_entry != null)
              game_title_with_user 
            else 
              Seq(<span></span>) 
-         }</span>, <br/>)
+         }<br/>～{room.room_comment.is}～</span>, <br/>)
 
     val play_sound_option : scala.xml.Elem =
       if (S.getSessionAttribute("play_sound") == "on")
@@ -315,11 +315,78 @@ class GameController {
             RoomDay.create.room_id(room.id.is).day_no(room_day.day_no.is + 1).vote_time(1).save
             S.redirectTo("game_end.html?room_no=" + room_no)
           }
-          Seq(<span>廢村[{abandon_votes.length +1}/{abandon_counts}]</span>)
+          Seq(<span>已要求廢村[{abandon_votes.length +1}/{abandon_counts}]</span>)
         } else if (player_abandon_voted.length > 0) {
-          Seq(<span>廢村[{abandon_votes.length}/{abandon_counts}]</span>)
+          Seq(<span>已要求廢村[{abandon_votes.length}/{abandon_counts}]</span>)
         } else {
           Seq(<a href={"game_view.html?room_no=" + room_no + "&abandon=on"}>廢村[{abandon_votes.length}/{abandon_counts}]</a>)
+        }
+      }
+	  
+	val rollcall_option : NodeSeq =
+      if ((room_day.day_no.is > 0) || (user_entry == null) || (!user_entry.live.is))
+        Seq()
+      else {
+        val rollcall_vote_param = S.param("rollcall").getOrElse("0")
+
+        val rollcall_votes = SpecialVote.findAll(By(SpecialVote.roomday_id, room_day.id.is), By(SpecialVote.mtype, MTypeEnum.SPECIAL_VOTE_ROLLCALL.toString))
+        val live_user_entrys = user_entrys.filter(_.live.is)
+        val rollcall_counts   = Math.max((live_user_entrys.length + 1) / 3, 5)
+        val player_rollcall_voted = rollcall_votes.filter(x => x.actioner_id.is == user_entry.id.is)
+
+        if ((rollcall_vote_param == "on") && (player_rollcall_voted.length == 0) && (user_entry.has_flag(UserEntryFlagEnum.VOTED))) {
+          SpecialVote.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is).mtype(MTypeEnum.SPECIAL_VOTE_ROLLCALL.toString).save
+          Talk.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is).mtype(MTypeEnum.ROLLCALL.toString).save
+
+          if (rollcall_votes.length +1 >= rollcall_counts) {
+            Vote.bulkDelete_!!(By(Vote.roomday_id, room_day.id.is))
+            SpecialVote.bulkDelete_!!(By(SpecialVote.roomday_id, room_day.id.is))
+
+            DB.use(DefaultConnectionIdentifier) { conn =>
+            DB.prepareStatement("update UserEntry set user_flags = '' where room_id = ? and uname != 'dummy_boy'", conn) { stmt =>
+            stmt.setLong(1, room.id.is)
+            stmt.executeUpdate()
+              }
+            }
+
+            Talk.create.roomday_id(room_day.id.is).mtype(MTypeEnum.MESSAGE_GENERAL.toString).message("＜玩家準備標記已重置＞").save
+			Talk.create.roomday_id(room_day.id.is).mtype(MTypeEnum.MESSAGE_REVOTE0.toString).save
+            S.redirectTo("game_view.html?room_no=" + room_no)
+          }
+          Seq(<span>點名[{rollcall_votes.length +1}/{rollcall_counts}]</span>)
+        } else if (player_rollcall_voted.length > 0) { //已經按過則不能再按
+          Seq(<span>已要求點名[{rollcall_votes.length}/{rollcall_counts}]</span>)
+        } else if (user_entry.hasnt_flag(UserEntryFlagEnum.VOTED)) { //
+          Seq(<span>尚未準備不能點名[{rollcall_votes.length}/{rollcall_counts}]</span>)
+        } else {
+          Seq(<a href={"game_view.html?room_no=" + room_no + "&rollcall=on"}>點名[{rollcall_votes.length}/{rollcall_counts}]</a>)
+        }
+      }
+	  
+	  val dissent_option : NodeSeq =
+      if ((room_day.day_no.is == 0) || (user_entry == null) || (!user_entry.live.is))
+        Seq()
+      else {
+        val dissent_vote_param = S.param("dissent").getOrElse("0")
+
+        val dissent_votes = SpecialVote.findAll(By(SpecialVote.roomday_id, room_day.id.is),By(SpecialVote.mtype, MTypeEnum.SPECIAL_VOTE_DISSENT.toString))
+        val live_user_entrys = user_entrys.filter(_.live.is)
+        val dissent_counts   = 1
+        val player_dissent_voted = dissent_votes.filter(x => x.actioner_id.is == user_entry.id.is)
+
+        if (room_day.day_no.is % 2 == 0) {
+          Seq(<span>白天禁止異議</span>)
+        } else if ((dissent_vote_param == "on") && (player_dissent_voted.length == 0) && (room_day.day_no.is == 0)) {
+		  SpecialVote.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is).mtype(MTypeEnum.SPECIAL_VOTE_DISSENT.toString).save
+		  if (user_entry.sex.is.toString == "M")
+            Talk.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is).mtype(MTypeEnum.DISSENT_MALE.toString).save
+          else
+            Talk.create.roomday_id(room_day.id.is).actioner_id(user_entry.id.is).mtype(MTypeEnum.DISSENT_FEMALE.toString).save
+          Seq(<span>今日已使用異議</span>)
+        } else if (player_dissent_voted.length >= 1) {
+          Seq(<span>今日已使用異議</span>)
+        } else {
+          Seq(<a href={"game_view.html?room_no=" + room_no + "&dissent=on"}>異議</a>)
         }
       }
 
@@ -328,8 +395,8 @@ class GameController {
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=15"} target="_top">15秒</a>
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=20"} target="_top">20秒</a>
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=30"} target="_top">30秒</a>)
-         [音效通知]({ play_sound_option })
-         { list_down_option } {abandon_option}
+         [音效]({ play_sound_option })
+         { list_down_option }<br/>{abandon_option} {rollcall_option}
          </small>)
 
     def sound_object(swf_filename: String) =
@@ -359,8 +426,8 @@ class GameController {
             <input type="password" name="password" size="20" style="txt-align:rignt;ime-mode: disabled;" />
             <input type="submit" value="登入"/>
             { if (room_day.day_no.is == 0) 
-                Seq(<a href={"regist?group=1&room_no=" + room_no}><strong>[住民登錄1]</strong></a>,
-                    <a href={"regist?group=2&room_no=" + room_no}><strong>[住民登錄2]</strong></a>)
+                Seq(<a href={"regist?group=1&room_no=" + room_no}><strong>[村民登錄1]</strong></a>,
+                    <a href={"regist?group=2&room_no=" + room_no}><strong>[村民登錄2]</strong></a>)
               else scala.xml.NodeSeq.Empty } 
              <a href="main.html"><strong>[離開]</strong></a>              
            </td>
@@ -370,10 +437,10 @@ class GameController {
     val dead_mode    = (room.status.is != RoomStatusEnum.ENDED.toString) &&
                        (user_entry != null) && (!user_entry.live.is)
     val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
-                     ((room.status.is == RoomStatusEnum.PLAYING.toString) && 
-                      (room.has_flag(RoomFlagEnum.TEST_MODE))) ||
+                     (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
                      ((user_entry != null) && (!user_entry.live.is) && 
-                      (room.has_flag(RoomFlagEnum.DEATH_LOOK)))
+                      (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
+                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
     //println("heaven_mode " + heaven_mode.toString)
 
 
@@ -451,6 +518,7 @@ class GameController {
 
         // 教徒時互相知道身分
         val live_pontiff = user_entrys.filter(x=>(x.current_role == RoleEnum.PONTIFF) && (x.live.is))
+		val pontiff = user_entrys.filter(x=>(x.current_role == RoleEnum.PONTIFF))
 
         // 可以得知所有教徒身份的人有三
         // 1. 副教主
@@ -484,13 +552,35 @@ class GameController {
                 <td>{live_users_religion.length.toString}</td></tr></tbody></table>)
         }
 
-        if (user_entry.has_flag(UserEntryFlagEnum.LOVER)) {
+        if (user_entry.has_flag(UserEntryFlagEnum.SHIFTER_USER)) {
+          val users_shifter = user_entrys.filter(x=>(x.id.is != user_entry.id.is) &&
+                                                   (x.has_flag(UserEntryFlagEnum.SHIFTER_VOTE)))
+          val shifter_vote_str = users_shifter.map(_.handle_name.is).mkString("", "　","")
+
+          result = result ++ Seq(<table cellSpacing="0" cellPadding="0" border="1"><tbody>
+            <tr><td><img src="images/role_shifter_vote.gif"/></td><td>{shifter_vote_str}</td></tr></tbody></table>)
+        }
+		
+		if (user_entry.has_flag(UserEntryFlagEnum.LOVER)) {
           val users_lovers = user_entrys.filter(x=>(x.id.is != user_entry.id.is) &&
                                                    (x.has_flag(UserEntryFlagEnum.LOVER)))
           val lovers_str = users_lovers.map(_.handle_name.is).mkString("", "　","")
 
           result = result ++ Seq(<table cellSpacing="0" cellPadding="0" border="1"><tbody>
             <tr><td><img src="images/lovers_partner.gif"/></td><td>{lovers_str}</td></tr></tbody></table>)
+        }
+		
+		if ((user_entry.has_flag(UserEntryFlagEnum.LOVER)) && (user_entry.has_flag(UserEntryFlagEnum.RELIGION)) && (live_pontiff.length > 0)) {
+          val users_pontiff = user_entrys.filter(x=>(x.current_role == RoleEnum.PONTIFF) &&
+												   (x.has_flag(UserEntryFlagEnum.PONTIFF_AURA)))
+          val pontiffu_str = users_pontiff.map(_.handle_name.is).mkString("", "　","")
+          result = result ++ Seq(<table cellSpacing="0" cellPadding="0" border="1"><tbody>
+            <tr><td><img src="images/lovers_pontiffu.gif"/></td><td>{pontiffu_str}</td></tr></tbody></table>)
+        }
+		
+		if (user_entry.has_flag(UserEntryFlagEnum.SPY_JAM)) {
+          result = result ++ Seq(<table cellSpacing="0" cellPadding="0" border="1"><tbody>
+            <tr><td><img src="images/role_spy_jam_no.gif"/></td></tr></tbody></table>)
         }
 
         result

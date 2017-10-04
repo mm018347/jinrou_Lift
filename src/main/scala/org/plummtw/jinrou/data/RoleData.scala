@@ -191,7 +191,7 @@ object RoleNone        extends RoleData(RoleEnum.NONE,        "不指定", "", R
   override def role_enabled = false
 }
 
-object RoleVillager    extends RoleData(RoleEnum.VILLAGER,    "村民", "", RoomVictoryEnum.VILLAGER_WIN, List(ActionVillagerDetect, ActionBecomeMob ,ActionNoAction)) {
+object RoleVillager    extends RoleData(RoleEnum.VILLAGER,    "村民", "#606060", RoomVictoryEnum.VILLAGER_WIN, List(ActionVillagerDetect, ActionBecomeMob ,ActionNoAction)) {
   override def role_intro = <img src="images/role_human.gif"/>
   override def role_pic   = <img src="images/rolepic_human.gif" />
 
@@ -226,17 +226,16 @@ object RoleHermit    extends RoleData(RoleEnum.HERMIT,    "隱士", "#888888", R
   override def role_pic   = <img src="images/rolepic_hermit.gif" />
 }
 
-
-
 object RoleAugurer     extends RoleData(RoleEnum.AUGURER,     "占卜師", "#9933FF", RoomVictoryEnum.VILLAGER_WIN, List(ActionAugure, ActionBecomeMob)) {
   override def role_intro = <img src="images/role_mage.gif"/>
   override def role_pic   = <img src="images/rolepic_mage.gif" />
   
   def augurer_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry], system_message0:SystemMessage) = {
-      
+    if(user.hasnt_flag(UserEntryFlagEnum.SPY_JAM)){
     var  color_tag  : scala.xml.Elem = null
     var  result_tag : scala.xml.Elem = null  
     val actionee   = user_entrys.filter(_.id.is == system_message0.actionee_id.is)(0)
+  
     if (((actionee.role.is.substring(0,1) == RoleEnum.WEREWOLF.toString) ||
          (actionee.role.is.substring(0,1) == RoleEnum.WOLFCUB.toString)  ||
          (actionee.subrole.is == SubroleEnum.WOLFSTAMP.toString)  ||
@@ -258,12 +257,14 @@ object RoleAugurer     extends RoleData(RoleEnum.AUGURER,     "占卜師", "#993
         result_tag = <img src="images/role_result_human.gif"/>
       }
     }
-           
+  
     <table cellSpacing="0" cellPadding="0" border="1"><tbody>
      <tr><td><img src="images/role_mage_result.gif"/></td>
       <td>{color_tag}</td>
       <td>{result_tag}</td></tr></tbody></table>    
-  }
+    } else 
+      <span></span>
+}
 
   override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
     if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0)) {
@@ -283,12 +284,12 @@ object RoleAugurer     extends RoleData(RoleEnum.AUGURER,     "占卜師", "#993
   }
 }
 
-object RoleNecromancer extends RoleData(RoleEnum.NECROMANCER, "靈能者", "#009900", RoomVictoryEnum.VILLAGER_WIN, List(ActionBecomeMob ,ActionNoAction)) {
+object RoleNecromancer extends RoleData(RoleEnum.NECROMANCER, "靈能者", "#006699", RoomVictoryEnum.VILLAGER_WIN, List(ActionBecomeMob ,ActionNoAction)) {
   override def role_intro = <img src="images/role_necromancer.gif"/>
   override def role_pic   = <img src="images/rolepic_necromancer.gif" />
   
   override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
-    if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0)) {
+    if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0) && (user.hasnt_flag(UserEntryFlagEnum.SPY_JAM))) {
       val  room_days      = RoomDay.findAll(By(RoomDay.room_id, room.id.is), OrderBy(RoomDay.day_no, Descending))
       val  system_messages = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_days(2).id.is),
                                                   By(SystemMessage.mtype,       MTypeEnum.DEATH_HANGED.toString)) ::: 
@@ -300,7 +301,9 @@ object RoleNecromancer extends RoleData(RoleEnum.NECROMANCER, "靈能者", "#009
       def  color_tag(handle_name : String, role_str : String)   =
         if (role_str == RoleEnum.WEREWOLF.toString)
           <font color="red">{handle_name}</font>
-        else if ((role_str == RoleEnum.DEMON.toString) || (role_str == RoleEnum.FALLEN_ANGEL.toString))
+        else if (role_str == RoleEnum.DEMON.toString)
+          <font color="#666666">{handle_name}</font>
+        else if (role_str == RoleEnum.FALLEN_ANGEL.toString)
           <font color="#666666">{handle_name}</font>
         else if ((role_str == RoleEnum.FOX.toString) && (room.has_flag(RoomFlagEnum.NECROMANCER_OPTION1)))
           <font color="#CC0099">{handle_name}</font>
@@ -312,6 +315,8 @@ object RoleNecromancer extends RoleData(RoleEnum.NECROMANCER, "靈能者", "#009
           <img src="images/role_result_wolf.gif"/> 
         else if (role_str == RoleEnum.DEMON.toString) 
           <img src="images/role_result_demon.gif"/>
+        else if (role_str == RoleEnum.FALLEN_ANGEL.toString) 
+          <img src="images/role_result_angel.gif"/>
         else if ((role_str == RoleEnum.FOX.toString) && (room.has_flag(RoomFlagEnum.NECROMANCER_OPTION1)))
           <img src="images/role_result_fox.gif"/>
         else
@@ -377,7 +382,7 @@ object RoleHunter      extends RoleData(RoleEnum.HUNTER,      "獵人",   "#3399
   }
 }
 
-object RoleGemini      extends RoleData(RoleEnum.GEMINI,      "共有者", "#CC9966", RoomVictoryEnum.VILLAGER_WIN, List(ActionBecomeMob ,ActionNoAction)) {
+object RoleGemini      extends RoleData(RoleEnum.GEMINI,      "共有者", "#CC6633", RoomVictoryEnum.VILLAGER_WIN, List(ActionBecomeMob ,ActionNoAction)) {
   override def role_intro = <img src="images/role_common.gif"/>
   override def role_pic   = <img src="images/rolepic_common.gif" />
   
@@ -401,6 +406,12 @@ object RoleCleric      extends RoleData(RoleEnum.CLERIC,      "牧師",   "#CCDD
   override def role_pic   = <img src="images/rolepic_cleric.gif" />
   
   override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
+    val party : NodeSeq =
+    if (user.has_flag(UserEntryFlagEnum.HERETIC_PARTY_1) || user.has_flag(UserEntryFlagEnum.HERETIC_PARTY_2))
+        Seq(<tr><td><img src="images/role_heretic_party.gif"/></td></tr>)
+	  else
+        NodeSeq.Empty
+		
     if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0)) {
       val system_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_WEREWOLF.toString))
@@ -411,7 +422,7 @@ object RoleCleric      extends RoleData(RoleEnum.CLERIC,      "牧師",   "#CCDD
                                                         By(SystemMessage.mtype,       MTypeEnum.VOTE_HUNTER.toString))
 
       val demon_tag =
-        if (actionee.role.is.substring(0,1) == RoleEnum.DEMON.toString) {
+        if ((actionee.role.is.substring(0,1) == RoleEnum.DEMON.toString) && (user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY_1) && user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY_2)) ) {
           if (system_message(0).message.is.indexOf(VoteFlagEnum.POWER.toString) != -1)
             Seq(<tr><td><img src="images/role_cleric_demon_dead.gif" /></td></tr>)
           else if (system_message_hunter.length == 0)
@@ -421,7 +432,7 @@ object RoleCleric      extends RoleData(RoleEnum.CLERIC,      "牧師",   "#CCDD
         } else NodeSeq.Empty
 
       val betrayer_tag =
-        if (room.has_flag(RoomFlagEnum.CLERIC_OPTION2)) {
+        if (room.has_flag(RoomFlagEnum.CLERIC_OPTION2) && (user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY_1) && user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY_2)) ) {
           val system_message_betrayer = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
                                                               By(SystemMessage.mtype, MTypeEnum.VOTE_BETRAYER_DISGUISE.toString))
           if (system_message_betrayer.length != 0)
@@ -430,10 +441,9 @@ object RoleCleric      extends RoleData(RoleEnum.CLERIC,      "牧師",   "#CCDD
             NodeSeq.Empty
         } else NodeSeq.Empty
 
-
-      <table cellSpacing="0" cellPadding="0" border="1"><tbody>{demon_tag}{betrayer_tag}</tbody></table>
+      <table cellSpacing="0" cellPadding="0" border="1"><tbody>{demon_tag}{betrayer_tag}{party}</tbody></table>
     } else
-      <span></span>
+      <table cellSpacing="0" cellPadding="0" border="1"><tbody>{party}</tbody></table>
   }
 }
 
@@ -480,7 +490,7 @@ object RolePoisoner    extends RoleData(RoleEnum.POISONER,    "埋毒者", "#006
   override def role_pic   = <img src="images/rolepic_poison.gif" />
 }
 
-object RoleRunner      extends RoleData(RoleEnum.RUNNER,      "逃亡者", "#009999", RoomVictoryEnum.VILLAGER_WIN, List(ActionRun)) {
+object RoleRunner      extends RoleData(RoleEnum.RUNNER,      "逃亡者", "#009999", RoomVictoryEnum.VILLAGER_WIN, List(ActionRun, ActionRun2)) {
   //override def role_intro = <span>[角色]<br/>　　您所扮演的角色是逃亡者，逃亡到不同的人家以躲避人狼的襲擊，由於您忙於逃亡所以沒時間準備遺書。</span>
   override def role_intro = <img src="images/role_runner.gif"/>
   override def role_pic   = <img src="images/rolepic_runner.gif" />
@@ -488,7 +498,8 @@ object RoleRunner      extends RoleData(RoleEnum.RUNNER,      "逃亡者", "#009
   def runner_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry], system_message0:SystemMessage) = {
     val actionee   = user_entrys.filter(_.id.is == system_message0.actionee_id.is)(0)
     val subrole_data = SubroleEnum.get_subrole(actionee.subrole.is).toString
-    if (actionee.current_role == RoleEnum.PONTIFF)
+	val heretic = user_entrys.filter(x=>(x.current_role == RoleEnum.HERETIC))
+    if ((actionee.current_role == RoleEnum.PONTIFF))
       <table cellSpacing="0" cellPadding="0" border="1"><tbody>
        <tr><td><img src="images/role_runner_result.gif" /></td><td>{actionee.handle_name.is}</td>
        <td><img src="images/role_result_pontiff.gif"/></td></tr></tbody></table>
@@ -543,6 +554,7 @@ object RoleScholar     extends RoleData(RoleEnum.SCHOLAR,     "學者",   "#3CB3
       //  SubroleEnum.get_subrole(actionee.subrole.is).subrole_pic_true //subrole_name
       //else
         SubroleEnum.get_subrole(actionee.subrole.is).subrole_pic      //toString
+	
     val is_religion =
      if (actionee.current_role == RoleEnum.PONTIFF) {
        if (room.has_flag(RoomFlagEnum.SCHOLAR_OPTION1))
@@ -582,7 +594,7 @@ object RoleScholar     extends RoleData(RoleEnum.SCHOLAR,     "學者",   "#3CB3
   }
 
   override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
-    if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0)) {
+    if ((room_day.day_no.is != 0) && (room_day.day_no.is %2 == 0) && (user.hasnt_flag(UserEntryFlagEnum.SPY_JAM))) {
       val  system_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
                                                   By(SystemMessage.actioner_id, user.id.is),
                                                 Like(SystemMessage.mtype,      MTypeEnum.VOTE.toString+"%"))
@@ -620,7 +632,7 @@ object RoleScholar     extends RoleData(RoleEnum.SCHOLAR,     "學者",   "#3CB3
             werewolf_result = "role_scholar_failure_fox.gif" //"失敗(妖狐)"
           else if (werewolf_target.current_role == RoleEnum.DEMON)
             werewolf_result = "role_scholar_failure_demon.gif" //"失敗(惡魔)"
-          else if (werewolf_target.current_role == RoleEnum.DEMON)
+          else if (werewolf_target.current_role == RoleEnum.PENGUIN)
             werewolf_result = "role_scholar_failure_penguin.gif" //"失敗(企鵝)"
           else if (werewolf_target.current_role == RoleEnum.WOLFCUB)
             werewolf_result = "role_scholar_failure_wolfcub.gif" //"失敗(幼狼)"
@@ -752,10 +764,11 @@ object RoleWerewolf    extends RoleData(RoleEnum.WEREWOLF,    "人狼",   "#FF00
       val actionee   = user_entrys.filter(_.id.is == system_message(0).actionee_id.is)(0)
       val actionee_role = RoleEnum.get_role(actionee.role.is.substring(0,1))
       val actionee_role_str =
-        if (room_day.day_no.is == 2)
+        if ((room_day.day_no.is == 2) && (!room.has_flag(RoomFlagEnum.NO_DUMMY)))
           actionee_role.role_pic
         else if ((actionee_role == RoleFox) || (actionee_role == RoleDemon) ||
-            (actionee.subrole.is == "") || (actionee.subrole.is == SubroleEnum.FAKEAUGURER.toString))
+            (actionee.subrole.is == "") || (actionee.subrole.is == SubroleEnum.FAKEAUGURER.toString) ||
+			(actionee.subrole.is == SubroleEnum.HASHIHIME.toString))
           <img src="images/side_unknown.gif"/> //？？
         else
           actionee_role.role_pic
@@ -770,10 +783,25 @@ object RoleWerewolf    extends RoleData(RoleEnum.WEREWOLF,    "人狼",   "#FF00
       else
         werewolf_tag = <tr><td colspan="2"><img src="images/yesterday_wolf.gif"/><span>{actioner.handle_name.is}</span><img src="images/wolf_attacks.gif"/><span>{actionee.handle_name.is}</span><span>{actionee_str}</span></td></tr>
     }
+	
+	val  spy_jam_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_JAM.toString),
+												  By(SystemMessage.actionee_id,      user.id.is))
+    def  spy_tag(message : SystemMessage) : NodeSeq = {
+        if (message.actioner_id.is == 0)
+          return NodeSeq.Empty
+
+        val actioner = UserEntry.findAll(By(UserEntry.id, message.actioner_id.is))(0)
+
+        Seq(<tr><td><img src="images/role_spy_jam_1.gif"/> {actioner.handle_name.is} <img src="images/role_spy_jam_2.gif"/></td></tr>)
+    }
     
     <table cellSpacing="0" cellPadding="0" border="1"><tbody>
       <tr><td><img src="images/role_wolf_partner.gif"/></td>
-      <td>{werewolf_str}</td></tr>{werewolf_tag}</tbody></table>
+      <td>{werewolf_str}</td></tr>{werewolf_tag}
+	  { for (message <- spy_jam_message) yield
+        spy_tag(message)  
+      }</tbody></table>
   }
 }
 
@@ -791,9 +819,24 @@ object RoleWolfcub     extends RoleData(RoleEnum.WOLFCUB,     "幼狼",   "#EE00
       //val actioner   = user_entrys.filter(_.id.is == system_message(0).actioner_id.is)(0)
       //val actionee       = UserEntry.findAll(By(UserEntry.id, system_message(0).actionee_id.is))(0)
       val actionee   = user_entrys.filter(_.id.is == system_message(0).actionee_id.is)(0)
+	  
+	  val  spy_jam_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_JAM.toString),
+												  By(SystemMessage.actionee_id,      user.id.is))
+      def  spy_tag(message : SystemMessage) : NodeSeq = {
+        if (message.actioner_id.is == 0)
+          return NodeSeq.Empty
+
+        val actioner = UserEntry.findAll(By(UserEntry.id, message.actioner_id.is))(0)
+
+        Seq(<tr><td><img src="images/role_spy_jam_1.gif"/> {actioner.handle_name.is} <img src="images/role_spy_jam_2.gif"/></td></tr>)
+      }
 
       <table cellSpacing="0" cellPadding="0" border="1"><tbody>
-      <tr><td colspan="2"><img src="images/yesterday_wolf_attacks.gif" />{actionee.handle_name.is}</td></tr></tbody></table>
+      <tr><td colspan="2"><img src="images/yesterday_wolf_attacks.gif" />{actionee.handle_name.is}</td></tr>
+	  { for (message <- spy_jam_message) yield
+        spy_tag(message)  
+      }</tbody></table>
     } else
       <span></span>
   }
@@ -826,8 +869,106 @@ object RoleMadman      extends RoleData(RoleEnum.MADMAN,      "狂人",   "#DD00
         Seq(<tr><td><img src="images/role_mad_anger.gif" /></td><td>{user.action_point.is.toString}</td></tr>)
       else
         NodeSeq.Empty
+	
+	val  spy_jam_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_JAM.toString),
+												  By(SystemMessage.actionee_id,      user.id.is))
+    def  spy_tag(message : SystemMessage) : NodeSeq = {
+        if (message.actioner_id.is == 0)
+          return NodeSeq.Empty
 
-    <table cellSpacing="0" cellPadding="0" border="1"><tbody>{werewolves_tag}{action_point_tag}</tbody></table>
+        val actioner = UserEntry.findAll(By(UserEntry.id, message.actioner_id.is))(0)
+
+        Seq(<tr><td><img src="images/role_spy_jam_1.gif"/> {actioner.handle_name.is} <img src="images/role_spy_jam_2.gif"/></td></tr>)
+    }
+
+    <table cellSpacing="0" cellPadding="0" border="1"><tbody>{werewolves_tag}{action_point_tag}
+	{ for (message <- spy_jam_message) yield
+        spy_tag(message)  
+    }</tbody></table>
+  }
+}
+
+object RoleSpy      extends RoleData(RoleEnum.SPY,      "間諜",   "#DD0000", RoomVictoryEnum.WEREWOLF_WIN, List(ActionSpyIntelligence, ActionSpyScout, ActionSpyJam, ActionSpyOver, ActionNoAction)) {
+  override def role_intro = <img src="images/role_spy.gif"/>
+  override def role_pic   = <img src="images/rolepic_spy.gif" />
+  override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
+	  
+    val  spy_jam_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_JAM.toString),
+												  By(SystemMessage.actionee_id,      user.id.is))
+    def  spy_tag(message : SystemMessage) : NodeSeq = {
+        if (message.actioner_id.is == 0)
+          return NodeSeq.Empty
+
+        val actioner = UserEntry.findAll(By(UserEntry.id, message.actioner_id.is))(0)
+
+        Seq(<tr><td><img src="images/role_spy_jam_1.gif"/> {actioner.handle_name.is} <img src="images/role_spy_jam_2.gif"/></td></tr>)
+    }
+	val action_point_str = user.action_point.is.toString
+	  
+    val werewolf = UserEntry.findAll(By(UserEntry.room_id, room.id.is),
+                                     NotBy(UserEntry.id, user.id.is),
+                                     Like(UserEntry.role, RoleEnum.WEREWOLF.toString+"%"))
+                                   
+    val werewolf_str = 
+	  if (user.subrole.is == SubroleEnum.FOXBELIEVER.toString)
+        <img src="images/role_mad_fox.gif"/>
+	  else if (user.has_flag(UserEntryFlagEnum.LOVER))
+		<img src="images/role_spy_lover.gif"/>
+      else
+		werewolf.map(_.handle_name.is).mkString("　","　　","")
+	
+	val  system_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                By(SystemMessage.actioner_id, user.id.is),
+                                                By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_INTELLIGENCE.toString))
+    
+    val  result_intelligence : NodeSeq = if (system_message.length != 0) {
+      val actionee   = user_entrys.filter(_.id.is == system_message(0).actionee_id.is)(0)
+      val actionee_role = RoleEnum.get_role(actionee.current_role).toString.length.toString
+      
+      Seq(<tr><td><img src="images/role_spy_intelligence_1.gif"/></td>
+        <td>{actionee.handle_name.is}<img src="images/role_spy_intelligence_2.gif"/> {actionee_role} <img src="images/role_spy_intelligence_3.gif"/></td>
+      </tr>)
+    } else NodeSeq.Empty
+	
+	val  system_message2 = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                By(SystemMessage.actioner_id, user.id.is),
+                                                By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_SCOUT.toString))
+    
+    val  result_scout : NodeSeq = if (system_message2.length != 0) {
+      val actionee   = user_entrys.filter(_.id.is == system_message2(0).actionee_id.is)(0)
+      //val actionee_role = RoleEnum.get_role(actionee.current_role).toString.length.toString
+	  val actionee_result = 
+	  if ((actionee.role.is.substring(0,1) == RoleEnum.WEREWOLF.toString) ||
+         (actionee.role.is.substring(0,1) == RoleEnum.WOLFCUB.toString) ||
+		 (actionee.role.is == RoleEnum.FOX.toString) ||
+		 (actionee.role.is == RoleEnum.DEMON.toString) ||
+		 (actionee.role.is == RoleEnum.HUNTER.toString) ||
+		 (actionee.role.is == RoleEnum.AUGHUNTER.toString) ||
+		 (actionee.role.is == RoleEnum.HERMIT.toString) ||
+		 (actionee.role.is == RoleEnum.CARDMASTER.toString) ||
+		 (actionee.role.is == RoleEnum.RUNNER.toString) ||
+		 (actionee.role.is == RoleEnum.HERBALIST.toString) ||
+		 (actionee.role.is == RoleEnum.CLERIC.toString) ) {
+        "有"
+      } else {
+		"沒有"
+      }
+	  
+      Seq(<tr><td>偵察結果：</td>
+        <td>{actionee.handle_name.is} {actionee_result} 死亡耐性。</td>
+      </tr>)
+    } else NodeSeq.Empty
+
+	<table cellSpacing="0" cellPadding="0" border="1"><tbody>
+	  <tr><td><img src="images/role_spy_action_point.gif" /></td><td>{action_point_str}</td></tr>
+      <tr><td><img src="images/role_spy_wolf.gif" /></td>
+      <td>{werewolf_str}</td></tr>
+	  {result_intelligence}{result_scout}
+	  { for (message <- spy_jam_message) yield
+        spy_tag(message)  
+      }</tbody></table>
   }
 }
 
@@ -858,11 +999,26 @@ object RoleSorceror    extends RoleData(RoleEnum.SORCEROR,    "狂巫",   "#CC00
         <td>{SubroleEnum.get_subrole(actionee.subrole.is).subrole_pic}</td>
       </tr>)
     } else NodeSeq.Empty
+	
+	val  spy_jam_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                  By(SystemMessage.mtype,       MTypeEnum.VOTE_SPY_JAM.toString),
+												  By(SystemMessage.actionee_id,      user.id.is))
+      def  spy_tag(message : SystemMessage) : NodeSeq = {
+        if (message.actioner_id.is == 0)
+          return NodeSeq.Empty
+
+        val actioner = UserEntry.findAll(By(UserEntry.id, message.actioner_id.is))(0)
+
+        Seq(<tr><td><img src="images/role_spy_jam_1.gif"/> {actioner.handle_name.is} <img src="images/role_spy_jam_2.gif"/></td></tr>)
+      }
 
   
     <table cellSpacing="0" cellPadding="0" border="1"><tbody>
       <tr><td><img src="images/mana.gif" /></td><td>{action_point_str}</td></tr>
-      { result_augure }</tbody></table>
+      { result_augure }
+	  { for (message <- spy_jam_message) yield
+        spy_tag(message)  
+      }</tbody></table>
   }
 }
 
@@ -1164,7 +1320,7 @@ object RoleGodfat      extends RoleData(RoleEnum.GODFAT,      "哥德法", "#BB0
   }
 }
 
-object RoleDemon       extends RoleData(RoleEnum.DEMON,       "惡魔",   "#666666", RoomVictoryEnum.DEMON_WIN, List(ActionDemonChaos, ActionDemonDominate, ActionDemonCurse, ActionDemonCurse2, ActionDemonVortex, ActionNoAction)) {
+object RoleDemon       extends RoleData(RoleEnum.DEMON,       "惡魔",   "#666666", RoomVictoryEnum.DEMON_WIN, List(ActionDemonChaos, ActionDemonDominate, ActionDemonCurse, ActionDemonCurse2, ActionDemonVortex, ActionDemonGiveup, ActionNoAction)) {
   //override def role_intro = <span>[角色]<br/>　　您所扮演的角色是惡魔，您必須完成惡魔儀式以毀滅整個村子。(當你被咬後你可以有一次機會詛咒自己，使隔日自己票數多 2)。</span>
   override def role_intro = <img src="images/role_demon.gif"/>
   override def role_pic   = <img src="images/rolepic_demon.gif" />
@@ -1203,7 +1359,7 @@ object RoleDemon       extends RoleData(RoleEnum.DEMON,       "惡魔",   "#6666
   }
 }
 
-object RoleFallenAngel  extends RoleData(RoleEnum.FALLEN_ANGEL,       "墮天使",   "#666666", RoomVictoryEnum.FALLENANGEL_WIN, List(ActionFallenAngelFallen, ActionNoAction)) {
+object RoleFallenAngel  extends RoleData(RoleEnum.FALLEN_ANGEL,       "墮天使",   "#666666", RoomVictoryEnum.FALLENANGEL_WIN, List(ActionPrideProud, ActionWrathAnger, ActionLustCharm, ActionSlothWorth, ActionGluttonyHunger, ActionFallenAngelFallen, ActionNoAction)) {
   override def role_intro = <img src="images/role_fallenangel.gif"/>
   override def role_pic   = <img src="images/rolepic_fallenangel.gif" />
 
@@ -1211,10 +1367,64 @@ object RoleFallenAngel  extends RoleData(RoleEnum.FALLEN_ANGEL,       "墮天使
     val bited_tag    : NodeSeq = if (user.has_flag(UserEntryFlagEnum.BITED))
                                    Seq(<tr><td><img src="images/role_angel_rise.gif" /></td></tr>)
                                  else
-                                   Seq(<tr><td><img src="images/role_demon_ceremony_no.gif" /></td></tr>)
+                                   Seq(<tr><td><img src="images/role_angel_no.gif" /></td></tr>)
+
+    val sin_tag = 
+		if (user.get_fallenangel_special == RoleSpecialEnum.PRIDE.toString) {
+		  Seq(<img src="images/role_fallenangel_pride.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.ENVY.toString) {
+		  Seq(<img src="images/role_fallenangel_envy.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.WRATH.toString) {
+		  Seq(<img src="images/role_fallenangel_wrath.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.LUST.toString) {
+		  Seq(<img src="images/role_fallenangel_lust.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.SLOTH.toString) {
+		  Seq(<img src="images/role_fallenangel_sloth.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.GREED.toString) {
+		  Seq(<img src="images/role_fallenangel_greed.gif" />)
+		} else if (user.get_fallenangel_special == RoleSpecialEnum.GLUTTONY.toString) {
+		  Seq(<img src="images/role_fallenangel_gluttony.gif" />)
+		} else
+          NodeSeq.Empty
+
+ 
+	<table cellSpacing="0" cellPadding="0" border="1"><tbody>
+      {sin_tag} {bited_tag}
+    </tbody></table>
+  }
+}
+
+object RoleHeretic  extends RoleData(RoleEnum.HERETIC,       "異端",   "#666666", RoomVictoryEnum.DEMON_WIN, List(ActionHereticBloodSacrifice, ActionHereticPossessed, ActionHereticParty, ActionHereticPrayRain, ActionHereticReincarnated, ActionNoAction)) {
+  override def role_intro = <img src="images/role_heretic.gif"/>
+  override def role_pic   = <img src="images/rolepic_heretic.gif" />
+  
+  override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
+    val action_point_tag : NodeSeq =
+      Seq(<tr><td><img src="images/role_heretic_hp.gif" /></td><td>{user.action_point.is}</td></tr>)
+
+	var party_claim =
+	if (room.has_flag(RoomFlagEnum.HERETIC_OPTION1)) {
+	  if ((user.hasnt_flag(UserEntryFlagEnum.HERETIC_DESTRUCTION_1)) &&
+	  (user.hasnt_flag(UserEntryFlagEnum.HERETIC_DESTRUCTION_2)) &&
+	  (user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY)) ) {
+	    Seq(<tr><td><img src="images/role_heretic_party_claim.gif" /></td><td><img src="images/role_heretic_party_claim2.gif" /></td></tr>)
+      } else if (user.has_flag(UserEntryFlagEnum.HERETIC_DESTRUCTION_1)) {
+	    Seq(<tr><td><img src="images/role_heretic_party_claim.gif" /></td><td><img src="images/role_heretic_party_claim1.gif" /></td></tr>)
+      } else if ((user.has_flag(UserEntryFlagEnum.HERETIC_DESTRUCTION_2)) &&
+	  (user.hasnt_flag(UserEntryFlagEnum.HERETIC_PARTY))) {
+	    Seq(<tr><td><img src="images/role_heretic_party_claim.gif" /></td><td><img src="images/role_heretic_party_claim0.gif" /></td></tr>)
+      } else NodeSeq.Empty
+    } else NodeSeq.Empty
+	
+	val religion_domons = user_entrys.filter(x =>(x.has_flag(UserEntryFlagEnum.RELIGION)) && (x.current_role == RoleEnum.DEMON))
+	val live_pontiff = user_entrys.filter(x =>(x.live.is) && (x.current_role == RoleEnum.PONTIFF))
+	var religion_domon_tag = 
+	if((user.has_flag(UserEntryFlagEnum.RELIGION)) && (religion_domons.length > 0) && (live_pontiff.length > 0)){
+		Seq(<tr><td><img src="images/role_heretic_religion_domon.gif" /></td><td>{religion_domons.map(_.handle_name.is).mkString("　","　　","")}</td></tr>)
+	} else NodeSeq.Empty
 
     <table cellSpacing="0" cellPadding="0" border="1"><tbody>
-      {bited_tag}
+      {action_point_tag}{religion_domon_tag}
     </tbody></table>
   }
 }
@@ -1254,7 +1464,48 @@ object RolePontiff     extends RoleData(RoleEnum.PONTIFF,     "教主", "#EEAA55
   override def role_pic   = <img src="images/rolepic_pontiff.gif"/>
   
   override def role_ability(room:Room, room_day:RoomDay, user: UserEntry, user_entrys: List[UserEntry]) = {
-    <span></span>
+    val party =
+      if (user.has_flag(UserEntryFlagEnum.HERETIC_PARTY_1) || user.has_flag(UserEntryFlagEnum.HERETIC_PARTY_2))
+        Seq(<tr><td><img src="images/role_heretic_party.gif"/></td></tr>)
+	  else
+        NodeSeq.Empty
+		
+    val system_message = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                 By(SystemMessage.mtype,       MTypeEnum.VOTE_HERETIC_DESTRUCTION_FAITH.toString))
+    val heretic_targeted_tag =
+    if (system_message.length != 0) {
+	  val actionee   = user_entrys.filter(_.id.is == system_message(0).actionee_id.is)(0)
+      val actioner   = user_entrys.filter(_.id.is == system_message(0).actioner_id.is)(0)
+	  if (actionee.id.is == user.id.is)
+        Seq(<tr><td>{actioner.handle_name.is}</td><td><img src="images/yes.gif" /><img src="images/rolepic_heretic.gif" /></td></tr>)
+      else
+        NodeSeq.Empty
+	} else NodeSeq.Empty
+	
+	val system_message_pontiff = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                 By(SystemMessage.mtype,       MTypeEnum.VOTE_PONTIFF.toString))
+	val heretic_vote_tag =
+    if ( (system_message_pontiff.length != 0) ) {
+	  val actionee   = user_entrys.filter(_.id.is == system_message_pontiff(0).actionee_id.is)(0)
+	  if (actionee.role.is.substring(0,1) == RoleEnum.HERETIC.toString)
+        Seq(<tr><td>{actionee.handle_name.is}</td><td><img src="images/yes.gif" /><img src="images/rolepic_heretic.gif" /></td></tr>)
+      else
+        NodeSeq.Empty
+	} else NodeSeq.Empty
+	
+	val system_message_faith = SystemMessage.findAll(By(SystemMessage.roomday_id,  room_day.id.is),
+                                                 By(SystemMessage.mtype,       MTypeEnum.VOTE_HERETIC_DESTRUCTION_FAITH.toString))
+												 
+	val faith_successs = user_entrys.filter(x =>(x.has_flag(UserEntryFlagEnum.HERETIC_FAITH_SUCCESS)))
+	
+	val faith_targeted_tag =
+         if   ((system_message_faith.length != 0) && 
+			   (faith_successs.length != 0)) {
+		   val faith   = user_entrys.filter(_.id.is == faith_successs(0).id.is)(0)
+           Seq(<tr><td>昨天晚上似乎有人的信仰開始動搖了</td></tr>)
+		 } else NodeSeq.Empty
+	
+    <table cellSpacing="0" cellPadding="0" border="1"><tbody>{party}{heretic_vote_tag}{heretic_targeted_tag}</tbody></table>
   }
 }
 
@@ -1264,7 +1515,7 @@ object RoleInheriter   extends RoleData(RoleEnum.INHERITER,   "繼承者", "#AAA
   override def role_pic   = <img src="images/rolepic_inheriter.gif" />
 }
 
-object RoleShifter     extends RoleData(RoleEnum.SHIFTER,     "模仿師", "#FF7700", RoomVictoryEnum.VILLAGER_WIN, List(ActionShifter, ActionShifterDemon)) {
+object RoleShifter     extends RoleData(RoleEnum.SHIFTER,     "模仿師", "#FF7700", RoomVictoryEnum.VILLAGER_WIN, List(ActionShifter, ActionShifterDemon, ActionShifterRandom)) {
   //override def role_intro = <span>[角色]<br/>　　您所扮演的角色是模仿師，您可以於首日選擇一名角色，並和它有同樣的能力。</span>
   override def role_intro = <img src="images/role_shifter.gif"/>
   override def role_pic   = <img src="images/rolepic_shifter.gif" />

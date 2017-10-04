@@ -18,6 +18,8 @@ object MTypeEnum extends Enumeration {
   val TALK_WOLFCUB     = Value("TX")
   val TALK_GEMINI      = Value("TG")
   val TALK_LOVER       = Value("TL")
+  val TALK_LOVER_DIARY = Value("TLD")
+  val TALK_MICROPHONE = Value("TM")
   val TALK_GEMINI_DAY = Value("TGD")
   val TALK_FOX         = Value("TF")
   val TALK_DISGUISED  = Value("TB")
@@ -41,6 +43,9 @@ object MTypeEnum extends Enumeration {
 
   val OBJECTION_MALE    = Value("OM")
   val OBJECTION_FEMALE  = Value("OF")
+  val ROLLCALL    = Value("RC")
+  val DISSENT_MALE    = Value("IM")
+  val DISSENT_FEMALE    = Value("IF")
   
   val BITED_FOX      = Value("BF")
   val BITED_DEMON    = Value("BD")
@@ -70,6 +75,8 @@ object MTypeEnum extends Enumeration {
   val DEATH_LINKS        = Value("DL")
   val DEATH_LOVER        = Value("DLL")
   val DEATH_DEATH_NOTE  = Value("DDN")
+  val DEATH_GLUTTONY_HUNGER = Value("DGH")
+  val DEATH_SPY = Value("DSY")
 
   val ITEM_PREFIX          = "I"
   val ITEM_NO_ITEM         = Value(ITEM_PREFIX + ItemEnum.ITEM_NO_ITEM.toString)
@@ -86,6 +93,7 @@ object MTypeEnum extends Enumeration {
   val ITEM_PANDORA_BOX = Value(ITEM_PREFIX + ItemEnum.PANDORA_BOX.toString)
   val ITEM_CUBIC_ARROW = Value(ITEM_PREFIX + ItemEnum.CUBIC_ARROW.toString)
   val ITEM_POPULATION_CENSUS = Value(ITEM_PREFIX + ItemEnum.POPULATION_CENSUS.toString)
+  val ITEM_MICROPHONE = Value(ITEM_PREFIX + ItemEnum.MICROPHONE.toString)
 
   val VOTE             = Value("V")  
   val VOTE_STARTGAME   = Value("V_")
@@ -131,6 +139,11 @@ object MTypeEnum extends Enumeration {
   val VOTE_MADMAN_STUN     = Value("VMT")
   val VOTE_MADMAN_SUICIDE  = Value("VMS")
   val VOTE_MADMAN_DUEL     = Value("VMD")
+  
+  val VOTE_SPY_OVER     = Value("VSO")
+  val VOTE_SPY_INTELLIGENCE = Value("VSI")
+  val VOTE_SPY_SCOUT = Value("VSU")
+  val VOTE_SPY_JAM = Value("VSJ")
 
   val VOTE_SORCEROR_AUGURE  = Value("VSA")
   val VOTE_SORCEROR_WHISPER = Value("VSW")
@@ -169,8 +182,21 @@ object MTypeEnum extends Enumeration {
   val VOTE_DEMON_CURSE2 = Value("VDO")
   val VOTE_DEMON_DOMINATE = Value("VDD")
   val VOTE_DEMON_VORTEX = Value("VDR")
+  val VOTE_DEMON_GIVEUP = Value("VDG")
+  
+  val VOTE_HERETIC_BLOOD_SACRIFICE = Value("VHB")
+  val VOTE_HERETIC_DESTRUCTION_FAITH = Value("VHD")
+  val VOTE_HERETIC_PARTY = Value("VHP")
+  val VOTE_HERETIC_PRAY_RAIN = Value("VHR")
+  val VOTE_HERETIC_REINCARNATED = Value("VHE")
+  val VOTE_HERETIC_POSSESSED = Value("VHO")
 
   val VOTE_FALLENANGEL_FALLEN = Value("VFF")
+  val VOTE_FALLENANGEL_PRIDEPROUD = Value("VFP")
+  val VOTE_FALLENANGEL_WRATHANGER = Value("VFW")
+  val VOTE_FALLENANGEL_LUSTCHARM = Value("VFL")
+  val VOTE_FALLENANGEL_SLOTHWORTH = Value("VFS")
+  val VOTE_FALLENANGEL_GLUTTONYHUNGER = Value("VFG")
 
   val VOTE_PENGUIN_ICE = Value("VKI")
   val VOTE_PENGUIN_CHILL = Value("VKC")
@@ -178,6 +204,7 @@ object MTypeEnum extends Enumeration {
   val VOTE_INHERITER   = Value("VI")
   val VOTE_SHIFTER     = Value("VS")
   val VOTE_SHIFTER2    = Value("VS2")
+  val VOTE_SHIFTER3    = Value("VS3")
 
   val VOTE_PONTIFF     = Value("VJ")
   val VOTE_PONTIFF_COMMAND = Value("VJC")
@@ -195,32 +222,36 @@ object MTypeEnum extends Enumeration {
   val VOTE_NO_ACTION   = Value("VN")
 
   val SPECIAL_VOTE_ABANDON = Value("SVA")
+  val SPECIAL_VOTE_ROLLCALL = Value("SVR")
+  val SPECIAL_VOTE_DISSENT = Value("SVD")
 
   def DEATH_MAP   = scala.collection.immutable.TreeMap(
     DEATH          -> "死因不明",
-    DEATH_BETRAYER -> "跟隨妖狐死亡",
+    DEATH_BETRAYER -> "追隨妖狐死亡",
     DEATH_CLERIC   -> "牧師聖域術犧牲",
     DEATH_FOX      -> "被占卜師咒殺",
     DEATH_SORCEROR -> "被狂巫咒殺",
-    DEATH_HANGED   -> "被吊死",
+    DEATH_HANGED   -> "被處刑",
     DEATH_HUNTER   -> "獵人特殊死亡",
-    DEATH_HUNTER_KILL  -> "被獵人擊殺",
-    DEATH_MADMAN   -> "狂人自爆死亡",
+    DEATH_HUNTER_KILL  -> "被獵人射殺",
+    DEATH_MADMAN   -> "狂人自殺",
     DEATH_POISON_D -> "被埋毒者毒死",
     DEATH_POISON_N -> "被埋毒者毒死",
-    DEATH_POISON_H -> "被藥師毒死",
+    DEATH_POISON_H -> "被毒藥毒死",
     DEATH_RUNNER   -> "逃亡者特殊死亡",
     DEATH_SUDDEN   -> "暴斃死亡",
     DEATH_EATEN    -> "被人狼襲擊",
     DEATH_GODFAT   -> "被哥德法逆咒殺",
-    DEATH_WOLFCUB  -> "跟隨人狼死亡",
+    DEATH_WOLFCUB  -> "追隨人狼死亡",
     DEATH_WOLFCUB_EATEN  -> "被幼狼襲擊",
-    DEATH_FALLENANGEL -> "被墮天使生贅",
+    DEATH_FALLENANGEL -> "成為墮天使的生贅",
     DEATH_PENGUIN_ICE -> "被企鵝冰凍",
-    DEATH_SUBPONTIFF -> "跟隨教主死亡",
-    DEATH_LINKS    -> "跟隨生命連繫者死亡",
-    DEATH_LOVER    -> "跟隨戀人死亡",
+    DEATH_SUBPONTIFF -> "追隨教主死亡",
+    DEATH_LINKS    -> "追隨生命連繫者死亡",
+    DEATH_LOVER    -> "追隨戀人死亡",
     DEATH_DEATH_NOTE -> "被死亡筆記寫上",
+	DEATH_GLUTTONY_HUNGER -> "成為別西卜的食物",
+	DEATH_SPY    -> "間諜脫離村莊",
   )
 
   def DEATH_MAP_GIF   = scala.collection.immutable.TreeMap(
@@ -248,6 +279,8 @@ object MTypeEnum extends Enumeration {
     DEATH_LINKS    -> "death_links.gif",
     DEATH_LOVER    -> "death_lovers.gif",
     DEATH_DEATH_NOTE -> "death_death_note.gif",
+	DEATH_GLUTTONY_HUNGER -> "death_gluttony_hunger.gif",
+	DEATH_SPY -> "death_spy.gif",
   )
 
   def get_death_text(death : MTypeEnum.Value) : String = {

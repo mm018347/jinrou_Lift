@@ -67,7 +67,7 @@ class FrameController {
     val dead_mode = (!user_entry.live.is) && (room.status.is != RoomStatusEnum.ENDED.toString)
 
     if (dead_mode)
-      <frameset rows="80,*,20%" border="2" frameborder="1" framespacing="1" bordercolor="silver" >
+      <frameset rows="110,*,20%" border="2" frameborder="1" framespacing="1" bordercolor="silver" >
         <frame id="up" name="up" src={"up_normal.html?room_no=" + room_no} />
         <frame id="middle" name="middle" src={"game_view.html?room_no=" + room_no} />
         <frame id="bottom" name="bottom" src={"heaven_view.html?room_no=" + room_no} />
@@ -76,7 +76,7 @@ class FrameController {
         </noframes>
       </frameset>          
     else if(room.status.is == RoomStatusEnum.ENDED.toString)
-      <frameset rows="80,*" border="1" frameborder="1" framespacing="1" >
+      <frameset rows="110,*" border="1" frameborder="1" framespacing="1" >
         <frame id="up" name="up" src={"up_normal.html?room_no=" + room_no} />
         <frame id="bottom" name="bottom" src={"game_end.html?room_no=" + room_no} />
         <noframes>
@@ -84,7 +84,7 @@ class FrameController {
         </noframes>
       </frameset>
     else
-      <frameset rows="80,*" border="1" frameborder="1" framespacing="1" >
+      <frameset rows="110,*" border="1" frameborder="1" framespacing="1" >
         <frame id="up" name="up" src={"up_normal.html?room_no=" + room_no} />
         <frame id="bottom" name="bottom" src={"game_view.html?room_no=" + room_no} />
         <noframes>

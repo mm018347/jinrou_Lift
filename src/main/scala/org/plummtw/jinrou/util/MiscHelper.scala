@@ -10,15 +10,22 @@ import S._
 import SHtml._
 import Helpers._
 
-
 import org.plummtw.jinrou.model._
 import org.plummtw.jinrou.enum._
+import org.plummtw.jinrou.util._
+import org.plummtw.jinrou.data._
 
 object MiscHelper {
 
   def get_lastwords_tag(system_messages: List[SystemMessage], user_entrys: List[UserEntry]) = {
     var result : NodeSeq = NodeSeq.Empty
     system_messages.foreach { system_message =>
+      val room_no = S.param("room_no").getOrElse(S.getSessionAttribute("room_id").getOrElse("0"))
+      val room_id : Long =
+        try { room_no.toLong }
+        catch { case e: Exception => 0 }    //val room        = Room.get(room_id)
+      val room_list   = Room.findAll(By(Room.id, room_id))
+      val room        = if (room_list.length == 0) null else room_list(0)
       val actioner_list = user_entrys.filter(_.id.is == system_message.actioner_id.is)
       val actioner =
         if (actioner_list.length != 0)
@@ -27,6 +34,9 @@ object MiscHelper {
           null
       if ((actioner != null) && (actioner.last_words.is != "") && (actioner.current_role != RoleEnum.RUNNER) &&
           (actioner.hasnt_flag(UserEntryFlagEnum.DMESSAGE_SEALED))) {
+      if ((actioner.has_flag(UserEntryFlagEnum.LOVER)) && (room.has_flag(RoomFlagEnum.LOVER_LETTER_EXCHANGE))){
+      } else if(actioner.has_flag(UserEntryFlagEnum.SPY_OVER)) {
+	  } else {
         if (result == NodeSeq.Empty)
           result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                    <tr style="background-color:#ccddff;color:black;font-weight:bold;">
@@ -39,6 +49,8 @@ object MiscHelper {
                        <table><td width="1000" style="color:black;"><span>{Unparsed(actioner.last_words.is)} </span>
                      </td></table></td>
                      </tr></table>)
+
+      }
       }
     }
     result
@@ -56,36 +68,50 @@ object MiscHelper {
         else
           <font color="#1E90FF">水元素</font>
         
-      val (death_message, message_color) =
+      val (death_message, message_color, death_image) =
         if (system_message.mtype.is == MTypeEnum.DEATH_HANGED.toString)
-          ("被表決處死", "#666600")
+          ("被表決處死", "#666600", "icon/dead1.gif")
         else if (system_message.mtype.is == MTypeEnum.DEATH_SUDDEN.toString)
-          ("暴斃死亡",   "#990000")
+          ("暴斃死亡",   "#33CCFF", "icon/mad.gif")
         else if (system_message.mtype.is == MTypeEnum.DEATH_PENGUIN_ICE.toString)
-          ("被冰凍成冰棒",   "#AADDDD")
+          ("被冰凍成冰棒",   "#AADDDD", "icon/nee.gif")
         else if (system_message.mtype.is == MTypeEnum.DEATH_LOVER.toString)
-          ("跟隨戀人死亡", "#FF69B4")
+          ("跟隨戀人死亡", "#FF69B4", "icon/fcp.gif")
+        else if (system_message.mtype.is == MTypeEnum.DEATH_SPY.toString)
+          ("突然消失了…", "#777777", "icon/untitled.gif")
         else if (system_message.mtype.is == MTypeEnum.DEATH_WOLFCUB_EATEN.toString)
-          ("有點慘的死狀被發現", "#990000")
+          ("有點慘的死狀被發現", "#990000", "icon/alive_1331.gif")
         else
-          ("悽慘的死狀被發現", "#990000")
+          ("悽慘的死狀被發現", "#990000", "icon/dead2.gif")
 
       result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="5" width="100%">
                    <tr height="35" style={"background-color:snow;color:" + message_color + ";font-weight:bold;"}>
-                   <td valign="middle" align="left" width="100%">　　　　　　　　　　　　{actioner_name} {death_message}</td>
+                   <td valign="middle" align="left" width="100%">　　　　　　　　　　　　<img src={"" + death_image + ""}/> {actioner_name} {death_message}</td>
                    </tr></table>)
     }
     result
   }
 
   def get_self_lastwords_tag(user: UserEntry) = {
-   if ((user != null) && (user.last_words.is != "") && (user.live.is))
-     Seq(<table border="0" cellpadding="0" cellspacing="5" width="100%">
-      <tr style="color:black;background-color:#ddeeff;">
-      <td valign="middle" align="right" width="140">自己的遺言</td>
-      <td valign="top" align="left"> {Unparsed(user.last_words.is)} </td></tr></table>)
-   else
-     NodeSeq.Empty
+      val room_no = S.param("room_no").getOrElse(S.getSessionAttribute("room_id").getOrElse("0"))
+      val room_id : Long =
+        try { room_no.toLong }
+        catch { case e: Exception => 0 }    //val room        = Room.get(room_id)
+      val room_list   = Room.findAll(By(Room.id, room_id))
+      val room        = if (room_list.length == 0) null else room_list(0)
+    if ((user != null) && (user.last_words.is != "") && (user.live.is)) {
+      if ((user.has_flag(UserEntryFlagEnum.LOVER)) && (room.has_flag(RoomFlagEnum.LOVER_LETTER_EXCHANGE)))
+       Seq(<table border="0" cellpadding="0" cellspacing="5" width="100%">
+        <tr style="color:black;background-color:#ddeeff;">
+        <td valign="middle" align="right" width="140">戀人的交換日記</td>
+        <td valign="top" align="left"> {Unparsed(user.last_words.is)} </td></tr></table>)
+     else
+      Seq(<table border="0" cellpadding="0" cellspacing="5" width="100%">
+        <tr style="color:black;background-color:#ddeeff;">
+        <td valign="middle" align="right" width="140">自己的遺言</td>
+        <td valign="top" align="left"> {Unparsed(user.last_words.is)} </td></tr></table>)
+    }else
+      NodeSeq.Empty
   }
 
   /*

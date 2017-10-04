@@ -27,6 +27,7 @@ object ItemEnum extends Enumeration {
   val PANDORA_BOX = Value("PB")
   val CUBIC_ARROW = Value("CA")
   val POPULATION_CENSUS = Value("PC")
+  val MICROPHONE = Value("MI")
 
 
   def ITEM_MAP   = scala.collection.immutable.TreeMap(
@@ -44,7 +45,8 @@ object ItemEnum extends Enumeration {
      DEATH_NOTE -> ItemDeathNote,
      PANDORA_BOX -> ItemPandoraBox,
      CUBIC_ARROW -> ItemCubicArrow,
-     POPULATION_CENSUS -> ItemPopulationCensus
+     POPULATION_CENSUS -> ItemPopulationCensus,
+	 MICROPHONE -> ItemMicrophone
   )
 
   def get_item(item : ItemEnum.Value) : ItemData = {
