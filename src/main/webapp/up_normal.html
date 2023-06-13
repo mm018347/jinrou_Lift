@@ -32,17 +32,29 @@
         reloadgame();
         setfocus();
       });
+
+      
 // ]]>      
     </script>
+    <style type="text/css">
+@import url("//fonts.googleapis.com/earlyaccess/notosanstc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosansjp.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanssc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanskr.css");
+@import url("./css/game.css");
+
+input, button, select, textarea, body{
+  font-family: 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', sans-serif;
+}
+  </style>
   </lift:surround>
   <body>
     <entry:reload_form />
-    <entry:reload_middle_form />
-    <form name="send" method="POST" action="up_normal.html" onSubmit="setfocus();">    
+    <form id="speakform" name="send" method="POST" action="up_normal.html" onSubmit="setfocus();">    
       <a name="game_top"></a>
       <table border="0" cellpadding="0" cellspacing="0">
        <tr>
-        <td><textarea name="say" id="say" rows="3" cols="70" wrap="soft" style="font-size:12pt;"></textarea></td>
+        <td><textarea size="50" name="say" id="say" rows="3" cols="70" wrap="soft" style="font-size:12pt;"></textarea></td>
         <td valign="bottom">
          <table cellpadding="0" cellspacing="0" border="0">
           <tr>

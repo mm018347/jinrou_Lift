@@ -153,7 +153,7 @@ object RoomFlagEnum extends Enumeration {
     ITEM_MODE    -> "(道具)",
     MOB_MODE     -> "(暴)",
     MOB_MODE1    -> "(暴1)",
-    ITEM_CUBIC   -> "(戀)",
+    ITEM_CUBIC   -> "(箭)",
     CUBIC_CHANNEL-> "(戀1)",
     CUBIC_INIT   -> "(戀2)",
     CUBIC_IMMEDIATE -> "(戀3)",

@@ -229,6 +229,15 @@ class GameController {
         S.redirectTo("main.html")
       }
     }
+    
+    val dead_mode    = (room.status.is != RoomStatusEnum.ENDED.toString) &&
+                       (user_entry != null) && (!user_entry.live.is)
+    val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
+                     (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
+                     ((user_entry != null) && (!user_entry.live.is) && 
+                      (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
+                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
+    //println("heaven_mode " + heaven_mode.toString)
 
     var alert_message =
       if (room_day.deadline.is == null)
@@ -268,13 +277,13 @@ class GameController {
              
     
     val game_title : NodeSeq = Seq(<span><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
-         [{room_no}號村] 
+         [#{room_no}] 
          { 
            if (user_entry != null)
              game_title_with_user 
            else 
              Seq(<span></span>) 
-         }<br/>～{room.room_comment.is}～</span>, <br/>)
+         } ～{room.room_comment.is}～</span>, <br/>)
 
     val play_sound_option : scala.xml.Elem =
       if (S.getSessionAttribute("play_sound") == "on")
@@ -389,14 +398,21 @@ class GameController {
           Seq(<a href={"game_view.html?room_no=" + room_no + "&dissent=on"}>異議</a>)
         }
       }
+      
+    val old_logs : NodeSeq = 
+      if ((room_day.day_no.is == 0) || (user_entry == null))
+        Seq(<span></span>)
+      else
+        for (i <- (1 to room_day.day_no.is -1).reverse) yield
+          { <a href={"oldlog_view_single.html?room_no=" + room_no + "&roomday_no=" + i} target="_new">{((i+2)/2).toString}{if (i%2==0) "日" else " 夜"}</a> }
 
-    val game_option : NodeSeq = Seq(<small>[自動更新](
+    val game_option : NodeSeq = Seq(<small>{abandon_option} [自動更新](
          <a href={link_page + "?room_no=" + room_no + "&auto_reload="} target="_top">手動</a>
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=15"} target="_top">15秒</a>
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=20"} target="_top">20秒</a>
          <a href={link_page + "?room_no=" + room_no + "&auto_reload=30"} target="_top">30秒</a>)
          [音效]({ play_sound_option })
-         { list_down_option }<br/>{abandon_option} {rollcall_option}
+         { list_down_option }<br/>{rollcall_option} {old_logs}
          </small>)
 
     def sound_object(swf_filename: String) =
@@ -433,15 +449,6 @@ class GameController {
            </td>
           </tr>
          </form>) else Seq(<span></span>)
-        
-    val dead_mode    = (room.status.is != RoomStatusEnum.ENDED.toString) &&
-                       (user_entry != null) && (!user_entry.live.is)
-    val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
-                     (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
-                     ((user_entry != null) && (!user_entry.live.is) && 
-                      (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
-                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
-    //println("heaven_mode " + heaven_mode.toString)
 
 
     if (GameProcesser.check_deadline(room, room_day, user_entrys)) {

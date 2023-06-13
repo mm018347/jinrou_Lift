@@ -46,7 +46,7 @@ object UserEntryHelper {
         NodeSeq.Empty
 
     if (user_entry.live.is)
-      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#CCCCCC" else ""}>
+      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#CCCCCC" else ""}>
       <img src={user_icon.icon_filename.is} width={user_icon.icon_width.is.toString} height={user_icon.icon_height.is.toString} border="2" style={"border-color:" + user_icon.color.is} />{
        if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (reveal || ((current_user != null) && (user_entry.id.is == current_user.id.is))))
          Seq(<br/><span>{"金:" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span>) else NodeSeq.Empty}</td>
@@ -55,11 +55,11 @@ object UserEntryHelper {
        if (room.has_flag(RoomFlagEnum.ITEM_MODE) && reveal) Seq(<br/><span>{"金：" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span>) else NodeSeq.Empty}</td>
 	else
       result ++= <td valign="top" bgcolor="#992222"><img src="images/grave.gif"   border="2"  onMouseover={"this.src='" + user_icon.icon_filename.is + "'"} onMouseout="this.src='images/grave.gif'"  style={"border-color:" + user_icon.color.is} />{
-       // if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}{
+       // if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}{
        if (room.has_flag(RoomFlagEnum.ITEM_MODE) && reveal) Seq(<br/><span>{"金：" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span>) else NodeSeq.Empty}</td>
 
     // <img src={"http://identicon.relucks.org/" + user_entry.ip_address_md5.is} />
-    result ++= <td bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#CCCCCC" else ""}>
+    result ++= <td bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#CCCCCC" else ""}>
           <font color={user_icon.color.is}>◆</font>{user_entry.handle_name.is}
 		  { if (room.has_flag(RoomFlagEnum.ANONYMOUS_MODE) && (((current_user != null) && (user_entry.id.is == current_user.id.is))) && (room.status.is != RoomStatusEnum.ENDED.toString))
 		  Seq("(自己)")
@@ -107,17 +107,17 @@ object UserEntryHelper {
         NodeSeq.Empty
 		/*
     if (user_entry.live.is)
-      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}>
+      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}>
       <img src={user_icon.icon_filename.is} width={user_icon.icon_width.is.toString} height={user_icon.icon_height.is.toString} border="2" style={"border-color:" + user_icon.color.is} />{
        if (room.has_flag(RoomFlagEnum.ITEM_MODE) && (reveal || ((current_user != null) && (user_entry.id.is == current_user.id.is))))
          Seq(<br/><span>{"金:" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span>) else NodeSeq.Empty}</td>
     else
       result ++= <td valign="top" bgcolor="#992222"><img src="images/grave.gif"   border="2"  onMouseover={"this.src='" + user_icon.icon_filename.is + "'"} onMouseout="this.src='images/grave.gif'"  style={"border-color:" + user_icon.color.is} />{
-       // if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}{
+       // if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}{
        if (room.has_flag(RoomFlagEnum.ITEM_MODE) && reveal) Seq(<br/><span>{"金：" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span>) else NodeSeq.Empty}</td>
 */
     if (user_entry.live.is)
-      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#9966CC" else ""}>
+      result ++= <td valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#9966CC" else ""}>
       <img src={user_icon.icon_filename.is} width={user_icon.icon_width.is.toString} height={user_icon.icon_height.is.toString} border="2" style={"border-color:" + user_icon.color.is} />
 	  <br/><span>{"金:" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span></td>
     else if((!user_entry.live.is) && (user_entry.has_flag(UserEntryFlagEnum.SPY_OVER)))
@@ -128,7 +128,7 @@ object UserEntryHelper {
 	  <br/><span>{"金:" + user_entry.cash.is} {ItemEnum.get_item(user_entry.item_flags.is).item_pic}</span></td>
 
     // <img src={"http://identicon.relucks.org/" + user_entry.ip_address_md5.is} />
-    result ++= <td bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#9966CC" else ""}>
+    result ++= <td bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else if (user_entry.has_flag(UserEntryFlagEnum.AUTOVOTED)) "#9966CC" else ""}>
           <font color={user_icon.color.is}>◆</font>{user_entry.handle_name.is}<br/>
           {
             if (user_entry.trip.is != "")
@@ -159,12 +159,12 @@ object UserEntryHelper {
     var result : NodeSeq = Seq()
     val user_icon : UserIcon = user_entry.get_user_icon()
     if (user_entry.live.is)
-      result ++= <td class="table_votelist1" valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}>
+      result ++= <td class="table_votelist1" valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}>
       <img src={user_icon.icon_filename.is} width={user_icon.icon_width.is.toString} height={user_icon.icon_height.is.toString} border="2" style={"border-color:" + user_icon.color.is} /></td>
     else
       result ++= <td class="table_votelist1" valign="top" bgcolor="#992222"><img src="images/grave.gif"   border="2"  onMouseover={"this.src='" + user_icon.icon_filename.is + "'"} onMouseout="this.src='images/grave.gif'"  style={"border-color:" + user_icon.color.is} /></td>
 
-    result ++= <td class="table_votelist2" width="150px" bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}>
+    result ++= <td class="table_votelist2" width="150px" bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}>
           {user_entry.handle_name.is}<br/><font color={user_icon.color.is}>◆</font>
           { if (targetable)
              Seq(<input type="radio" id="target" name="target" value={user_entry.id.is.toString} />)
@@ -178,12 +178,12 @@ object UserEntryHelper {
     var result : NodeSeq = Seq()
     val user_icon : UserIcon = user_entry.get_user_icon()
     if (user_entry.live.is)
-      result ++= <td class="table_votelist1" valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}>
+      result ++= <td class="table_votelist1" valign="top" bgcolor={if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}>
       <img src={user_icon.icon_filename.is} width={user_icon.icon_width.is.toString} height={user_icon.icon_height.is.toString} border="2" style={"border-color:" + user_icon.color.is} /></td>
     else
       result ++= <td class="table_votelist1" valign="top" bgcolor="#992222"><img src="images/grave.gif"   border="2"  onMouseover={"this.src='" + user_icon.icon_filename.is + "'"} onMouseout="this.src='grave.gif'"  style={"border-color:" + user_icon.color.is} /></td>
 
-    result ++= <td class="table_votelist2" width="150px" bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#FF50FF" else ""}>
+    result ++= <td class="table_votelist2" width="150px" bgcolor={if (!user_entry.live.is) "#992222" else if (user_entry.user_flags.is == UserEntryFlagEnum.VOTED.toString) "#ffcdff" else ""}>
           {user_entry.handle_name.is}<br/><font color={user_icon.color.is}>◆</font>
           { if (targetable)
              {Seq(<input type="checkbox" id={"id" + user_entry.user_no.is} name={"id" + + user_entry.user_no.is} />)}

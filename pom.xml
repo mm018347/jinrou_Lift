@@ -8,7 +8,7 @@
   <name>jinrou</name>
   <inceptionYear>2007</inceptionYear>
   <properties>
-    <scala.version>2.13.6</scala.version>
+    <scala.version>2.7.5</scala.version>
   </properties>
 
   <repositories>
@@ -36,12 +36,12 @@
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-util</artifactId>
-      <version>2.0</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-webkit</artifactId>
-      <version>2.0</version>
+      <version>1.0</version>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -52,7 +52,7 @@
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper</artifactId>
-      <version>2.0</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -63,7 +63,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.2</version>
+      <version>4.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -83,10 +83,8 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
+      <version>0.9.15</version>
     </dependency>
-
-
 
   </dependencies>
 
@@ -121,8 +119,8 @@
           <scanIntervalSeconds>0</scanIntervalSeconds>
           <connectors>
             <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-              <host>localhost</host>
-              <port>8080</port>
+              <host>0.0.0.0</host>
+              <port>80</port>
             </connector>
           </connectors>
         </configuration>
@@ -145,6 +143,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
+		  <encoding>UTF-8</encoding>  
           <downloadSources>true</downloadSources>
           <excludes>
             <exclude>org.scala-lang:scala-library</exclude>

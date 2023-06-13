@@ -1,0 +1,206 @@
+.vote_table {
+    //margin: 10px 0px 20px 0px;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+.vote_tr, .vote_td {
+    //padding: 5px;
+    border: 1px solid;
+    white-space: nowrap;
+}
+.day {
+    border-top: silver 1px dashed;
+    //line-height: 16px;
+}
+.night {
+    border-top: silver 1px dashed;
+    background-color:#000030;
+    //line-height: 16px;
+    color: #ffffff;
+}
+.heaven {
+    border-top: silver 1px dashed;
+    background-color:#777777;
+    //line-height: 16px;
+}
+.talk_werewolf { 
+    color:#FFCCFF;
+}
+.talk_wolfcub { 
+    color:#EE0000;
+}
+.talk_gemini { 
+    color:#DDAA77;
+}
+.talk_gemini_day { 
+    color:#AA7744;
+}
+.talk_fox { 
+    color:#CC0099;
+}
+.talk_pontiff { 
+    color:#EEAA55;
+}
+.talk_lover { 
+    color:#FF69B4;
+}
+.talk_microphone { 
+    color:#66CCFF;
+}
+.talk_heaven { 
+    color:#FFFFFF;
+}
+.talk_ventriloquist { 
+    color:#009999;
+    font-size:17pt;
+}
+.talk_secret { 
+    color:#red;
+    font-size:17pt;
+}
+.tag {
+    font-weight:bold;
+    border-top: silver 1px dashed;
+    padding-left: 6em;
+}
+.message {
+    background-color:#efefef;
+    color:black;
+}
+.act_male { 
+    background-color:#336699;
+    color:white;
+}
+.act_female { 
+    background-color:#FF0099;
+    color:white;
+}
+.act_rollcall { 
+    background-color:#FF0099;
+    color:white;
+}
+/*投票*/
+.act_vote { 
+    background-color:#AAAA33;
+    color:snow;
+}
+/*道具*/
+.act_item { 
+    background-color:#AAAA33;
+    color:snow;
+}
+/*村民*/
+.act_villager { 
+    background-color:#AAAA33;
+    color:black;
+}
+/*暴民*/
+.act_becomemob { 
+    background-color:#AAAAAA;
+    color:snow;
+}
+/*隱士*/
+.act_hermit { 
+    background-color:#888888;
+    color:snow;
+}
+/*占卜師*/
+.act_augure { 
+    background-color:#9933FF;
+    color:snow;
+}
+/*獵人*/
+.act_hunter { 
+    background-color:#3399FF;
+    color:snow;
+}
+/*牧師*/
+.act_cleric { 
+    background-color:#CCDD00;
+    color:blue;
+}
+/*藥師+煉金術師*/
+.act_herbalis { 
+    background-color:#8FCECE;
+    color:snow;
+}
+/*逃亡者*/
+.act_runner { 
+    background-color:#009999;
+    color:snow;
+}
+/*學者*/
+.act_scholar { 
+    background-color:#3CB371;
+    color:snow;
+}
+/*大魔導*/
+.act_archmage { 
+    background-color:#7B68EE;
+    color:snow;
+}
+/*人狼*/
+.act_werewolf { 
+    background-color:#FF0000;
+    color:snow;
+}
+/*幼狼*/
+.act_wolfcub { 
+    background-color:#EE0000;
+    color:snow;
+}
+/*狂人+間諜*/
+.act_madwan { 
+    background-color:#DD0000;
+    color:snow;
+}
+/*狂巫*/
+.act_sorceror { 
+    background-color:#CC0000;
+    color:snow;
+}
+/*妖狐*/
+.act_fox { 
+    background-color:#CC0099;
+    color:snow;
+}
+/*背德*/
+.act_betrayer { 
+    background-color:#DD0088;
+    color:snow;
+}
+/*哥德法*/
+.act_godfat { 
+    background-color:#BB00AA;
+    color:snow;
+}
+/*惡魔+墮天使+異端*/
+.act_demon { 
+    background-color:#666666;
+    color:#FF0000;
+}
+/*企鵝*/
+.act_penguin { 
+    background-color:#CCFFFF;
+    color:#0000FF;
+}
+/*教主*/
+.act_pontiff { 
+    background-color:#EEAA55;
+    color:snow;
+}
+/*模仿師*/
+.act_shifter { 
+    background-color:#FF7700;
+    color:snow;
+}
+/*繼承者*/
+.act_inheriter { 
+    background-color:#AAAA00;
+    color:snow;
+}
+/*卡片師*/
+.act_card { 
+    background-color:#DAA520;
+    color:snow;
+}

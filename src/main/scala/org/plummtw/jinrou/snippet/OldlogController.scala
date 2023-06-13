@@ -139,6 +139,11 @@ class OldlogController {
         S.redirectTo("main.html")
       }
     }
+    val heaven_mode  = (room.status.is == RoomStatusEnum.ENDED.toString) ||
+                        (room.has_flag(RoomFlagEnum.TEST_MODE)) ||
+                       ((user_entry != null) && (!user_entry.live.is) &&
+                        (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
+                     ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
     
     val game_title : NodeSeq = Seq(<span><strong style="font-size:15pt;">{room.room_name.is} 村</strong>
          [{room_no}號村] <a href="main.html" target="_top">[離開]</a><br/>～{room.room_comment.is}～
@@ -178,12 +183,12 @@ class OldlogController {
     val user_table = UserEntryHelper.user_table(room, null, user_entrys, true)
 
     //val room_days = RoomDay.findAll(By(RoomDay.room_id, room_id), OrderBy(RoomDay.day_no, Descending))
-
+      
     def old_last_words_tag(deaths: List[SystemMessage]) = MiscHelper.get_lastwords_tag(deaths, user_entrys)
 
     def old_dead_tag(deaths: List[SystemMessage]) = MiscHelper.get_dead_tag(deaths, user_entrys)
 
-    def old_votes_tag(old_room_day:RoomDay) = VoteHelper.get_vote_tag(room, old_room_day, user_entrys)
+    def old_votes_tag(old_room_day:RoomDay) = VoteHelper.get_vote_tag(room, old_room_day, user_entrys, heaven_mode)
 
     def old_message(old_room_day:RoomDay) = 
       MessageHelper.messages_all(room, old_room_day, user_entry, user_entrys)
@@ -193,12 +198,12 @@ class OldlogController {
       room_day_list.foreach{old_room_day =>
         val deaths = SystemMessage.findAll(By(SystemMessage.roomday_id, old_room_day.id.is),  Like(SystemMessage.mtype, MTypeEnum.DEATH.toString + "%"),
                                            OrderBy(SystemMessage.actioner_id, Descending))
-        result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="0" style="font-family:新細明體;">
+        result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="0" style="">
           <tr>{old_last_words_tag(deaths)}</tr>
           <tr>{old_dead_tag(deaths)}</tr>
           <tr>{old_votes_tag(old_room_day)}</tr>
         </table>,
-        <table border="0" cellpadding="0" cellspacing="0" style="font-family:新細明體;">
+        <table border="0" cellpadding="0" cellspacing="0" style="">
           {old_message(old_room_day)}
         </table>)
       }
@@ -241,7 +246,9 @@ class OldlogController {
 
 
     val room_day_list   = RoomDay.findAll(By(RoomDay.room_id, room_id), By(RoomDay.day_no, room_day_no_int))
+    val last_room_day_list   = RoomDay.findAll(By(RoomDay.room_id, room_id), By(RoomDay.day_no, room_day_no_int - 1))
     val room_day        = if (room_day_list.length == 0) null else room_day_list(0)
+    val last_room_day        = if (last_room_day_list.length == 0) null else last_room_day_list(0)
     if (room_day == null) {
       S.error(<b>找不到遊戲日</b>)
       S.redirectTo("main.html")
@@ -274,32 +281,50 @@ class OldlogController {
                        ((user_entry != null) && (!user_entry.live.is) &&
                         (room.has_flag(RoomFlagEnum.DEATH_LOOK))) ||
                      ((user_entry != null) && (user_entry.uname.is == "dummy_boy"))
-    if (!heaven_mode) {
-      S.redirectTo("main.html")
-    }
+    // if (!heaven_mode) {
+    //   S.redirectTo("main.html")
+    // }
 
     val user_entrys = UserEntry.findAll(By(UserEntry.room_id, room_id))
+    val vote_godfat_blind = SystemMessage.findAll(By(SystemMessage.roomday_id, room_day.id.is),
+                                                  By(SystemMessage.mtype, MTypeEnum.VOTE_GODFAT_BLIND2.toString))
+    val is_blinded =
+      if (vote_godfat_blind.length == 0)
+        false
+      else if (user_entry == null)
+        true
+      else if ((user_entry.test_foxside(room, room_day, user_entrys)) || (heaven_mode))
+        false
+      else
+        true
 
-
-    def old_last_words_tag(deaths: List[SystemMessage]) = MiscHelper.get_lastwords_tag(deaths, user_entrys)
+    def old_last_words_tag(deaths: List[SystemMessage], last_deaths: List[SystemMessage]) = MiscHelper.get_lastwords_tag(deaths++last_deaths, user_entrys)
 
     def old_dead_tag(deaths: List[SystemMessage]) = MiscHelper.get_dead_tag(deaths, user_entrys)
 
-    def old_votes_tag(old_room_day:RoomDay) = VoteHelper.get_vote_tag(room, old_room_day, user_entrys)
+    def old_votes_tag(old_room_day:RoomDay) = VoteHelper.get_vote_tag(room, old_room_day, user_entrys, heaven_mode)
 
     def old_message(old_room_day:RoomDay) =
-      MessageHelper.messages_all(room, old_room_day, user_entry, user_entrys)
+      if (heaven_mode) {
+        MessageHelper.messages_all(room, old_room_day, user_entry, user_entrys)
+      } else {
+        MessageHelper.messages_normal(room, old_room_day, user_entry, heaven_mode, is_blinded, user_entrys)
+      }
 
     def old_logs : NodeSeq = {
       var result : NodeSeq = Seq()
+      //val deaths = SystemMessage.findAll(By(SystemMessage.roomday_id, room_day.id.is),  Like(SystemMessage.mtype, MTypeEnum.DEATH.toString + "%"),
+      //                                   OrderBy(SystemMessage.actioner_id, Descending))
       val deaths = SystemMessage.findAll(By(SystemMessage.roomday_id, room_day.id.is),  Like(SystemMessage.mtype, MTypeEnum.DEATH.toString + "%"),
-                                         OrderBy(SystemMessage.actioner_id, Descending))
-      result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="0" style="font-family:新細明體;">
-        <tr>{old_last_words_tag(deaths)}</tr>
+                                       OrderBy(SystemMessage.actioner_id, Descending))
+      val last_deaths = SystemMessage.findAll(By(SystemMessage.roomday_id, last_room_day.id.is),  Like(SystemMessage.mtype, MTypeEnum.DEATH.toString + "%"),
+                                       OrderBy(SystemMessage.actioner_id, Descending))
+      result = result ++ Seq(<table border="0" cellpadding="0" cellspacing="0" style="">
+        <tr>{if(room_day.day_no.is % 2 == 0) null else old_last_words_tag(deaths,last_deaths)}</tr>
         <tr>{old_dead_tag(deaths)}</tr>
         <tr>{old_votes_tag(room_day)}</tr>
       </table>,
-      <table border="0" cellpadding="0" cellspacing="0" style="font-family:新細明體;">
+      <table border="0" cellpadding="0" cellspacing="0" style="">
         {old_message(room_day)}
       </table>)
       result

@@ -23,7 +23,7 @@ class UserIconController {
     for (val icon_group <- icon_groups) result ++= Seq(<tr> { 
        for (val icon <- icon_group) yield
          <td valign="top"><img src={icon.icon_filename.is} width={icon.icon_width.is.toString} height={icon.icon_height.is.toString} border="2" style={"border-color:" + icon.color.is}/></td>
-         <td width="150px">{icon.icon_name.is}<br/><font color={icon.color.is}>◆</font><span style="font-family:新細明體;">{icon.color.is}</span></td>
+         <td width="150px">{icon.icon_name.is}<br/><font color={icon.color.is}>◆</font><span style="">{icon.color.is}</span></td>
     } </tr>)
     
     return result
@@ -40,7 +40,7 @@ class UserIconController {
       <tr>
       <%   } %>
        <td valign=top><img src=${icon.icon_filename} width=${icon.icon_width} height=${icon.icon_height} border=2 style="border-color:${icon.color};"><td>
-       <td width=150px>${icon.icon_name}<br><font color=${icon.color}>◆</font><span style="font-family:新細明體;">${icon.color}</span></td>
+       <td width=150px>${icon.icon_name}<br><font color=${icon.color}>◆</font><span style="">${icon.color}</span></td>
       <% icon_index += 1
          } %>
       </tr>

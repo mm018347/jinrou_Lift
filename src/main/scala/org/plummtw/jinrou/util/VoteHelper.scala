@@ -621,13 +621,13 @@ object VoteHelper {
         else
           <span>競價：{vote.auc_number.is}</span>
 
-      return <tr>
-         <td align="left"><strong>{actioner_name}</strong></td>
-         <td>{(vote.vote_number.is/2).toString+" 票"}</td>
-         <td>{"投票給 " + vote_no(room_day, actioner, vote_reveal, vote.vote_flags.is) +" 票 →"}</td>
-         <td><strong>{actionee_name}</strong></td>
-         <td>{vote_flags_str(vote)}</td>
-         <td>{auction_str}</td>
+      return <tr class="vote_tr">
+         <td align="left" class="vote_td"><strong>{actioner_name}</strong></td>
+         <td class="vote_td">{(vote.vote_number.is/2).toString+" 票"}</td>
+         <td class="vote_td">{"投票給 " + vote_no(room_day, actioner, vote_reveal, vote.vote_flags.is) +" 票 →"}</td>
+         <td class="vote_td"><strong>{actionee_name}</strong></td>
+         <td class="vote_td">{vote_flags_str(vote)}</td>
+         <td class="vote_td">{auction_str}</td>
         </tr>
     }
     val vote_reveal = (room.has_flag(RoomFlagEnum.VOTE_REVEAL))
@@ -635,17 +635,17 @@ object VoteHelper {
     if (votes.length == 0)
       return <span></span>
 
-    return <table border="1" cellspacing="0" cellpadding="2" style="font-size:12pt;">
-      <td colspan="6" align="center">{"第 " + ((room_day.day_no+2)/2).toString + "日 (第 " + vote_time.toString +" 回)"}</td> {
+    return <table border="1" cellspacing="0" cellpadding="2" style="font-size:12pt;" class="vote_table">
+      <td colspan="6" align="center" class="vote_td">{"第 " + ((room_day.day_no+2)/2).toString + " 日 (第 " + vote_time.toString +" 回)"}</td> {
          for (vote <- votes) yield vote_tag(vote, vote_reveal)
       }
     </table>
   }
 
-  def get_vote_tag(room: Room, room_day: RoomDay, user_entrys: List[UserEntry]) = {
+  def get_vote_tag(room: Room, room_day: RoomDay, user_entrys: List[UserEntry], heaven_mode:Boolean) = {
     var vote_tag : NodeSeq = NodeSeq.Empty
     (1 to room_day.vote_time.is).toList.reverse.foreach { index =>
-      vote_tag = vote_tag ++ Seq(VoteHelper.generate_vote_tag(room, room_day, index, true, user_entrys))
+      vote_tag = vote_tag ++ Seq(VoteHelper.generate_vote_tag(room, room_day, index, heaven_mode, user_entrys))
     }
     vote_tag
   }

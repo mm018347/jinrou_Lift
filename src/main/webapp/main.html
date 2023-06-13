@@ -1,9 +1,148 @@
 <lift:surround with="default" at="content">
   <head>
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/base.css"/>
     <style type="text/css">
-// ]]>
+@import url("//fonts.googleapis.com/earlyaccess/notosanstc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosansjp.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanssc.css");
+@import url("//fonts.googleapis.com/earlyaccess/notosanskr.css");
+
+input, button, select, textarea, body{
+  font-family: 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', sans-serif;
+}
+body {
+  background-color: #FFFFFF;
+  background-image: url("images/top_bg.jpg");
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-attachment: fixed;
+}
+img {
+  border: 0;
+}
+.comment { /* サーバ名 */
+  text-align: right;
+  font-weight: bold;
+}
+noscript { /* JavaScript が無効の場合のワーニング */
+  color: #FF0000;
+  font-size: 15pt;
+  font-weight: bold;
+}
+table.main { /* 全体の table */
+  border: 0;
+  width: 100%;
+  padding: 5px;
+}
+table.main td {
+  vertical-align: top;
+}
+.menu  {
+  width: 140px;
+}
+.information { /* Information (中身は info/top.php) */
+  margin: 10px 10px;
+}
+.information h1, .information h2, .information h3, .information h4 {
+  margin: 10px 0px;
+  padding: 0px;
+}
+.information h1 { font-size: 120%; }
+.information h2 { font-size: 100%; }
+.information h3 { font-size: 100%; }
+.information h4 { font-size: 100%; }
+form { /* 村の作成フォーム */
+  margin-top: 10px;
+}
+label { /* 村作成のオプション名 */
+  margin-left: 1em;
+  font-weight: bold;
+}
+input, select { /* 設定項目 */
+  background-color: #F0F8FF;
+  border: 1px solid #C0C0C0;
+}
+.text { /* 村の名前, 説明など */
+  border: 1px solid #C0C0C0;
+}
+.explain { /* オプションの説明 */
+  filter: alpha(opacity=70, enabled=70);
+  -moz-opacity: 0.7;
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  font-size: 80%;
+}
+.make { /* 作成ボタン */
+  text-align: right;
+}
+.make input {
+  border: 1px solid #000000;
+}
+.footer { /* フッター (バージョン情報など) */
+  margin-bottom: 5px;
+  text-align: right;
+  font-size: 80%;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+ul {
+  margin-left: -32px;
+  *margin-left: 8px; /* IE6 対応 */
+  list-style-type: none;
+  line-height: 150%;
+  font-size: 95%;
+}
+.menu {
+  padding: 5px 1px;
+  background-color: #CCFFCC;
+  border: 1px solid #CC3300;
+  text-align: center;
+  font-weight: bold;
+}
+fieldset {
+  margin-bottom: 10px;
+}
+legend { /* fieldset のタイトル */
+  font-weight: bold;
+}
+.game-list { /* ゲーム一覧 (中身は room_manager.php) */
+  margin: 20px 20px 30px;
+  line-height: 135%;
+}
+.game-list div {
+  text-align: right;
+}
+h1, h2, h3, h4, h5 {
+  filter: alpha(opacity=80, enabled=80);
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  margin: 0px;
+  padding: 5px 0px;
+}
+h1 {
+  background-color: #CCFFCC;
+  font-size: 200%;
+}
+h2 {
+  background-color: #CCFFFF;
+  font-size: 150%;
+}
+h3 {
+  background-color: #FFDDDD;
+  font-size: 120%;
+}
+h4 {
+  background-color: #DDDDEE;
+  font-size: 100%;
+}
+h5 {
+  background-color: #DDDDDD;
+  font-size: 90%;
+}
+
     </style>
     <script type="text/javascript">
 // <![CDATA[
@@ -14,7 +153,7 @@
       }
 // ]]>
     </script>
-    <script type="text/javascript"> 
+    <script type="text/javascript">
 // <![CDATA[
  function IllegalElement_a()
 {
@@ -27,863 +166,996 @@ document.getElementById("Illegal").style.display="none";
 // ]]>
     </script>
   </head>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<div id="header">
-<h1>
-<img src="images/top_title2.png"/><br/>
-<span class="comment">鸚鵡實驗站（猫又代管）</span>
-</h1>
-   <noscript>
-   <tr>
-    <td align="center">
-     <span>＜＜ 請啟用JavaScript ＞＞</span>
-    </td>
-   </tr>
-   </noscript>
-</div>
-
-   <tr>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%"><td></td>
-    </table>
-   </tr>
-   
-   <tr>
-    <td width="190" valign="top">
-     <table border="0" cellpadding="0" cellspacing="0">
-      <tr>
-       <td valign="top">
-<div id="menu">
-<h2>選單</h2>
-<ul class="menu">
-<!--
-    <li><a href="test.html">測試須知</a></li>
+<a href="main.html"><img src="images/top_title.jpg" border="0" alt="汝等是人是狼？" /></a>
+<div class="comment">PRRT鸚鵡實驗站</div>
+<noscript>&lt;&lt; 請安裝JavaScript &gt;&gt;</noscript>
+<table class="main"><tr>
+<td>
+  <div class="menu">選單</div>
+  <ul>
+    <!--<li><a href="test.html">測試須知</a></li>
     <li><a href="create_test1.html">25人測試用村</a></li>
-    <li><a href="create_test2.html">8人測試用村</a></li>
-	-->
-    <li><a href="http://catjinro.no-ip.org/">導覽頁</a></li>
-	<li><a href="main.html">首頁</a></li>
-    <li><a href="http://jigokutushin.net/jinro/list.php">聯合列表</a></li>
-    <li><a href="http://nedftp.com/wiki/index.php/">人狼Wiki</a></li>
-	<li><a href="http://personwolf.mykomica.org/ddays/">K島人狼</a></li>
-	<li><a href="script_info.html">系統特點</a></li>
+    <li><a href="create_test2.html">8人測試用村</a></li>-->
+    <li><a href="script_info.html">系統特點</a></li>
 	<li><a href="rule.html">遊戲規則</a></li>
-	<li><a href="version.html">版本紀錄</a></li>
-	<li><a href="oldlog_list.html">紀錄閱覽</a></li>
-	<li><a href="user_icon.html">頭像一覽</a></li>
-	<li><a href="upload.html">頭像登錄</a></li>
+    <li><a href="version.html">版本記錄</a></li>
+    <li><a href="oldlog_list.html">紀錄閱覽</a></li>
+    <li><a href="http://cheshire.pinomeng.com:81/par_jinrousiki/icon_view.php">頭像一覽</a></li>
+    <li><a href="http://cheshire.pinomeng.com:81/par_jinrousiki/icon_upload.php">頭像上傳</a></li>
+    <li><a href="stat.html">統計</a></li>
 	<li><a href="faq.html">問答集</a></li>
-	<li><a href="main_olg.html">舊版首頁</a></li>
-	<li><a href="http://parrot2.jigokutushin.net/">地獄鸚鵡</a></li>
-</ul>
-</div>
-       </td>
-<!-- <font color="#FF0000">目前沒有緊急公告</font> -->
-	   <td width="5%"><span style="margin:10px;" align="left"></span></td>
-       <td width="95%" valign="top">
-        <fieldset>
-         <legend><strong>伺服器公告</strong></legend>
-         <div id="information">
-	 <h3>目前版本 Build0613</h3>
-	 <p>
-     <b>本伺服器由克洛洛提供主機得以運作的。
-	 <br/>伺服器不穩定，若突然關閉請告知柴郡猫。
-	 <br/>新首頁建立村莊若排版錯誤請調整解析度。</b>
-	 <br/><strong class="notice">若發現伺服器突然無法連接請稍等幾分鐘，非常可能是突然更新。</strong>
-	 <br/>
-	 <br/>若有BUG請至K島人狼BUG回報專用串回報，感謝配合。（左邊選單有連結）
-	 <br/>
-	 <br/><img src="images/rabbit.gif"/>
-	 <br/>
-	 <h4>最新更新</h4>
-	 <br/>0601 - 墮天使初版實裝（無任何主動/被動技能、無法入教、被拉即轉職）、狂人擊暈效果變更。
-	 <br/>0606 - 修正墮天使無法登場的問題，經過測試墮天使正常。
-	 <br/>0612 - 修正鸚鵡出包，開放墮天使選項、GM：教選項、墮天使－墮落技能、邱比特之箭。
-	 <br/>戀人性質為標記（同教徒、暴民）、<font color="#FF0000">沒有戀人頻道</font>、連繫死死因為：跟隨生命連繫者死亡
-	 <br/>戀人規則有點不太一樣，不是一個掛就全掛，而是剩下 1 人時會掛。所以超過 2 人時是有優勢的。
-	 <br/>陣營判定：戀人優於人/狼/狐/天使/暴民/惡魔，[教徒戀人]於教派獲勝時[教徒戀人]不會獲勝。
-	 <br/>0613 - 修正天氣系統、道具模式BUG，更改戀人的死亡訊息。
-	 <br/>0615 - 修正墮天使的代碼導致背德以為墮天使也是狐主的BUG。
-	 </p>
-	 <h2>其他</h2>
-	 <p>
-	 <br/>有新頭像若需上傳請先上傳至猫又伺服器後再告知編號、名稱、邊框顏色、寬高（50*50內）。
-	 <br/>本程式使用 Lift 架構重寫。若有問題、不合理、建議，請通知鸚鵡或柴郡猫。
-     <br/>程式＆主機＆管理員：<a href="mailto:sailormoontw@hotmail.com"><font color="#FF7700">鸚鵡(parrot)</font></a> <font color="#BB0077">哥德法(godfat)</font>／<font color="#6699ff">克洛洛</font>／依舊的<font color="#9933cc">柴郡猫</font>
-     <br/>構想提供：PTT kerl、PTT lime2001／測試協力：落葉子一群
-     <br/>落葉子 M 群：group434262@msnzone.cn／鸚鵡 M 群：group576934@msnzone.cn<strong class="notice">（審核制）</strong>
-	 </p>
-         </div>
-        </fieldset><br/>
-		
-        <fieldset>
-         <legend><strong>遊戲列表</strong></legend><br/>
-         <div style="line-height:135%;margin:20px 20px 30px;">
-           <lift:RoomController.list_normal/>
-        </div>
-        </fieldset><br/>
-        
+	<li><a href="http://cheshire.pinomeng.com:81/par_jinrousiki/trip.php">Trip</a></li>
+	<li><a href="thank.html">感謝</a></li>
+  </ul>
+  <div class="menu">交流連結</div>
+  <ul>
+    <li><a href="https://www.facebook.com/groups/789475714409882/">Facebook社團</a></li>
+  </ul>
+  <div class="menu">外部連結</div>
+  <ul>
+    <li><a href="http://nedftp.com/wiki/">人狼Wiki</a></li>
+    <li><a href="http://diam.ngct.net/">鑽石伺服器</a></li>
+    <li><a href="http://jigokutushin.net/jinro/">地獄通信伺服器</a></li>
+    <li><a href="http://higurashi.nctucs.org/">寒蟬伺服器</a></li>
+    <li><a href="http://touhou.jigokutushin.net/touhou/index.php">幻想鄉伺服器</a></li>
+    <li><a href="http://jinroh.surl.tw/">人狼物語</a></li>
+	<li><a href="http://cheshire.pinomeng.com:83/main.html">鸚鵡備份站</a></li>
+	<li><a href="http://cheshire.pinomeng.com:84/main.html">暗影獵人</a></li>
+	<li><a href="http://cheshire.pinomeng.com:85/">紫月人狼</a></li>
+  </ul>
+</td>
+<td>
+  <fieldset>
+    <legend>伺服器公告</legend>
+    <div class="information"><font size="2">
+	 <h2>目前版本 Build1070122 詳細內容請參閱版本記錄</h2>
+	 <h4>建議使用NTPClock校準電腦時間。
+	 <br/>本程式使用 Lift 架構重寫。若有問題、不合理、建議，請通知鸚鵡或柴郡猫。</h4>
+     <h5>程式＆主機＆管理員：<a href="mailto:sailormoontw@hotmail.com"><font color="#FF7700">鸚鵡(parrot)</font></a>／<font color="#FF6600">小緯</font>／<a href="mailto:mm018347@gmail.com"><font color="#9933cc">柴郡猫</font></a>
+     <br/>構想提供：PTT kerl、PTT lime2001／測試協力：落葉子一群</h5>
+     </font>
+    </div>
+    </fieldset>
+
+  <fieldset>
+    <legend>村莊一覽</legend>
+    <div class="game-list">
+      <lift:RoomController.list_normal/>
+    </div>
+    </fieldset>
+
         <lift:RoomController.add form="POST">
-         <fieldset>
-         <legend><strong>建立村莊</strong></legend>
-         <table>
-          <tr>
-           <td><label><strong>　村莊名稱：</strong></label></td>
-           <td><entry:room_name /> 村<br/></td>
-          </tr>
-          <tr>
-           <td><label><strong>　村莊說明：</strong></label></td>
-           <td><entry:room_comment /></td>
-          </tr>
+		
+  <fieldset>
+    <legend>村莊建立</legend>
+	
+  <tr>
+    <td><lift:msgs/></td>
+  </tr>
+  
+  <tr>
+  <td><label>村莊名稱：</label></td>
+  <td><entry:room_name /> <small class="explain">村</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>村莊說明：</label></td>
+  <td><entry:room_comment />
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　最大人數：</strong></label></td>
-           <td>
-             <entry:max_user />
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　測試模式：</strong></label></td>
-           <td>
-            <entry:test_mode />
-            <small>(測試模式顯示所有人物職業及夜晚對話)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>最大人數：</label></td>
+   <td>
+     <entry:max_user />
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>測試模式：</label></td>
+   <td>
+    <entry:test_mode />
+    <small class="explain">(顯示所有玩家的職業、發言、行動)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>匿名模式：</label></td>
+   <td>
+    <entry:anonymous_mode />
+    <small class="explain">(不顯示Trip，由系統給予名稱與頭像)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　希望角色：</strong></label></td>
-           <td>
-            <entry:wish_role />
-            <small>(打勾後將可選擇希望角色)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>希望角色：</label></td>
+   <td>
+    <entry:wish_role />
+    <small class="explain">(可以選擇希望職業)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　限時時間：</strong></label></td>
-           <td><small>限制投票實際時間　白：<entry:day_minutes />分
-                                        夜：<entry:night_minutes />分</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　替身君姓名：</strong></label></td>
-           <td><entry:dummy_handle_name /></td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　替身君遺言：</strong></label></td>
-           <td><entry:dummy_last_words /></td>
-          </tr>
-		  
+  <tr>
+  <td><label>實際時間：</label></td>
+   <td><small class="explain">設定遊戲時的實際時間長度　日：<entry:day_minutes />分
+        夜：<entry:night_minutes />分</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>替身君姓名：</label></td>
+   <td><entry:dummy_handle_name /></td>
+  </tr>
+  
+  <tr>
+  <td><label>替身君遺言：</label></td>
+   <td><entry:dummy_last_words /></td>
+  </tr>
+  
 	      <tr>
-           <td><label><strong>　無替身君模式：</strong></label></td>
-           <td><entry:no_dummy />
-            <small>(關閉替身君，惡魔渾沌更改為初日可施展)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　替身君公佈職業：</strong></label></td>
-           <td><entry:dummy_reveal />
-            <small>(替身君於第七日白天公佈職業)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　公開給予票數：</strong></label></td>
-           <td>
-            <entry:vote_reveal />
-            <small>(公開每位玩家的給予票數，只有權力者存在於村子的時候才有效果)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　靈界資訊公開：</strong></label></td>
-           <td><entry:death_look />
-            <small>(允許幽靈看到職業、行動、發言等全部資訊)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　共有悄悄話顯示：</strong></label></td>
-           <td>
-            <entry:gemini_talk />
-            <small>(允許晚上顯示共有者的悄悄話) </small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　自動防暴斃功能：</strong></label></td>
-           <td><entry:auto_vote />
-            <small>(暴斃時自動投給自己，並計自動一次，投票完後若自動達兩次未死仍會暴斃)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　天氣系統啟用：</strong></label></td>
-           <td><entry:weather />
-            <small>(每天晚上可以得知隔一天的天氣變化)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　颱風來臨：</strong></label></td>
-           <td><entry:weather1 />
-            <small>(額外增加天氣：颱風)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　暴民模式：</strong></label></td>
-           <td><entry:mob_mode />
-            <small>(22人以上大部分村民側於六夜可轉為暴民，只有村側暴民視為暴民側)</small>
-           </td>
-          </tr>
+  <td><label>停用替身君：</label></td>
+   <td><entry:no_dummy />
+    <small class="explain">(關閉替身君，同時令惡魔可於第一天施展混沌)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>替身君公佈職業：</label></td>
+   <td><entry:dummy_reveal />
+    <small class="explain">(於第七天早上公開替身君的職業)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>公開給予票數：</label></td>
+   <td>
+    <entry:vote_reveal />
+    <small class="explain">(公開每位玩家的給予票數，只有權力者登場的時候才有效)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>靈界資訊公開：</label></td>
+   <td><entry:death_look />
+    <small class="explain">(允許死亡的玩家在靈界可看到玩家職業、行動、發言)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>共有悄悄話顯示：</label></td>
+   <td>
+    <entry:gemini_talk />
+    <small class="explain">(令共有者於晚上發言時會發出聲音（悄悄話…）令其他人聽見，但會聽不懂) </small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>自動防暴斃功能：</label></td>
+   <td><entry:auto_vote />
+    <small class="explain">(處刑投票時若結算時仍未投票則自動投給自己一次，第二次則暴斃)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>天氣系統啟用：</label></td>
+   <td><entry:weather />
+    <small class="explain">(每天晚上可以得知隔一天的天氣變化)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>颱風來臨：</label></td>
+   <td><entry:weather1 />
+    <small class="explain">(額外增加天氣：颱風)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>暴民模式：</label></td>
+   <td><entry:mob_mode />
+    <small class="explain">(22人以上部分村民陣營職業可於第六天夜晚成為暴民，只有主職業為村民陣營的職業才算真正的暴民)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　暴民人數限制：</strong></label></td>
-           <td><entry:mob_mode1 />
-            <small>(若有多人選擇暴民模式時，最多只會有二名暴民)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>暴民人數限制：</label></td>
+   <td><entry:mob_mode1 />
+    <small class="explain">(若有多人成為暴民時，限制最多只有二名暴民)</small>
+  </td>
+  </tr>
 
-	      <tr>
-           <td><label><strong>　道具模式：</strong></label></td>
-           <td><entry:item_mode />
-	        <small>(每天晚上可以得知隔一天競標的道具，白天可競標道具)</small>
-           </td>
-          </tr>
-		  
+  <tr>
+  <td><label>道具模式：</label></td>
+   <td><entry:item_mode />
+        <small class="explain">(每天晚上可以得知隔天競標的道具，白天處刑投票時可競標道具)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>邱比特之箭：</label></td>
+   <td><entry:item_cubic />
+    <small class="explain">(道具模式開啟時，令邱比特之箭可能出現在競標中)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>戀人頻道：</label></td>
+   <td><entry:cubic_channel />
+    <small class="explain">(讓戀人之間可以於晚上使用戀人頻道交流)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>邱比特初始化：</label></td>
+   <td><entry:cubic_init />
+    <small class="explain">(25人時，第一天晚上任一名玩家將會獲得邱比特之箭，但持有金錢會歸零，沒有開啟道具模式也有效，不會配置給橋姬)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>邱比特即逝：</label></td>
+   <td><entry:cubic_immediate />
+    <small class="explain">(邱比特之箭若晚上不使用則於隔日早上消失)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>戀人初始化：</label></td>
+   <td><entry:lover_init />
+    <small class="explain">(25人時，第一天晚上任兩名玩家將會成為戀人，5%追加第三名，不會配置給橋姬)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label>戀人交換日記：</label></td>
+   <td><entry:lover_letter_exchange />
+    <small class="explain">(開啟時(戀)、(戀1)、(戀2)、(戀3)無效，(戀4)不會有第三名戀人出現，<br/>令戀人的遺書不會被公開，戀人在更新遺書時會直接傳遞至另一位戀人)</small>
+  </td>
+  </tr>
+
 	  <tr><td><strong><font color="blue">額外職業部份：</font></strong></td><td><font color="red">( 警告：別開太多職業以免遊戲太過混亂 )</font></td></tr>
+
+  <tr>
+  <td><label><font color="#CCDD00">牧師</font>：</label></td>
+   <td><entry:role_cleric />
+    <small class="explain">(１７人以上加入牧師) (人側)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label><font color="#8FCECE">藥師</font>：</label></td>
+   <td><entry:role_herbalist />
+    <small class="explain">(１８人以上加入藥師) (人側)</small>
+  </td>
+  </tr>
+
+  
+  <tr>
+   <td><label><font color="#006633">埋毒者</font>：</label></td>
+   <td><entry:role_poisoner />
+    <small class="explain">(２０人以上加入埋毒者) (人側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#009999">逃亡者</font>：</label></td>
+   <td><entry:role_runner />
+    <small class="explain">(２１人以上加入逃亡者) (人側)</small>
+  </td>
+  </tr>
+
+  <tr>
+  <td><label><font color="#3CB371">學者：</font></label></td>
+   <td><entry:role_scholar />
+    <small class="explain">(２４人以上加入學者) (人側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#CC0000">狂巫</font>：</label></td>
+   <td><entry:role_sorceror />
+    <small class="explain">(２２人以上加入狂巫) (狼側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#EE0000">幼狼</font>：</label></td>
+   <td><entry:role_wolfcub />
+    <small class="explain">(２３人以上加入幼狼) (狼側) (狼) (人狼1→幼狼)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#DD0088">背德</font>：</label></td>
+   <td><entry:role_betrayer />
+    <small class="explain">(２０人以上加入背德) (狐側)</small>
+  </td>
+  </tr>  
+  
+  <tr>
+  <td><label><font color="#BB00AA">哥德法</font>：</label></td>
+   <td><entry:role_godfat />
+    <small class="explain">(２５人以上加入哥德法) (狐側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#666666">惡魔</font>：</label></td>
+   <td><entry:role_demon />
+    <small class="explain">(２３人以上加入惡魔) (惡魔側)</small>
+  </td>
+  </tr>  
+  
+  <tr>
+  <td><label><font color="#EEAA55">教主</font>：</label></td>
+   <td><entry:role_pontiff />
+    <small class="explain">(２５人以上加入教主) (教主側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#AAAA00">繼承者</font>：</label></td>
+   <td><entry:role_inheriter />
+    <small class="explain">(１４人以上加入繼承者) (不定側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#FF7700">模仿師</font>：</label></td>
+   <td><entry:role_shifter />
+    <small class="explain">(２５人以上加入模仿師) (不定側)</small>
+  </td>
+  </tr> 
+  
+	  <tr><td><strong><font color="blue">進階職業部份：</font></strong></td><td><font color="red">( 警告：別開太多職業以免遊戲太過混亂 )</font></td></tr>
 	  
-          <tr>
-           <td><label><strong><font color="#CCDD00">　牧師</font>：</strong></label></td>
-           <td><entry:role_cleric />
-            <small>(１７人以上加入牧師) (人側)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label><font color="#7B68EE">大魔導</font>：</label></td>
+   <td><entry:role_archmage />
+    <small class="explain">(２５人以上，第九日白天時，若只有一名村民生存，<br/>則該村民將成為大魔導，擁有水元素及法力 2 點，人側)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong><font color="#8FCECE">　藥師</font>：</strong></label></td>
-           <td><entry:role_herbalist />
-            <small>(１８人以上加入藥師) (人側)</small>
-           </td>
-          </tr>
-
-          
-          <tr>
-           <td><label><font color="#006633"><strong>　埋毒者：</strong></font></label></td>
-           <td><entry:role_poisoner />
-            <small>(２０人以上加入埋毒者) (人側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#009999">　逃亡者</font>：</strong></label></td>
-           <td><entry:role_runner />
-            <small>(２１人以上加入逃亡者) (人側)</small>
-           </td>
-          </tr>
-
-          <tr>
-           <td><label><strong><font color="#3CB371">　學者：</font></strong></label></td>
-           <td><entry:role_scholar />
-            <small>(２４人以上加入學者) (人側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#CC0000">　狂巫</font>：</strong></label></td>
-           <td><entry:role_sorceror />
-            <small>(２２人以上加入狂巫) (狼側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#EE0000">　幼狼</font>：</strong></label></td>
-           <td><entry:role_wolfcub />
-            <small>(２３人以上加入幼狼) (狼側) (狼) (人狼1→幼狼)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#DD0088">　背德</font>：</strong></label></td>
-           <td><entry:role_betrayer />
-            <small>(２０人以上加入背德) (狐側)</small>
-           </td>
-          </tr>          
-          
-          <tr>
-           <td><label><strong><font color="#BB00AA">　哥德法</font>：</strong></label></td>
-           <td><entry:role_godfat />
-            <small>(２５人以上加入哥德法) (狐側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#666666">　惡魔</font>：</strong></label></td>
-           <td><entry:role_demon />
-            <small>(２３人以上加入惡魔) (惡魔側)</small>
-           </td>
-          </tr>          
-          
-          <tr>
-           <td><label><strong><font color="#EEAA55">　教主</font>：</strong></label></td>
-           <td><entry:role_pontiff />
-            <small>(２５人以上加入教主) (教主側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#AAAA00">　繼承者</font>：</strong></label></td>
-           <td><entry:role_inheriter />
-            <small>(１４人以上加入繼承者) (不定側)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#FF7700">　模仿師</font>：</strong></label></td>
-           <td><entry:role_shifter />
-            <small>(２５人以上加入模仿師) (不定側)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　<font color="#7B68EE">大魔導</font>：</strong></label></td>
-           <td><entry:role_archmage />
-            <small>(２５人以上，第九日白天時，若場上只有你一位無職村民，<br/>你將轉職成大魔導，有水元素及解除魔法，人側)</small>
-           </td>
-          </tr>
-
-          <tr>
-           <td><label><strong>　<font color="#FF7700">卡</font><font color="#EC9010">片</font><font color="#DAA520">師</font>：</strong></label></td>
-           <td><entry:role_cardmaster />
-            <small>(模仿師若為忘卻者或冒牌占，醒過來時將轉職成卡片師，<br/>卡片師每天可以翻一張卡，根據手上卡片使用不同的能力，人側)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　<font color="#9933FF">占卜</font><font color="#3399FF">獵人</font>：</strong></label></td>
-           <td><entry:role_aughunter />
-            <small>(占卜獵人無法直接被選取，<br/>但當模仿師/繼承者的目標是占卜師或獵人且成功時，則變為占卜獵人，人側)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　<font color="#66FFFF">企鵝</font>：</strong></label></td>
-           <td><entry:role_penguin />
-            <small>(企鵝無法直接被選取，但當模仿師模仿惡魔時則變為企鵝，企鵝側)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　<font color="#888888">隱士</font>：</strong></label></td>
-           <td><entry:role_hermit />
-            <small>(隱士無法直接被選取，但當繼承者繼承模仿或繼承時則變為隱士，人側)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong><font color="#666666">　墮天使</font>：</strong></label></td>
-           <td><entry:role_fallen_angel />
-            <small>(惡魔入教時轉為墮天使，能施展墮落，無法入教，活著即勝利) (墮天使側)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label><font color="#FF7700">卡</font><font color="#EC9010">片</font><font color="#DAA520">師</font>：</label></td>
+   <td><entry:role_cardmaster />
+    <small class="explain">(模仿師若為忘卻者或冒牌占，醒過來時將成為卡片師。<br/>卡片師每天可以抽一張卡，根據手牌使用不同的能力，人側)</small>
+  </td>
+  </tr>
   
-          <tr><td><strong><font color="blue">額外副職業部份：</font></strong></td><td><font color="#FF7700">( 構想徵求中 )</font></td></tr>
+  <tr>
+  <td><label><font color="#9933FF">占卜</font><font color="#3399FF">獵人</font>：</label></td>
+   <td><entry:role_aughunter />
+    <small class="explain">(模仿師／繼承者若模仿／繼承占卜師或獵人且成功則成為占卜獵人，人側)</small>
+  </td>
+  </tr>
   
-          <tr>
-           <td><label><strong><font color="#999999">　忘卻者4</font>：</strong></label></td>
-           <td><entry:subrole_memoryloss4 /><entry:subrole_memoryloss4_2 />
-            <small>(２０人以上加入四日忘卻者)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#999999">　忘卻者6</font>：</strong></label></td>
-           <td><entry:subrole_memoryloss6 />
-            <small>(２４人以上加入六日忘卻者)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#999999">　忘卻者8</font>：</strong></label></td>
-           <td><entry:subrole_memoryloss8 />
-            <small>(２５人以上加入八日忘卻者)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label><font color="#66FFFF">企鵝</font>：</label></td>
+   <td><entry:role_penguin />
+    <small class="explain">(模仿師模仿惡魔且成功則成為企鵝，企鵝側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#888888">隱士</font>：</label></td>
+   <td><entry:role_hermit />
+    <small class="explain">(當繼承者繼承模仿師或繼承者且成功則成為隱士，人側)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#666666">墮天使</font>：</label></td>
+   <td><entry:role_fallen_angel />
+    <small class="explain">(惡魔被教主宣揚教儀過後可選擇成為墮天使，中立)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong><font color="#9933FF">　冒牌占</font>：</strong></label></td>
-           <td><entry:subrole_fakeaugurer />
-            <small>(新增人側專用副職業冒牌占)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#999999">　絕望者</font>：</strong></label></td>
-           <td><entry:subrole_suddendeath />
-            <small>(２２人以上加入絕望者)(不會為狐、惡魔、教主)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#999999">　復仇者</font>：</strong></label></td>
-           <td><entry:subrole_avenger />
-            <small>(１６人以上加入復仇者)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#FF0000">　狼信者</font>：</strong></label></td>
-           <td><entry:subrole_wolfbeliever />
-            <small>(１８人以上加入狼信者)(不會為狐、惡魔、教主)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong><font color="#FF0000">　大狼</font>：</strong></label></td>
-           <td><entry:subrole_alphawolf />
-            <small>(２０人以上加入人狼專用副職大狼)</small>
-           </td>
-          </tr>
+  <tr><td><strong><font color="blue">額外副職業部份：</font></strong></td><td><font color="#FF7700">( 構想徵求中 )</font></td></tr>
+  
+  <tr>
+  <td><label><font color="#999999">忘卻者4</font>：</label></td>
+   <td><entry:subrole_memoryloss4 /><entry:subrole_memoryloss4_2 />
+    <small class="explain">(２０人以上加入四日忘卻者)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#999999">忘卻者6</font>：</label></td>
+   <td><entry:subrole_memoryloss6 />
+    <small class="explain">(２４人以上加入六日忘卻者)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#999999">忘卻者8</font>：</label></td>
+   <td><entry:subrole_memoryloss8 />
+    <small class="explain">(２５人以上加入八日忘卻者)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong><font color="#FF0000">　智狼</font>：</strong></label></td>
-           <td><entry:subrole_wisewolf />
-            <small>(２０人以上加入人狼專用副職智狼)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label><font color="#9933FF">冒牌占</font>：</label></td>
+   <td><entry:subrole_fakeaugurer />
+    <small class="explain">(加入冒牌占，不會是占卜師和勝利條件不是村人陣營的職業)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#999999">絕望者</font>：</label></td>
+   <td><entry:subrole_suddendeath />
+    <small class="explain">(２２人以上加入絕望者)(不會為妖狐、惡魔、教主)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#999999">復仇者</font>：</label></td>
+   <td><entry:subrole_avenger />
+    <small class="explain">(１６人以上加入復仇者)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#FF0000">狼信者</font>：</label></td>
+   <td><entry:subrole_wolfbeliever />
+    <small class="explain">(１８人以上加入狼信者)(不會為人狼、幼狼、狂人、間諜、狂巫、妖狐、惡魔、企鵝、教主、異端)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#FF0000">大狼</font>：</label></td>
+   <td><entry:subrole_alphawolf />
+    <small class="explain">(２０人以上加入大狼，人狼專用副職)</small>
+  </td>
+  </tr>
 
-          
-          <tr>
-           <td><label><strong><font color="#999999">　<font color="#EEAA55">副教主</font>＆<br/>　無神論者2</font>：</strong></label></td>
-           <td><entry:subrole_subpontiff />
-            <small>(２５人以上教主場，加入副教主及無神論者，<br/>副教主不會是教主、學者、妖狐、惡魔，無神論者不會是教主、牧師)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　額外副職業：</strong></label></td>
-           <td><entry:subrole_plus />
-            <small>(１６人以上某項副職業增加１人，<br/>不會是冒牌占、大狼、狼信者、副教主、無神論者，不會是未勾選項)</small>
-           </td>
-          </tr>
-          
+  <tr>
+  <td><label><font color="#FF0000">智狼</font>：</label></td>
+   <td><entry:subrole_wisewolf />
+    <small class="explain">(２０人以上加入智狼，人狼專用副職)</small>
+  </td>
+  </tr>
+
+  
+  <tr>
+  <td><label><font color="#999999"><font color="#EEAA55">副教主</font>＆<br/>　無神論者2</font>：</label></td>
+   <td><entry:subrole_subpontiff />
+    <small class="explain">(２５人以上若有教主登場，則加入副教主及無神論者2，<br/>副教主不會是教主、學者、妖狐、惡魔、異端，無神論者不會是教主、牧師)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#FF69B4">橋姬</font>：</label></td>
+   <td><entry:subrole_hashihime />
+    <small class="explain">(２５人以上加入橋姬，戀2和戀4同時開啟的情況下，橋姬會額外增加一名)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#FF0000">狼印者</font>：</label></td>
+   <td><entry:subrole_wolfstamp />
+    <small class="explain">(加入狼印者)(不會為人狼、幼狼、狂人、間諜、狂巫)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>額外副職業：</label></td>
+   <td><entry:subrole_plus />
+    <small class="explain">(１６人以上某項副職業增加１人，<br/>不會是冒牌占、大狼、狼信者、副教主、無神論者、橋姬，不會是未開啟的選項)</small>
+  </td>
+  </tr>
+  
 	  <tr><td><strong><font color="blue">職業微調部份：</font></strong></td><td><font color="#BB00AA">( 構想徵求中 )</font></td></tr>
-	  
-          <tr>
-           <td><label><strong>　村民推理能力：</strong></label></td>
-           <td><entry:villager_detect />
-            <small>(村民可以謹限'四日夜'，可以推理其中一人是否為'無職村民'，判斷村占用)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　靈能檢驗妖狐：</strong></label></td>
-           <td><entry:necromancer_option1 />
-            <small>(靈腦結果可以驗出妖狐)</small>
-           </td>
-          </tr>           
-          
-          <tr>
-           <td><label><strong>　獵人失手射殺：</strong></label></td>
-           <td><entry:hunter_option1 />
-            <small>(獵人若被人狼(幼狼不算)襲擊，會抓狂錯亂，而失手誤將原本要護衛的人擊殺)</small>
-           </td>
-          </tr>          
+  <tr>
+  <td><label>村民推理能力：</label></td>
+   <td><entry:villager_detect />
+    <small class="explain">(第四天晚上，村民可以對任一人進行推理，判斷對方的真正職業是否為村民。)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>靈能檢驗妖狐：</label></td>
+   <td><entry:necromancer_option1 />
+    <small class="explain">(令靈能可以判斷出妖狐)</small>
+  </td>
+  </tr>   
+  
+  <tr>
+  <td><label>獵人失手射殺：</label></td>
+   <td><entry:hunter_option1 />
+    <small class="explain">(獵人若被人狼襲擊（幼狼不算），會因為一時的混亂想要自衛，而失手擊殺到護衛對象，自己仍會身亡)</small>
+  </td>
+  </tr>  
 
-          <tr>
-           <td><label><strong>　獵人自我護衛：</strong></label></td>
-           <td><entry:hunter_option2 />
-            <small>(獵人可以自我護衛)</small>
-           </td>
-          </tr>          
-          
-          <tr>
-           <td><label><strong>　共有日間頻道：</strong></label></td>
-           <td><entry:gemini_daytalk />
-            <small>(共有者白天可以使用共有頻道交流，<br/>　但對其他人不會顯示悄悄話，不可用來自證)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　共有票數平衡：</strong></label></td>
-           <td><entry:gemini_balance />
-            <small>(當共有者獲得票數為最高票時，<br/>　共有者獲得的總票數會平分給各共有者，餘數亂數加入其中一人)</small>
-           </td>
-          </tr>       
+  <tr>
+  <td><label>獵人自我護衛：</label></td>
+   <td><entry:hunter_option2 />
+    <small class="explain">(獵人於晚上可以自衛)</small>
+  </td>
+  </tr>  
+  
+  <tr>
+  <td><label>共有日間頻道：</label></td>
+   <td><entry:gemini_daytalk />
+    <small class="explain">(令共有者於白天也可以進行交流，但其他人並不會聽到聲音)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>共有票數平衡：</label></td>
+   <td><entry:gemini_balance />
+    <small class="explain">(處刑投票時，若共有者為最高票，則該名共有者的獲得票數會平分給其他共有者，餘數則隨機分給任一人)</small>
+  </td>
+  </tr>       
 
-          <tr>
-           <td><label><strong>　共有者遺產：</strong></label></td>
-           <td><entry:gemini_legacy />
-            <small>(當共有者死亡時，其錢及道具會分給剩下的共有者，但道具不會蓋掉現有道具)</small>
-           </td>
-          </tr>	        
-          
-          <tr>
-           <td><label><strong>　牧師祝福強化：</strong></label></td>
-           <td><entry:cleric_option1 />
-            <small>(牧師祝福術初期即可以使用。這項讓牧師初期即可用祝福術自證，開啟時牧２無效)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>共有者遺產：</label></td>
+   <td><entry:gemini_legacy />
+    <small class="explain">(當共有者死亡時，其持有的金錢與道具會分給殘存的共有者，道具會優先分給沒有道具的共有者)</small>
+  </td>
+  </tr>	        
+  
+  <tr>
+  <td><label>牧師祝福強化：</label></td>
+   <td><entry:cleric_option1 />
+    <small class="explain">(令牧師的祝福可以無條件施展，本選項開啟時會令牧師偵測偽裝[牧2]選項無效)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　牧師偵測偽裝：</strong></label></td>
-           <td><entry:cleric_option2 />
-            <small>(牧師可以得知今天是不是有人被偽裝，但是不知道誰偽裝誰，<br/>　選項開啟時背德偽裝需要票數下降１)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>牧師偵測偽裝：</label></td>
+   <td><entry:cleric_option2 />
+    <small class="explain">(牧師可以於早上得知今天是否有人被偽裝封印，但不知道受害者是誰，本選項開啟時背德偽裝的需要票數 - 1)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>牧師？？？？：</label></td>
+   <td><!-- <entry:cleric_option3 /> -->
+    <small class="explain">(無效果)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>牧師祝福衝突：</label></td>
+   <td><entry:cleric_option4 />
+    <small class="explain">(令異端被祝福時會使祝福的力量減弱導致失效)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　藥師調配藥劑：</strong></label></td>
-           <td><entry:herbalist_mix />
-            <small>(當藥師藥用完時可以調配藥劑，但有機率會失敗)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>藥師調配藥劑：</label></td>
+   <td><entry:herbalist_mix />
+    <small class="explain">(若藥師的藥都用完了，可以進行調藥，有失敗的可能性)</small>
+  </td>
+  </tr>
 
+  <tr>
+  <td><label>藥師丟棄藥品：</label></td>
+   <td><entry:herbalist_drop />
+    <small class="explain">(藥師可以隨時拋棄持有的藥物，若於第一天晚上拋棄，可以成為進階職業－鍊金術士)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　學者調查教主：</strong></label></td>
-           <td><entry:scholar_option1 />
-            <small>(學者個案調查，若目標是教主時，顯示是教主)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>學者調查教主：</label></td>
+   <td><entry:scholar_option1 />
+    <small class="explain">(學者進行個案調查時，若對象是教主，則可進一步確認並得知對象是教主)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　學者現況詳報：</strong></label></td>
-           <td><entry:scholar_option2 />
-            <small>(學者現況調查改為較詳盡的資訊)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>學者現況詳報：</label></td>
+   <td><entry:scholar_option2 />
+    <small class="explain">(學者進行現況調查的結果更改為目前存活中的村人陣營以外的職業)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　學者事件分析：</strong></label></td>
-           <td><entry:scholar_option3 />
-            <small>(學者可使用事件分析)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>學者事件分析：</label></td>
+   <td><entry:scholar_option3 />
+    <small class="explain">(第二天晚上起可施展一次，可以了解前天晚上人狼確切的襲擊狀況，以及昨天早上所有死者的確切死因)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　學者深入調查：</strong></label></td>
-           <td><entry:scholar_option4 />
-            <small>(學者個案調查可以調查出大狼、智狼、狐信者、冒牌占)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>學者強力調查：</label></td>
+   <td><entry:scholar_option4 />
+    <small class="explain">(同個案調查，但可以調查出大狼、智狼、狐信者、冒牌占，可以對死者使用，使用後隔天無法使用)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　逃亡逃狼存活：</strong></label></td>
-           <td><entry:runner_option1 />
-            <small>(逃亡者若逃到咬人的人狼家，將不會死亡)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　逃亡被獵射殺：</strong></label></td>
-           <td><entry:runner_option2 />
-            <small>(逃亡者若逃到獵人護衛的人家，將被獵人誤認而被擊殺)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>逃亡逃狼存活：</label></td>
+   <td><entry:runner_option1 />
+    <small class="explain">(逃亡者若逃亡到主導襲擊的人狼住處，將不會死亡)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>逃亡被獵射殺：</label></td>
+   <td><entry:runner_option2 />
+    <small class="explain">(逃亡者若逃亡到被獵人護衛的住處，將會被獵人誤認而遭到擊殺)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　逃亡得知教主：</strong></label></td>
-           <td><entry:runner_option3 />
-            <small>(逃亡者若逃到教主的家中，隔日可以知道該人是教主)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>逃亡得知教主：</label></td>
+   <td><entry:runner_option3 />
+    <small class="explain">(逃亡者若逃亡到教主的住處，隔天早上會發現對方是教主，異端登場時無效)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>逃亡生存意志：</label></td>
+   <td><entry:runner_option4 />
+    <small class="explain">(不受其他因素影響的前提下逃亡者的勝利條件改為「村民勝利＋自己生存」，<br/>同時令逃亡者可以逃亡至死者家，但不能重複逃亡至同一人<br/>
+			逃亡對象的職業若為人狼、幼狼、狂巫、哥德法則死亡)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>人狼隨機特性：</label></td>
+   <td><entry:werewolf_option1 />
+   <small class="explain">(遊戲開始時，每位人狼都有 50% 的機率隨機獲得特性)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　幼狼額外咬人：</strong></label></td>
-           <td><entry:wolfcub_option1 />
-           <small>(幼狼可於九日夜，再增加一次咬人的機會)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　狂人人狼知識：</strong></label></td>
-           <td><entry:madman_knowledge />
-           <small>(狂人第三、六、九等三的倍數日早上可以知道一隻狼的名稱)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　狂人自殺：</strong></label></td>
-           <td><entry:madman_suicide />
-           <small>(狂人可於晚上自殺，白天會以悽慘的死狀被大家發現，造成混亂)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　狂人怒氣系統：</strong></label></td>
-           <td><entry:madman_stun />
-           <small>(狂人於每人狼襲擊失敗時，可以獲得怒氣１點，可使用擊昏或擊忘功能)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　狂巫狼信化術：</strong></label></td>
-           <td><entry:sorceror_believe />
-           <small>(狂巫可消耗法力５，將目標副職變為狼信者，非人側及已有副職者無效)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>幼狼額外咬人：</label></td>
+   <td><entry:wolfcub_option1 />
+   <small class="explain">(令幼狼可於第九天的晚上再次自行襲擊他人)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂人人狼知識：</label></td>
+   <td><entry:madman_knowledge />
+   <small class="explain">(狂人於三的倍數日的早上可以隨機判斷出其中一隻人狼是誰)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂人自殺：</label></td>
+   <td><entry:madman_suicide />
+   <small class="explain">(狂人可以於晚上自殺，於隔日早上以悽慘的死狀身亡，造成混亂)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂人怒氣系統：</label></td>
+   <td><entry:madman_stun />
+   <small class="explain">(每當人狼襲擊失敗時，狂人累積怒氣 1 點，透過消耗怒氣可以使用擊忘或擊昏)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂人單挑：</label></td>
+   <td><entry:madman_duel />
+   <small class="explain">(可於偶數日晚上對任一人進行，隔日對方的獲得票數若高於自己則對方暴斃，平手或低於自己則自己暴斃，若當時天氣為霧則沒有任何效果)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂巫狼信化術：</label></td>
+   <td><entry:sorceror_believe />
+   <small class="explain">(消耗法力 5 點，可以對任一人施展，若對象沒有副職業，<br/>且職業不是妖狐陣營、惡魔、企鵝、墮天使、教主，則將其副職業變為狼信者)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　狂巫密言匿名：</strong></label></td>
-           <td><entry:sorceror_whisper1 />
-           <small>(狂巫使用密言術時，不會對狼側顯示狂巫名稱，密言所需法力減少為2)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>狂巫密言匿名：</label></td>
+   <td><entry:sorceror_whisper1 />
+   <small class="explain">(狂巫透過密言術發言時，不會對人狼、幼狼、狂人、間諜、狂巫顯示狂巫名稱，<br/>若當天為奇數日則顯示狂巫的所在行數（直）、偶數日則顯示狂巫的所在列數（橫），施展密言術的所需法力提升至 3 點)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　狂巫鼓舞限制：</strong></label></td>
-           <td><entry:sorceror_shout1 />
-           <small>(狂巫鼓舞術限制一次)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>狂巫鼓舞限制：</label></td>
+   <td><entry:sorceror_shout1 />
+   <small class="explain">(令狂巫只能施展一次鼓舞術)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂巫灼熱術：</label></td>
+   <td><entry:sorceror_sear />
+   <small class="explain">(消耗法力 3 點，可以對任一人施展，對象從隔日起三天的獲得票數會分別增加 1 ~ 3 票，天氣為雪時無效)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>狂巫狼元素：</label></td>
+   <td><entry:sorceror_summon />
+   <small class="explain">(消耗法力 5 點，可以召喚一個狼元素，狼元素會算在判定勝負的人狼數量計算內)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　妖狐指定背德：</strong></label></td>
-           <td><entry:fox_option1 />
-           <small>(妖狐於第一日晚上可以從村民中指定一名成為背德)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>妖狐指定背德：</label></td>
+   <td><entry:fox_option1 />
+   <small class="explain">(遊戲開始時背德的職業更改為村民，妖狐於第一天晚上可以從主職村民當中挑選任一人成為背德)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　妖狐襲擊感知：</strong></label></td>
-           <td><entry:fox_option2 />
-           <small>(妖狐可如幼狼般，知道昨晚人狼襲擊的對象，但不知是誰咬的)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　妖狐結界：</strong></label></td>
-           <td><entry:fox_option3 />
-           <small>(妖狐可以施展結界1次，可以擋占卜師、狂巫咒殺、殺害逃亡者)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　妖狐能力吸收：</strong></label></td>
-           <td><entry:fox_option4 />
-           <small>(若背德死亡則妖狐可施展偽裝，若哥德法死亡則擁有方陣)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　背德偽裝：</strong></label></td>
-           <td><entry:betrayer_option1 />
-            <small>(背德可以消耗累積票數３，隔日偽裝其中一人的發言)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>妖狐襲擊感知：</label></td>
+   <td><entry:fox_option2 />
+   <small class="explain">(妖狐於早上可以得知昨天晚上人狼的襲擊對象，但不能得知襲擊的人狼是誰，也無法得知成功與否)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>妖狐結界：</label></td>
+   <td><entry:fox_option3 />
+   <small class="explain">(妖狐晚上可以施展結界 1 次，當晚可以避免被占卜師、狂巫咒殺，若成為逃亡者的逃亡對象則殺害逃亡者)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>妖狐能力吸收：</label></td>
+   <td><entry:fox_option4 />
+   <small class="explain">(當背德死亡後可以累積票數並消耗票數施展偽裝，當哥德法死亡可以獲得魔幻方陣)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>背德偽裝：</label></td>
+   <td><entry:betrayer_option1 />
+    <small class="explain">(消耗票數 3 張，背德可以選擇任一人令其隔日白天被封印（不能發言），同時背德可以藉對象的名義進行發言<br/>
+	  　若牧師偵測偽裝[牧2]選項開啟時則所需消耗票數降至 2 張)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　背德變化：</strong></label></td>
-           <td><entry:betrayer_option2 />
-            <small>(背德若無副職，可以消耗累積票數２，<br/>　自己變為目標的職業且副職為狐信者，不得為大魔人狼幼狼妖狐惡魔教主)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　背德粉紅迷霧：</strong></label></td>
-           <td><entry:betrayer_option3 />
-            <small>(背德可以消耗累積票數４，隔日所有人籠罩在粉紅迷霧之外，<br/>　看不到其他人一般發言的名稱，但其他頻道還是有效)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>背德變化：</label></td>
+   <td><entry:betrayer_option2 />
+    <small class="explain">(背德可以選擇任一人變化為對方的職業且副職業變為狐信者，<br/>對象若為人狼、幼狼、惡魔、企鵝、墮天使、教主、大魔導則失敗)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>背德粉紅迷霧：</label></td>
+   <td><entry:betrayer_option3 />
+    <small class="explain">(消耗票數 4 張，令隔日白天所有人都無法分辨所有發言的發言者名稱<br/>　共有者的日間頻道不受影響)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　哥德咒術特化：</strong></label></td>
-           <td><entry:godfat_special1 />
-            <small>(開啟哥德法特化選擇之咒術特化，新增絕望視線，無魔幻方陣)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>哥德咒術特化：</label></td>
+   <td><entry:godfat_special1 />
+    <small class="explain">(令哥德法於第一天晚上可進行咒術特化，遺忘魔幻方陣並習得絕望視線、言咒)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　哥德方陣特化：</strong></label></td>
-           <td><entry:godfat_special2 />
-            <small>(開啟哥德法特化選擇之方陣特化，新增七彩噴射，無怒視)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>哥德方陣特化：</label></td>
+   <td><entry:godfat_special2 />
+    <small class="explain">(令哥德法於第一天晚上可進行方陣特化，遺忘怒視並習得七彩噴射、眩光)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　哥德秘術特化：</strong></label></td>
-           <td><entry:godfat_special3 />
-            <small>(開啟哥德法特化選擇之秘術特化，新增秘術換身，無怒視且無魔幻方陣)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>哥德秘術特化：</label></td>
+   <td><entry:godfat_special3 />
+    <small class="explain">(令哥德法於第一天晚上可進行秘術特化，遺忘怒視、魔幻方陣，習得秘術換身<br/>
+	　哥德法若為狼信者、副教主則不能進行此特化)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　哥德預言特化：</strong></label></td>
-           <td><entry:godfat_special4 />
-            <small>(開啟哥德法特化選擇之預言特化，新增預言，除逆咒殺外無其他技能)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　哥德預言強化：</strong></label></td>
-           <td>未開放
-            <small>(預言哥德法於第五天後可得知可預言職業的生存狀況)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>哥德預言特化：</label></td>
+   <td><entry:godfat_special4 />
+    <small class="explain">(令哥德法於第一天晚上可進行預言特化，遺忘怒視、魔幻方陣，習得預言、生存感知)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　惡魔占卜為狼：</strong></label></td>
-           <td><entry:demon_option1 />
-            <small>(惡魔的占卜結果變更為人狼)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>惡魔占卜為狼：</label></td>
+   <td><entry:demon_option1 />
+    <small class="explain">(令惡魔的占卜結果變為人狼)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　惡魔詛咒強化：</strong></label></td>
-           <td><entry:demon_option2 />
-            <small>(惡魔詛咒改為被咬前可以用，且可以對他人用。對他人用時靈魂負荷只＋１)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>惡魔詛咒強化：</label></td>
+   <td><entry:demon_option2 />
+    <small class="explain">(令惡魔的詛咒可在被襲擊成功前使用，同時可以對他人使用，對他人使用時靈魂負荷只增加 1 點)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　惡魔斗轉星移：</strong></label></td>
-           <td><entry:demon_option3 />
-            <small>(新增惡魔技能斗轉星移，只能使用一次，<br/>　靈魂負荷+3，雪無效，設定目標為受害者，隔日你投票對象的票全轉給受害者)</small>
-           </td>
-          </tr>
-          
-		  <tr>
-           <td><label><strong>　企鵝急速冰凍：</strong></label></td>
-           <td><entry:penguin_option1 />
-            <small>(企鵝於雪、霧天時冰凍則對方凍結所需日數為2日)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　企鵝襲擊抵抗：</strong></label></td>
-           <td><entry:penguin_option2 />
-            <small>(企鵝將會無法被人狼直接咬死)</small>
-           </td>
-          </tr>
-		  
-		  <tr>
-           <td><label><strong>　企鵝寒冰內建：</strong></label></td>
-           <td><entry:penguin_option3 />
-            <small>(企鵝冰凍直接附加寒冰圍繞效果，若太強再削弱)</small>
-           </td>
-          </tr>
-		  
-          <tr>
-           <td><label><strong>　教友會：</strong></label></td>
-           <td><entry:pontiff_option1 />
-            <small>(藉由教友會的交流，教徒們可以更加認識彼此，<br/>　第七日開始教徒可以得知所有教徒的姓名)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　初期教徒配置：</strong></label></td>
-           <td><entry:pontiff_option2 />
-            <small>(初期牧師設為教徒，而學者設為教徒免疫)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　教主光環內建：</strong></label></td>
-           <td><entry:pontiff_option3 />
-            <small>(教徒光環從第一天晚上開始則內建)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　繼承結果公開：</strong></label></td>
-           <td><entry:inheriter_reveal />
-            <small>(繼承者繼承成功時，系統顯示繼承的職業給所有人知道，但不指明誰是繼承者)</small>
-           </td>
-          </tr>
+  <tr>
+  <td><label>惡魔斗轉星移：</label></td>
+   <td><entry:demon_option3 />
+    <small class="explain">(令惡魔可以使用斗轉星移一次，將對象設定為受害者，隔日白天您的投票對象的獲得票數會全數轉移給受害者，<br/>
+	　增加靈魂負荷 3 點，天氣為雪時無效)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>企鵝急速冰凍：</label></td>
+   <td><entry:penguin_option1 />
+    <small class="explain">(若天氣為雪、霧時，當晚的冰凍對象只需要經過 2 天便會被冰凍成功)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>企鵝襲擊抵抗：</label></td>
+   <td><entry:penguin_option2 />
+    <small class="explain">(令企鵝被人狼襲擊時不會死亡)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>企鵝寒冰內建：</label></td>
+   <td><entry:penguin_option3 />
+    <small class="explain">(令企鵝冰凍時會一直對自己施展寒冰圍繞)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>企鵝冰凍解除：</label></td>
+   <td><entry:penguin_option4 />
+    <small class="explain">(企鵝全部死亡時冰凍會自動解除)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>教友會：</label></td>
+   <td><entry:pontiff_option1 />
+    <small class="explain">(在第七日早上，教派會建立教友會，令教徒可以得知教派全體成員的名稱)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>初期教徒配置：</label></td>
+   <td><entry:pontiff_option2 />
+    <small class="explain">(遊戲開始時，牧師會自動成為教徒，學者則自動成為無法加入教派的狀態，沒有教主時無效)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>教主光環內建：</label></td>
+   <td><entry:pontiff_option3 />
+    <small class="explain">(令教主從第一天就環繞著光環)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>教主發現異端：</label></td>
+   <td><entry:pontiff_option4 />
+    <small class="explain">(任一教主對異端宣揚教儀時全體教主會得知對方是異端)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>繼承結果公開：</label></td>
+   <td><entry:inheriter_reveal />
+    <small class="explain">(繼承者繼承成功時，會公開提示繼承成功和繼承後的職業的訊息)</small>
+  </td>
+  </tr>
 
-          <tr>
-           <td><label><strong>　繼承中立模式：</strong></label></td>
-           <td><entry:inheriter_neutral />
-            <small>(繼承者繼承前為中立，自己生存即勝利，不計入村人數，且不顯示繼承成功訊息)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　模仿結果公開：</strong></label></td>
-           <td><entry:shifter_reveal />
-            <small>(模仿師模仿成功時，系統顯示模仿的職業給所有人知道，但不指明誰是模仿師)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　模仿生命連繫：</strong></label></td>
-           <td><entry:shifter_links />
-            <small>(模仿師和被模仿者生命連繫，其中一人掛了，另一人也會跟著掛，第七日開始無效)</small>
-           </td>
-          </tr>
-		  
-          <tr>
-           <td><label><strong>　<font color="#FF7700">卡</font><font color="#EC9010">片</font><font color="#DAA520">師</font><font color="#CC66FF">初始化</font>：</strong></label></td>
-           <td><entry:cardmaster_option1 />
-            <small><font color="#FF0000">※請注意平衡※</font><br/>(模仿師登場的情況下，替換為卡片師，無卡片)</small>
-           </td>
-          </tr>
-          <!--
-          <tr>
-           <td><label><strong>　<font color="#7B68EE">大魔導</font><font color="#CC66FF">初始化</font>：</strong></label></td>
-           <td><entry:archmage_option1 />
-            <small><font color="#FF0000"><b>※會導致場上無村迫害非人側，請注意平衡※</b></font><br/>(村民登場時，抽取一名替換成大魔導，法力0、無水元素)</small>
-           </td>
-          </tr>
-          
-          <tr>
-           <td><label><strong>　<font color="#66FFFF">企鵝</font><font color="#CC66FF">初始化</font>：</strong></label></td>
-           <td><entry:gm_penguin1 />
-            <small><font color="#FF0000"><b>※較難※</b></font><br/>(惡魔登場且企鵝登場選項開啟時，替換成企鵝)</small>
-           </td>
-          </tr>
-          -->
-          <tr>
-           <td><label><strong>　<font color="#888888">隱士</font><font color="#CC66FF">初始化</font>：</strong></label></td>
-           <td><entry:gm_hermit1 />
-            <small><font color="#FF0000">※請注意平衡※</font><br/>(繼承者登場且隱士登場選項開啟時，替換成隱士)</small>
-           </td>
-          </tr>
-		  <tr>
-           <td><label><strong>　<font color="#EEAA55">教主</font><font color="#CC66FF">替換</font>：</strong></label></td>
-           <td><entry:gm_pontiff1 />
-            <small><font color="#FF0000">※請注意平衡※</font><br/>(教主替換為企鵝，且相關副職關閉，模仿（繼承不算）成為企鵝時企鵝勝利要求提高為５人)</small>
-           </td>
-          </tr>
-          <tr>
-           <td></td>
-           <td align="right">
-            <font color="#FF0000" size="3">建立按鈕請按一次就好。</font>
-            <entry:submit/>
-           </td>
-          </tr>
+  <tr>
+  <td><label>繼承中立模式：</label></td>
+   <td><entry:inheriter_neutral />
+    <small class="explain">(令繼承者在繼承成功前的勝利條件改變為遊戲結束時若生存則與獲勝陣營共同享有勝利，<br/>
+	　開啟本選項會令繼承結果公開[繼1]選項無效，同時令繼承者不計算在判定勝負的人的數量之內)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>模仿結果公開：</label></td>
+   <td><entry:shifter_reveal />
+    <small class="explain">(模仿師模仿成功時，會公開提示模仿成功和模仿後的職業的訊息)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>模仿生命連繫：</label></td>
+   <td><entry:shifter_links />
+    <small class="explain">(模仿成功後，在第七天前若模仿師與模仿對象任一人死亡，則連帶影響另一人跟著死亡)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>模仿隨機選擇：</label></td>
+   <td><entry:shifter_random />
+    <small class="explain">(令模仿不能選擇對象，由系統隨機抽取，但仍會知道模仿對象是誰，另外強制關閉[模仿惡魔！]行動)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>墮天使七罪惡：</label></td>
+   <td><entry:fallenangel_option1 />
+    <small class="explain">(使惡魔成為墮天使或墮天使登場時隨機獲得一種特性)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>異端宵禁前置：</label></td>
+   <td><!-- <entry:heretic_option1 /> -->
+    <small class="explain">(無效果)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label>間諜情報殘缺：</label></td>
+   <td><!-- <entry:spy_option1 /> -->
+    <small class="explain">(未定)</small>
+  </td>
+  </tr>
+  <tr><td><strong><font color="red">特殊職業替換：</font></strong></td><td><font color="red">( 警告：可能會對遊戲造成很大的影響，請三思 )</font></td></tr>
+  <tr>
+  <td><label><font color="#FF7700">卡</font><font color="#EC9010">片</font><font color="#DAA520">師</font><font color="#CC66FF">初始化</font>：</label></td>
+   <td><entry:cardmaster_option1 />
+    <small class="explain">(模仿師登場的情況下，替換為卡片師)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#7B68EE">大魔導</font><font color="#CC66FF">初始化</font>：</label></td>
+   <td><entry:archmage_option1 />
+    <small class="explain">(村民登場時，抽取一名替換成大魔導，初始法力為0、沒有水元素)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#66FFFF">企鵝</font><font color="#CC66FF">初始化</font>：</label></td>
+   <td><entry:gm_penguin1 />
+    <small class="explain">(惡魔登場且企鵝登場選項開啟時，替換成企鵝)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#888888">隱士</font><font color="#CC66FF">初始化</font>：</label></td>
+   <td><entry:gm_hermit1 />
+    <small class="explain">(繼承者登場且隱士登場選項開啟時，替換成隱士)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#EEAA55">教主</font><font color="#CC66FF">替換</font>：</label></td>
+   <td><entry:gm_pontiff1 />
+    <small class="explain">(教主替換為墮天使，且相關副職關閉，模仿透過[模仿惡魔！]行動可以直接成為惡魔，25人時有效)</small>
+  </td>
+  </tr>
 
-         </table>
+  <tr>
+  <td><label><font color="#666666">異端</font>：</label></td>
+   <td>
+  <small class="explain">替換村民<entry:gm_heretic1 />／替換繼承者<entry:gm_heretic2 />
+    (希望惡魔毀滅村莊而幫助惡魔的異端，惡魔陣營，25人時有效，繼承者替換優先於村民替換)</small>
+  </td>
+  </tr>
+  
+  <tr>
+  <td><label><font color="#DD0000">間諜</font>：</label></td>
+   <td>
+  <small class="explain">替換狂人<entry:gm_spy1 />
+    (被鄰村派來毀滅村莊的間諜，人狼陣營，16人以上時有效)</small>
+  </td>
+  </tr>
+  <tr>
+   <td></td>
+   <td align="right">
+    <entry:submit/>
+  </td>
+  </tr>
+
          </fieldset>
         </lift:RoomController.add>
-
-       </td>
-      </tr>
-      
-      <tr>
-        <td></td>
-        <td></td>
-        <td><lift:msgs/></td>
-      </tr>
-      
-      <tr>
-       <td></td>
-       <td></td>
-       <td align="right">
-       <div style="margin-top:10px;"><small><script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=3351818"></script><noscript><img src="http://counter1.fc2.com/counter_img.php?id=3351818"/></noscript> Copyright 2009, Plummtw<br/>原始PHP版本資訊：
-        [<a href="http://p45.aaacafe.ne.jp/~netfilms/" style="color:blue;" target="_blank">配布網頁</a>]
-        [寫真素材<a href="http://keppen.web.infoseek.co.jp/" style="color:blue;" target="_blank">天之欠片</a>
-                 <a href="http://jigokutushin.net/jinro/" style="color:blue;" target="_blank">地獄通信</a>]
-        [修改<a href="http://test.ngct.net" style="color:blue;" target="_blank">小企鵝</a> 翻譯 殿]
-        [網站管理者<a href="http://catjinro.no-ip.org/" style="color:blue;" target="_blank">柴郡猫</a> <a href="http://diam.ngct.net" style="color:blue;" target="_blank">克洛洛</a>]
-       </small></div></td>
-      </tr>
+		
+      </td>
+	 </tr>
      </table>
-    </td>
-   </tr>
-  </table>
+	 
+ <div class="footer">
+<img src="./images/grading_12.png" width="210" height="69"/><br/>
+Copyright 2009, Plummtw<br/>
+感謝：<a href="http://keppen.web.infoseek.co.jp/" style="color:blue;" target="_blank">天之欠片</a>
+<a href="http://jigokutushin.net/jinro/" style="color:blue;" target="_blank">地獄通信</a>
+<a target="_blank" style="color:blue;" href="http://garulf.web.fc2.com/">Girandole</a>（作者：may-coさん）
+Founded by: 柴郡猫
+ </div>
 </lift:surround>

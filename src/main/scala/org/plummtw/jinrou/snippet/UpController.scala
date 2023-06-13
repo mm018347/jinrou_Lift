@@ -667,7 +667,7 @@ class UpController {
                               } else NodeSeq.Empty
 
     val reload_page         = if (room.status.is == RoomStatusEnum.ENDED.toString) "game_end"
-                              else if (dead_mode) "heaven_view"
+                              // else if (dead_mode) "heaven_view"
                               else "game_view"
     
     bind("entry", xhtml,
@@ -677,10 +677,6 @@ class UpController {
       "day_no_hidden_field"  -> <input type="hidden" name="day_no"  value={room_day.day_no.is.toString} />,
       "vote_time_hidden_field" -> <input type="hidden" name="vote_time" value={room_day.vote_time.is.toString} />,
       "reload_form"          -> <form id="reloadsend" name="reloadsend" method="POST" action={reload_page + ".html"} target="bottom">
-                                  <input type="hidden" name="room_no" value={room_no} />
-                                  <input type="hidden" name="day_no"  value={room_day.day_no.is.toString} />
-                                </form>,
-      "reload_middle_form"   -> <form id="reloadmiddle" name="reloadmiddle" method="POST" action="game_view.html" target="middle">
                                   <input type="hidden" name="room_no" value={room_no} />
                                   <input type="hidden" name="day_no"  value={room_day.day_no.is.toString} />
                                 </form>,

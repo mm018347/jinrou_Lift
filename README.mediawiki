@@ -1,0 +1,52 @@
+== 汝等是人是狼？ 鸚鵡實驗站 版本 ==
+
+== introduction ==
+原出處：[https://github.com/Plummtw/jinrou_Lift Plummtw/jinrou_Lift] 
+經過原作者 Plummtw 承認的後續維護版本。
+
+== version ==
+1070122
+
+== requirements ==
+* MySQL
+* Java 1.5 ↑
+* Maven 2.0 ↑
+* JDK 7u79
+
+=== installation ===
+# (Unix) 確認作業系統的編碼為 UTF-8 
+# 確認作業系統的時區 GMT+8 (理論上可忽略)
+# 安裝 MySQL 並建立 Database (下列的全部名稱可自定義)
+# 架構 `jinrou` (coding: UTF-8)
+ `CREATE DATABASE jinrou CHARACTER SET = utf8`
+# 建立 MySQL User：jinrou、密碼：jinrou0000
+ `CREATE USER jinrou IDENTIFIED BY 'jinrou0000'`
+# 給予 Schema jinrou 的所有權限
+ `GRANT all ON jinrou.* TO jinrou;`
+# 程式的資料庫設置為： `\src\main\webapp\WEB-INF\classes\props`
+# 資料庫最大連線數設置為： `\src\main\scala\bootstrap\liftweb\Boot.scala` 下方的 `private val maxPoolSize = 75`
+# `\src\main\webapp\WEB-INF\lib` 中需要 jetty-util-6.1.16.jar 及 commons-codec-1.3.jar
+# 初次啟動時會自動建立資料庫，建立完畢後須手動關閉
+# 之後請匯入 user_icon 圖像，可參考 load_usericon.sql
+* 需要匯入三組
+** icon_group = 0 為替身君專用圖像，一定要第一個匯入，使其 id = 1
+** icon_group = 1 為 村民登錄一 使用圖像
+** icon_group = 2 為 村民登錄二 使用圖像
+** ( 請建兩組 )
+# 請 INSERT 四筆到 AdminManage 下
+ `INSERT INTO jinrou.adminmanage('param_name','param_value') values('room_start','2')`
+ `INSERT INTO jinrou.adminmanage('param_name','param_value') values('room_end','22')`
+ `INSERT INTO jinrou.adminmanage('param_name','param_value') values('room_count','3')`
+ `INSERT INTO jinrou.adminmanage('param_name','param_value') values('admin_ip','127.0.0.1')`
+* 如本例是開放 02:00(凌晨)到 22:00(晚上十點) 允許開村，如要 24 小時開放請設 0 到 24
+* room_count 為設置村莊上限
+* admin_ip 是管理者用的 ip，以 ; 分隔
+
+=== sbt command ===
+* `mvn clean`	清理已編譯的資料
+* `mvn package`	產生 war 檔 於 target 目錄下
+* `test.bat`	測試程式(理論上都會 Error)
+* `jetty.bat`	啟動 Server
+   
+=== management ===
+* log的設置為： `\src\main\webapp\WEB-INF\classes\logback.xml`
