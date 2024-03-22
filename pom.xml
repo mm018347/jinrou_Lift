@@ -8,7 +8,7 @@
   <name>jinrou</name>
   <inceptionYear>2007</inceptionYear>
   <properties>
-    <scala.version>2.7.5</scala.version>
+    <scala.version>2.10.7</scala.version>
   </properties>
 
   <repositories>
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>0.9.15</version>
+      <version>1.2.13</version>
     </dependency>
 
   </dependencies>
