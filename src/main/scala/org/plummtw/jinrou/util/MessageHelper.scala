@@ -128,16 +128,8 @@ object MessageHelper {
     val grey_out_str = if (grey_out)  "color:#FFFFFF;background-color:#777777;" else ""
     val style_str = if (font_size >= 20) "font-size:" + talk.font_type.is +"pt;font-weight:bold;"
                     else "font-size:" + talk.font_type.is +"pt;"
-    val user_entry_list  = user_entrys.filter(_.id.is == talk.actioner_id.is)
-    val user_entry       = 
-      if( user_entry_list.length == 0) {
-        if (talk.actioner_id.is != 0)
-          UserEntry.findAll(By(UserEntry.id, talk.actioner_id.is))(0)
-        else
-          AdminUserEntry //user_entrys(0)
-      }
-      else
-        user_entry_list(0) 
+    val user_entry_result = get_user_entry(user_entrys.filter(_.id.is == talk.actioner_id.is), talk.actioner_id.is)
+    val user_entry        = if (user_entry_result == null) AdminUserEntry else user_entry_result
     val user_icon  = user_entry.get_user_icon()
     
     Seq(<tr><td width="200" align="left" valign="middle" style={grey_out_str} class="day">
@@ -154,16 +146,7 @@ object MessageHelper {
       catch { case e:Exception => 0}
     val style_str = if (font_size >= 20) "font-size:" + talk.font_type.is +"pt;font-weight:bold;"
                     else "font-size:" + talk.font_type.is +"pt;"
-    val user_entry_list  = user_entrys.filter(_.id.is == talk.actioner_id.is)
-    val user_entry       =
-      if( user_entry_list.length == 0) {
-        if (talk.actioner_id.is != 0)
-          UserEntry.findAll(By(UserEntry.id, talk.actioner_id.is))(0)
-        else
-          null
-      }
-      else
-        user_entry_list(0)
+    val user_entry       = get_user_entry(user_entrys.filter(_.id.is == talk.actioner_id.is), talk.actioner_id.is)
     val user_icon  = user_entry.get_user_icon()
 
     if (((user != null) && (user_entry.id.is == user.id.is)) || (heaven_mode))
